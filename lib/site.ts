@@ -115,6 +115,13 @@ export const PRIORITY_STATES = [
   "North Carolina", "Arizona", "Illinois",
 ];
 
+// Phase 2 expansion states — live pages, second-tier launch markets.
+export const EXPANSION_STATES = [
+  "Pennsylvania", "New Jersey", "Tennessee", "Colorado", "Washington",
+  "Virginia", "Nevada", "Massachusetts", "Ohio", "Michigan", "Utah",
+  "South Carolina",
+];
+
 export const PRIORITY_CITIES = [
   { city: "Houston", state: "Texas", slug: "houston", stateSlug: "texas" },
   { city: "Dallas", state: "Texas", slug: "dallas", stateSlug: "texas" },

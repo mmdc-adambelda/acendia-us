@@ -181,6 +181,198 @@ export const STATE_CONTENT: Record<string, StateContent> = {
       { question: "Do you cover Chicago's suburbs separately?", answer: "Yes — suburban markets like Naperville and Aurora often have meaningfully different competitive dynamics than the city itself and deserve their own local strategy." },
     ],
   },
+
+  pennsylvania: {
+    slug: "pennsylvania",
+    name: "Pennsylvania",
+    metaTitle: "SEO Agency Pennsylvania | Digital Marketing for PA Businesses",
+    metaDescription: "SEO and digital marketing services for Pennsylvania businesses — from Philadelphia to Pittsburgh. Local search, website design, and lead generation.",
+    heroDescription: "Pennsylvania's two major hubs, Philadelphia and Pittsburgh, operate almost like separate state economies — each needs its own local search strategy rather than one statewide approach.",
+    marketContext: "Philadelphia's dense East Coast market favors legal, healthcare, and professional services with intense competition typical of major Northeast metros, while Pittsburgh's economy has diversified from its industrial roots into healthcare, education, and technology, with generally less saturated local search competition. Businesses operating in both cities need distinctly different content and positioning rather than a single Pennsylvania-wide page.",
+    industries: ["Legal services", "Healthcare", "Professional and B2B services", "Home services"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Pennsylvania?", answer: "No — we work remotely with Pennsylvania businesses statewide, from Philadelphia to Pittsburgh, without geographic limits." },
+      { question: "Is Philadelphia more competitive than Pittsburgh?", answer: "Generally yes across most commercial categories, given Philadelphia's scale and Northeast-corridor competition — Pittsburgh often offers more accessible local SEO opportunity." },
+      { question: "Which Pennsylvania industries do you focus on?", answer: "Legal, healthcare, and professional services see the clearest SEO ROI given the state's mix of dense urban competition and specialized regional economies." },
+    ],
+  },
+
+  "new-jersey": {
+    slug: "new-jersey",
+    name: "New Jersey",
+    metaTitle: "SEO Agency New Jersey | Digital Marketing for NJ Businesses",
+    metaDescription: "SEO and digital marketing services for New Jersey businesses competing in the dense, NYC-adjacent Northeast corridor market.",
+    heroDescription: "New Jersey's proximity to New York City creates both spillover demand and spillover competition — local businesses need genuinely local content to avoid being drowned out by NYC-focused search results.",
+    marketContext: "Much of New Jersey functions as part of the greater New York or Philadelphia metro economies, which means local businesses often compete against both in-state rivals and larger neighboring-metro firms for the same searches. Genuinely New Jersey-specific content — town and county-level detail rather than \"near NYC\" positioning — is what separates visible local businesses from those lost in the noise of two adjacent major metros.",
+    industries: ["Legal services", "Healthcare", "Professional and B2B services", "Real estate"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in New Jersey?", answer: "No — we work remotely with New Jersey businesses statewide, without geographic limits." },
+      { question: "How do you handle NJ's proximity to NYC and Philadelphia?", answer: "We build genuinely New Jersey-specific, town-level content rather than generic \"near New York\" positioning, which is what actually helps local businesses stand out." },
+      { question: "Which New Jersey industries do you focus on?", answer: "Legal, healthcare, and professional services see strong demand given the state's dense, well-educated population and proximity to major business centers." },
+    ],
+  },
+
+  tennessee: {
+    slug: "tennessee",
+    name: "Tennessee",
+    metaTitle: "SEO Agency Tennessee | Digital Marketing for Tennessee Businesses",
+    metaDescription: "SEO and digital marketing services for Tennessee businesses — from Nashville's healthcare industry to statewide home services demand.",
+    heroDescription: "Nashville's rapid growth and status as a major healthcare industry hub has created strong demand for both consumer local services and specialized B2B healthcare marketing.",
+    marketContext: "Nashville has grown into one of the country's primary healthcare industry hubs, alongside sustained population growth driving home services and real estate demand. That combination creates two distinct opportunities: consumer-facing local SEO for the city's growing population, and B2B content for healthcare and professional services companies serving the industry cluster itself.",
+    industries: ["Healthcare (including B2B healthcare services)", "Home services", "Real estate", "Professional services"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Tennessee?", answer: "No — we work remotely with Tennessee businesses statewide, from Nashville to Memphis and beyond, without geographic limits." },
+      { question: "Why is Nashville significant for healthcare marketing specifically?", answer: "Nashville is one of the country's largest healthcare industry hubs, creating unusual B2B demand for healthcare-adjacent marketing alongside typical consumer healthcare search." },
+      { question: "Is Tennessee's home services demand still growing?", answer: "Yes — sustained population growth, particularly around Nashville, continues to drive strong home services and real estate search demand." },
+    ],
+  },
+
+  colorado: {
+    slug: "colorado",
+    name: "Colorado",
+    metaTitle: "SEO Agency Colorado | Digital Marketing for Colorado Businesses",
+    metaDescription: "SEO and digital marketing services for Colorado businesses — from Denver's tech economy to statewide home services demand.",
+    heroDescription: "Denver's tech-driven economy and Colorado's outdoor-lifestyle appeal have fueled a decade of population growth, creating strong, sustained demand across home services and professional services alike.",
+    marketContext: "Denver's growth as a secondary tech hub has drawn a well-educated, research-heavy population that behaves similarly to audiences in larger coastal tech markets — expecting credible, substantive content rather than generic marketing language. Meanwhile, Colorado's home services sector benefits from strong, sustained demand tied to continued residential growth across the Front Range.",
+    industries: ["Professional and B2B services (tech-adjacent)", "Home services", "Real estate", "Healthcare"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Colorado?", answer: "No — we work remotely with Colorado businesses statewide, from Denver to the wider Front Range, without geographic limits." },
+      { question: "Does Colorado's audience behave like other tech-hub markets?", answer: "In many professional services categories, yes — Denver's population tends to research thoroughly and respond better to substantive, credible content than generic marketing language." },
+      { question: "Is home services demand still strong across Colorado?", answer: "Yes — continued residential growth along the Front Range keeps home services demand strong and fairly steady." },
+    ],
+  },
+
+  washington: {
+    slug: "washington",
+    name: "Washington",
+    metaTitle: "SEO Agency Washington | Digital Marketing for WA Businesses",
+    metaDescription: "SEO and digital marketing services for Washington State businesses — from Seattle's tech-driven economy to statewide professional services.",
+    heroDescription: "Seattle's concentration of major tech employers has created some of the highest search costs and most sophisticated competition in the country for professional services.",
+    marketContext: "Seattle's tech industry density means professional services, legal, and healthcare categories all face well-funded, marketing-sophisticated competitors, alongside some of the highest paid search costs nationally — mirroring dynamics seen in the Bay Area. That makes durable organic visibility disproportionately valuable here relative to competing purely on ad spend.",
+    industries: ["Professional and B2B services (tech-adjacent)", "Legal services", "Healthcare", "Real estate"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Washington State?", answer: "No — we work remotely with Washington businesses statewide, from Seattle to Spokane, without geographic limits." },
+      { question: "Is Seattle SEO as expensive as the Bay Area?", answer: "In several competitive categories, search costs approach similar levels, which is exactly why strong organic and local SEO investment pays back disproportionately well here." },
+      { question: "Which Washington industries do you focus on?", answer: "Professional services, legal, and healthcare see the clearest ROI given Seattle's tech-driven, research-heavy buyer base." },
+    ],
+  },
+
+  virginia: {
+    slug: "virginia",
+    name: "Virginia",
+    metaTitle: "SEO Agency Virginia | Digital Marketing for Virginia Businesses",
+    metaDescription: "SEO and digital marketing services for Virginia businesses — from Northern Virginia's government-adjacent economy to statewide professional services.",
+    heroDescription: "Northern Virginia's proximity to Washington, DC has built a dense concentration of government contractors, legal firms, and IT services businesses unlike almost anywhere else in the country.",
+    marketContext: "Northern Virginia's economy is unusually shaped by proximity to federal government activity — a large share of professional services, legal, and managed IT firms serve government or government-adjacent clients, which comes with distinct compliance, security, and procurement-related search behavior. Southern and coastal Virginia markets operate more like typical Southeast metros, with stronger home services and healthcare demand.",
+    industries: ["Professional and B2B services (government-adjacent)", "Managed IT and cybersecurity", "Legal services", "Home services (outside Northern Virginia)"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Virginia?", answer: "No — we work remotely with Virginia businesses statewide, from Northern Virginia to Richmond and the coast, without geographic limits." },
+      { question: "How is Northern Virginia different from the rest of the state?", answer: "Northern Virginia's economy is heavily shaped by government-adjacent business, which calls for different positioning and content than the more typical Southeast dynamics found elsewhere in the state." },
+      { question: "Do you write compliance-focused content for government-adjacent firms?", answer: "Yes — this is a meaningful, often underserved content opportunity for Northern Virginia's IT, cybersecurity, and professional services firms." },
+    ],
+  },
+
+  nevada: {
+    slug: "nevada",
+    name: "Nevada",
+    metaTitle: "SEO Agency Nevada | Digital Marketing for Nevada Businesses",
+    metaDescription: "SEO and digital marketing services for Nevada businesses — from Las Vegas's tourism-adjacent economy to statewide home services and real estate demand.",
+    heroDescription: "Las Vegas's tourism economy sits alongside a large, steadily growing resident population — businesses that serve only the visitor economy miss a substantial local customer base actively searching for everyday services.",
+    marketContext: "Nevada's tax advantages and lifestyle appeal have drawn sustained residential growth to the Las Vegas valley, creating solid demand for home services, real estate, and healthcare that operates independently of the tourism economy. As in Orlando, businesses that treat Nevada as purely a visitor market miss real, resident-driven local search demand.",
+    industries: ["Home services", "Real estate", "Healthcare", "Legal services"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Nevada?", answer: "No — we work remotely with Nevada businesses statewide, from Las Vegas to Reno, without geographic limits." },
+      { question: "Is Nevada just a tourism-driven market?", answer: "No — the Las Vegas valley has a large, steadily growing resident population driving genuine, ongoing demand for home services and healthcare independent of tourism." },
+      { question: "Which Nevada industries do you focus on?", answer: "Home services, real estate, and healthcare see the strongest resident-driven local search demand across the state." },
+    ],
+  },
+
+  massachusetts: {
+    slug: "massachusetts",
+    name: "Massachusetts",
+    metaTitle: "SEO Agency Massachusetts | Digital Marketing for MA Businesses",
+    metaDescription: "SEO and digital marketing services for Massachusetts businesses — from Boston's healthcare and biotech economy to statewide professional services.",
+    heroDescription: "Boston's concentration of hospitals, universities, and biotech firms has created a uniquely research-heavy, credential-conscious audience across healthcare and professional services.",
+    marketContext: "Boston's dense cluster of world-class hospitals, universities, and biotech companies shapes buyer behavior across nearly every professional category — audiences here tend to weigh credentials, specificity, and genuine expertise more heavily than in most other markets. Generic marketing language tends to underperform badly against Boston's research-oriented population.",
+    industries: ["Healthcare (including biotech-adjacent)", "Legal services", "Professional and B2B services", "Real estate"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Massachusetts?", answer: "No — we work remotely with Massachusetts businesses statewide, from Boston to Worcester and beyond, without geographic limits." },
+      { question: "Why does Boston need especially credible content?", answer: "Its concentration of hospitals, universities, and biotech firms has built an unusually research-oriented, credential-conscious audience that responds poorly to generic marketing language." },
+      { question: "Which Massachusetts industries do you focus on?", answer: "Healthcare, legal, and professional services see the clearest opportunity given Boston's institutional density and educated population." },
+    ],
+  },
+
+  ohio: {
+    slug: "ohio",
+    name: "Ohio",
+    metaTitle: "SEO Agency Ohio | Digital Marketing for Ohio Businesses",
+    metaDescription: "SEO and digital marketing services for Ohio businesses — from Columbus, Cleveland, and Cincinnati to statewide home services and logistics demand.",
+    heroDescription: "Ohio's three major metros — Columbus, Cleveland, and Cincinnati — each carry a distinct economic identity, and none of them face the saturated competition of larger coastal markets.",
+    marketContext: "Columbus has grown into a fast-expanding logistics and insurance hub, Cleveland retains a strong healthcare and manufacturing base, and Cincinnati blends consumer goods and professional services — three genuinely different local economies within one state. Compared to coastal metros of similar size, Ohio's major cities generally offer more accessible local search competition, rewarding businesses that invest in SEO before more competitors catch on.",
+    industries: ["Moving and logistics", "Healthcare", "Manufacturing-adjacent professional services", "Home services"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Ohio?", answer: "No — we work remotely with Ohio businesses statewide, across Columbus, Cleveland, Cincinnati, and beyond, without geographic limits." },
+      { question: "Are Ohio's major cities really that different from each other?", answer: "Yes — Columbus, Cleveland, and Cincinnati have genuinely distinct economic identities, and we build market-specific strategy for each rather than one statewide approach." },
+      { question: "Is Ohio less competitive than coastal markets?", answer: "Generally yes across most categories, which often means faster visibility gains for businesses investing seriously in local SEO now." },
+    ],
+  },
+
+  michigan: {
+    slug: "michigan",
+    name: "Michigan",
+    metaTitle: "SEO Agency Michigan | Digital Marketing for Michigan Businesses",
+    metaDescription: "SEO and digital marketing services for Michigan businesses — from Detroit's manufacturing and automotive economy to statewide home services demand.",
+    heroDescription: "Detroit's automotive and advanced manufacturing legacy shapes unusually strong B2B search demand alongside a resurgent consumer economy across metro Detroit.",
+    marketContext: "Michigan's economy remains closely tied to automotive and advanced manufacturing, creating strong B2B demand for engineering, logistics, and industrial professional services that many generic marketing approaches overlook. At the same time, metro Detroit's ongoing economic resurgence has driven renewed demand for home services, healthcare, and real estate across the region.",
+    industries: ["Automotive and manufacturing-adjacent B2B services", "Home services", "Healthcare", "Moving and logistics"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Michigan?", answer: "No — we work remotely with Michigan businesses statewide, from Detroit to Grand Rapids and beyond, without geographic limits." },
+      { question: "Do you understand Michigan's automotive-adjacent B2B market?", answer: "Yes — we build content specific to engineering, logistics, and industrial professional services that serve the automotive and manufacturing sector, not generic B2B language." },
+      { question: "Is Detroit's local services demand growing?", answer: "Yes — the region's ongoing economic resurgence has renewed demand for home services, healthcare, and real estate across metro Detroit." },
+    ],
+  },
+
+  utah: {
+    slug: "utah",
+    name: "Utah",
+    metaTitle: "SEO Agency Utah | Digital Marketing for Utah Businesses",
+    metaDescription: "SEO and digital marketing services for Utah businesses — from Salt Lake City's fast-growing tech economy to statewide home services demand.",
+    heroDescription: "Salt Lake City's \"Silicon Slopes\" tech corridor and one of the youngest, fastest-growing populations in the country have created unusually strong demand across nearly every local service category.",
+    marketContext: "Utah's tech sector growth along the Wasatch Front, paired with one of the youngest and fastest-growing state populations in the country, has driven sustained demand for home services, healthcare, and professional services alike. The state's local search competition remains relatively approachable compared to more mature tech markets, creating real opportunity for businesses investing early.",
+    industries: ["Professional and B2B services (tech-adjacent)", "Home services", "Healthcare", "Real estate"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in Utah?", answer: "No — we work remotely with Utah businesses statewide, along the Wasatch Front and beyond, without geographic limits." },
+      { question: "Is Utah's tech-adjacent market similar to Colorado's?", answer: "Somewhat — both have research-heavy audiences following tech sector growth, though Utah's local search competition is generally still less developed than Denver's." },
+      { question: "Is Utah's population growth still strong?", answer: "Yes — Utah remains one of the fastest-growing states, sustaining strong demand across home services, healthcare, and real estate." },
+    ],
+  },
+
+  "south-carolina": {
+    slug: "south-carolina",
+    name: "South Carolina",
+    metaTitle: "SEO Agency South Carolina | Digital Marketing for SC Businesses",
+    metaDescription: "SEO and digital marketing services for South Carolina businesses — from Charleston and Greenville's manufacturing growth to statewide home services demand.",
+    heroDescription: "Charleston's tourism-and-port economy and Greenville's manufacturing boom have made South Carolina one of the Southeast's fastest-growing, most business-friendly states — with local search competition still catching up.",
+    marketContext: "Charleston blends a strong tourism and port-driven economy with a growing resident population, while Greenville has become a genuine manufacturing hub, drawing significant industrial investment. Both markets are growing fast enough that local search competition remains considerably less developed than in larger, more established Southeast metros like Atlanta or Charlotte.",
+    industries: ["Home services", "Manufacturing-adjacent professional services", "Real estate", "Healthcare"],
+    cities: [],
+    faqs: [
+      { question: "Does Acendia have an office in South Carolina?", answer: "No — we work remotely with South Carolina businesses statewide, from Charleston to Greenville, without geographic limits." },
+      { question: "Is South Carolina less competitive than Georgia or North Carolina?", answer: "Generally yes across most categories, which can mean faster visibility gains for businesses investing in local SEO now, ahead of increased competition." },
+      { question: "Which South Carolina industries do you focus on?", answer: "Home services and manufacturing-adjacent professional services see the clearest opportunity given the state's growth in both residential population and industrial investment." },
+    ],
+  },
 };
 
 export const CITY_CONTENT: Record<string, CityContent> = {

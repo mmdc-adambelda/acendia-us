@@ -1,10 +1,22 @@
 # Acendia US Website — Deliverables Report
 
-Date: 2026-08-06 · Build Pass 1 "Core Skeleton" (see [AUDIT.md](./AUDIT.md)) + Build Pass 2 "Phase 2 Expansion"
+Date: 2026-08-06 · Build Pass 1 "Core Skeleton" (see [AUDIT.md](./AUDIT.md)) + Build Pass 2 "Phase 2 Expansion" + Build Pass 3 "Expansion States + UI Polish"
 
 ---
 
-## Phase 2 Update (this pass)
+## Phase 3 Update (this pass)
+
+- **12 expansion states now live**: Pennsylvania, New Jersey, Tennessee, Colorado, Washington, Virginia, Nevada, Massachusetts, Ohio, Michigan, Utah, South Carolina — the full "Phase 2 expansion states" tier from the original brief. State pages only (no city-level pages yet for these); each has genuinely distinct market context, industries, and FAQs, not a templated swap. `/locations/` now shows them in their own "Expansion states" section, separate from the 8 original priority states.
+- **Header/footer UI polish**:
+  - Footer social links are now icon buttons (hand-built Facebook/LinkedIn/Instagram outline SVGs — lucide-react ships no brand glyphs) with accessible `aria-label`s, replacing plain text links.
+  - Footer's Services/Industries/Locations columns trimmed from 11/3/3 links to 4-5 each + a "View all →" link — previously the Services column alone listed all 11 service pages.
+  - Added a region/site switcher (`components/SiteSwitcher.tsx`) next to the header CTA: globe icon + current flag emoji + dropdown listing 🇺🇸 US / 🇬🇧 UK / 🇦🇺 AU / 🇳🇿 NZ, linking to acendia.us / acendia.uk / acendia.uk / acendia.agency respectively (AU intentionally shares acendia.uk, matching how Acendia's country sites are actually split). Present in both desktop header and mobile menu; closes on outside-click/Escape.
+- **Image placeholders**: confirmed the site currently ships with zero required image placeholders — every page renders with only the real logo/favicon plus code-generated graphics (no `<img>` tags on content pages). Optional future imagery (industry photos, city skylines, case study covers) is documented in Section 5 below but nothing is blocking.
+- **Live deployment**: site is now live on Vercel at `https://acendia-us.vercel.app` (auto-deploys from `main`), ahead of the custom `acendia.us` domain being connected.
+
+**Site now totals 81 indexable URLs** (up from 69) — 20 states + 15 cities + 19 industries + 11 services + 3 articles + core pages, plus 3 noindex campaign pages.
+
+---
 
 Added to the Pass 1 foundation:
 

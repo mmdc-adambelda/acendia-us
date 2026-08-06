@@ -6,7 +6,7 @@ import CTASection from "@/components/CTASection";
 import JsonLd from "@/components/JsonLd";
 import { webPageSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
-import { PRIORITY_CITIES, PRIORITY_STATES } from "@/lib/site";
+import { PRIORITY_CITIES, PRIORITY_STATES, EXPANSION_STATES } from "@/lib/site";
 import { STATE_CONTENT, CITY_CONTENT } from "@/lib/locationContent";
 
 export const metadata: Metadata = buildMetadata({
@@ -42,6 +42,32 @@ export default function LocationsHubPage() {
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {PRIORITY_STATES.map((state) => {
+            const slug = stateSlug(state);
+            const hasPage = Boolean(STATE_CONTENT[slug]);
+            return hasPage ? (
+              <Card key={state} href={`/locations/${slug}/`} dataEvent="location_cta_clicked">
+                <h3 className="text-base font-semibold text-white">{state}</h3>
+                <span className="mt-3 inline-block text-sm text-white/50">View state page →</span>
+              </Card>
+            ) : (
+              <Card key={state} className="opacity-60">
+                <h3 className="text-base font-semibold text-white/80">{state}</h3>
+                <span className="mt-3 inline-block text-xs uppercase tracking-wide text-white/35">
+                  Coming soon
+                </span>
+              </Card>
+            );
+          })}
+        </div>
+      </Section>
+
+      <Section className="border-t border-[var(--border-dim)]">
+        <Eyebrow>Expansion states</Eyebrow>
+        <h2 className="mb-8 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          Second-tier launch markets, now live
+        </h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {EXPANSION_STATES.map((state) => {
             const slug = stateSlug(state);
             const hasPage = Boolean(STATE_CONTENT[slug]);
             return hasPage ? (
