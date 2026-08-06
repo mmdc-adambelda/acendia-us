@@ -1,0 +1,74 @@
+import type { MetadataRoute } from "next";
+import { SITE_URL, SERVICES } from "@/lib/site";
+import { STATE_CONTENT, CITY_CONTENT } from "@/lib/locationContent";
+import { INDUSTRY_CONTENT } from "@/lib/industryContent";
+import { ARTICLES } from "@/lib/articles";
+
+const STATIC_PATHS = [
+  "/",
+  "/about/",
+  "/services/",
+  "/contact/",
+  "/case-studies/",
+  "/insights/",
+  "/locations/",
+  "/industries/",
+  "/free-seo-audit/",
+  "/privacy-policy/",
+  "/terms/",
+];
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
+
+  const staticEntries = STATIC_PATHS.map((path) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: path === "/" ? 1 : 0.7,
+  }));
+
+  const serviceEntries = SERVICES.map((s) => ({
+    url: `${SITE_URL}/services/${s.slug}/`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  const stateEntries = Object.values(STATE_CONTENT).map((s) => ({
+    url: `${SITE_URL}/locations/${s.slug}/`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const cityEntries = Object.values(CITY_CONTENT).map((c) => ({
+    url: `${SITE_URL}/locations/${c.stateSlug}/${c.slug}/`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const industryEntries = Object.values(INDUSTRY_CONTENT).map((i) => ({
+    url: `${SITE_URL}/industries/${i.slug}/`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const articleEntries = ARTICLES.filter((a) => a.published).map((a) => ({
+    url: `${SITE_URL}/insights/${a.slug}/`,
+    lastModified: new Date(a.publishedAt),
+    changeFrequency: "yearly" as const,
+    priority: 0.5,
+  }));
+
+  return [
+    ...staticEntries,
+    ...serviceEntries,
+    ...stateEntries,
+    ...cityEntries,
+    ...industryEntries,
+    ...articleEntries,
+  ];
+}

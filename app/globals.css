@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------
+   Acendia brand tokens
+   Sourced from the shared Acendia International identity system
+   (black/white/gray premium palette + Inter). Values only — no copy,
+   layout, or markup reused from any sister site.
+--------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --black: #000000;
+  --off-black: #0a0a0a;
+  --card: #111111;
+  --card-hover: #1a1a1a;
+  --gray-5: #2a2a2a;
+  --gray-4: #444444;
+  --gray-3: #888888;
+  --gray-2: #bbbbbb;
+  --gray-1: #e8e8e8;
+  --off-white: #f4f4f4;
+  --white: #ffffff;
+
+  --border-dim: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-hi: rgba(255, 255, 255, 0.28);
+
+  --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --glow-white: 0 0 60px rgba(255, 255, 255, 0.14);
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 24px;
+  --r-xl: 40px;
+
+  --background: var(--off-black);
+  --foreground: var(--off-white);
+
+  color-scheme: dark;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-border: var(--border);
+  --color-border-hi: var(--border-hi);
+  --color-gray-1: var(--gray-1);
+  --color-gray-2: var(--gray-2);
+  --color-gray-3: var(--gray-3);
+  --color-gray-4: var(--gray-4);
+  --color-gray-5: var(--gray-5);
+  --font-sans: var(--font-inter);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--border-dim) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-dim) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
