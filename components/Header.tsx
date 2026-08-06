@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import SiteSwitcher from "./SiteSwitcher";
 import { NAV_LINKS } from "@/lib/site";
 
 export default function Header() {
@@ -34,7 +35,8 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-3 md:flex">
+          <SiteSwitcher />
           <Link
             href="/free-seo-audit/"
             data-event="audit_cta_clicked"
@@ -94,6 +96,14 @@ export default function Header() {
               </Link>
             </li>
           </ul>
+          <div className="mt-4 border-t border-[var(--border-dim)] pt-4">
+            <p className="px-3 text-xs font-semibold uppercase tracking-wide text-white/40">
+              Other Acendia sites
+            </p>
+            <div className="mt-2">
+              <SiteSwitcher />
+            </div>
+          </div>
         </nav>
       )}
     </header>

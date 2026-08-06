@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Container from "./Container";
+import { FacebookIcon, InstagramIcon, LinkedinIcon } from "./icons";
 import { FOOTER_LINK_COLUMNS, SOCIAL_LINKS, TAGLINE } from "@/lib/site";
 
 export default function Footer() {
@@ -22,30 +23,33 @@ export default function Footer() {
             <p className="mt-4 max-w-xs text-sm text-white/40">
               Providing SEO, web, and digital growth services to businesses across the United States.
             </p>
-            <div className="mt-6 flex gap-4">
+            <div className="mt-6 flex gap-3">
               <a
                 href={SOCIAL_LINKS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="focus-ring text-sm text-white/50 hover:text-white"
+                aria-label="Acendia on Facebook"
+                className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-white/55 transition-colors hover:border-[var(--border-hi)] hover:text-white"
               >
-                Facebook
+                <FacebookIcon />
               </a>
               <a
                 href={SOCIAL_LINKS.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="focus-ring text-sm text-white/50 hover:text-white"
+                aria-label="Acendia on LinkedIn"
+                className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-white/55 transition-colors hover:border-[var(--border-hi)] hover:text-white"
               >
-                LinkedIn
+                <LinkedinIcon />
               </a>
               <a
                 href={SOCIAL_LINKS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="focus-ring text-sm text-white/50 hover:text-white"
+                aria-label="Acendia on Instagram"
+                className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-white/55 transition-colors hover:border-[var(--border-hi)] hover:text-white"
               >
-                Instagram
+                <InstagramIcon />
               </a>
             </div>
           </div>

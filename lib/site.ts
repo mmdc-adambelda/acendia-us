@@ -35,31 +35,27 @@ export const FOOTER_LINK_COLUMNS = [
     links: [
       { label: "SEO", href: "/services/seo/" },
       { label: "Local SEO", href: "/services/local-seo/" },
-      { label: "Technical SEO", href: "/services/technical-seo/" },
-      { label: "Google Business Profile Optimization", href: "/services/google-business-profile-optimization/" },
       { label: "Website Design", href: "/services/website-design/" },
-      { label: "Website Development", href: "/services/website-development/" },
-      { label: "Content Marketing", href: "/services/content-marketing/" },
       { label: "Lead Generation", href: "/services/lead-generation/" },
-      { label: "Conversion Rate Optimization", href: "/services/conversion-rate-optimization/" },
-      { label: "Multi-Location SEO", href: "/services/multi-location-seo/" },
-      { label: "AI Digital Marketing", href: "/services/ai-digital-marketing/" },
+      { label: "View all services →", href: "/services/" },
     ],
   },
   {
     title: "Industries",
     links: [
       { label: "Home Services", href: "/industries/home-services/" },
-      { label: "Roofing SEO", href: "/industries/roofing-seo/" },
       { label: "Law Firm SEO", href: "/industries/law-firm-seo/" },
+      { label: "Healthcare", href: "/industries/healthcare/" },
+      { label: "View all industries →", href: "/industries/" },
     ],
   },
   {
     title: "Locations",
     links: [
       { label: "Texas", href: "/locations/texas/" },
-      { label: "Houston, TX", href: "/locations/texas/houston/" },
-      { label: "Austin, TX", href: "/locations/texas/austin/" },
+      { label: "Florida", href: "/locations/florida/" },
+      { label: "California", href: "/locations/california/" },
+      { label: "View all locations →", href: "/locations/" },
     ],
   },
   {
