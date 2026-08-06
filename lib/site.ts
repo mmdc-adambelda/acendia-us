@@ -130,6 +130,19 @@ export const PRIORITY_CITIES = [
   { city: "New York City", state: "New York", slug: "new-york-city", stateSlug: "new-york" },
   { city: "Atlanta", state: "Georgia", slug: "atlanta", stateSlug: "georgia" },
   { city: "Charlotte", state: "North Carolina", slug: "charlotte", stateSlug: "north-carolina" },
+  { city: "Raleigh", state: "North Carolina", slug: "raleigh", stateSlug: "north-carolina" },
   { city: "Phoenix", state: "Arizona", slug: "phoenix", stateSlug: "arizona" },
+  { city: "Scottsdale", state: "Arizona", slug: "scottsdale", stateSlug: "arizona" },
   { city: "Chicago", state: "Illinois", slug: "chicago", stateSlug: "illinois" },
+  { city: "Orlando", state: "Florida", slug: "orlando", stateSlug: "florida" },
 ];
+
+export const INDUSTRY_CATEGORY_SLUGS: Record<string, string> = {
+  "home-services": "home-services",
+  legal: "law-firm-seo",
+  healthcare: "healthcare",
+  "real-estate": "real-estate",
+  "moving-and-logistics": "moving-and-logistics",
+  automotive: "automotive",
+  "professional-services": "professional-services",
+};

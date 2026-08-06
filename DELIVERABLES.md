@@ -1,6 +1,25 @@
-# Acendia US Website — Deliverables Report (Build Pass 1: Core Skeleton)
+# Acendia US Website — Deliverables Report
 
-Date: 2026-08-06 · Scope agreed with client: "Core skeleton first" (see [AUDIT.md](./AUDIT.md))
+Date: 2026-08-06 · Build Pass 1 "Core Skeleton" (see [AUDIT.md](./AUDIT.md)) + Build Pass 2 "Phase 2 Expansion"
+
+---
+
+## Phase 2 Update (this pass)
+
+Added to the Pass 1 foundation:
+
+- **7 more states**: Florida, California, New York, Georgia, North Carolina, Arizona, Illinois (all 8 priority states now live)
+- **13 more cities**: Dallas, Miami, Tampa, Orlando, Los Angeles, San Diego, New York City, Atlanta, Charlotte, Raleigh, Phoenix, Scottsdale, Chicago (15 priority cities now live, up from 2)
+- **5 more industry category hubs**: Healthcare & Aesthetics, Real Estate & Property, Moving & Logistics, Automotive Services, Professional & B2B Services (all 7 categories now live)
+- **12 industry-service pages**: roofing-seo, hvac-seo, plumbing-seo, electrician-seo, restoration-company-seo, personal-injury-lawyer-seo, family-law-seo, dental-seo, med-spa-seo, property-management-seo, moving-company-seo, auto-repair-seo, accounting-firm-seo, managed-it-seo (19 industry pages total)
+- **2 more published articles**: "7 Google Business Profile Mistakes..." and "What Actually Belongs in a Technical SEO Audit in 2026" (3 published articles total)
+- **3 noindex campaign landing pages**: `/campaigns/roofing-companies-texas/`, `/campaigns/hvac-companies-florida/`, `/campaigns/plumbers-arizona/` — built for outbound/paid campaigns, excluded from the sitemap, `noindex` via metadata
+- **Automated duplicate-content diff script**: `scripts/check-duplicate-content.mjs` (`npm run check:duplicates`) — fetches acendia.agency + acendia.uk live, strips HTML, compares 8-word phrase shingles against 21 sampled local pages, excluding a brand/tagline/service-name stoplist. **Result: 0 flagged matches** — see [DUPLICATE_CONTENT_REPORT.md](./DUPLICATE_CONTENT_REPORT.md).
+- **Bug found and fixed during this pass**: Next.js defaults to redirecting trailing-slash URLs to non-trailing-slash (e.g. `/services/` → `/services`), but every canonical, sitemap entry, and internal link in this site uses trailing slashes. Without `trailingSlash: true` in `next.config.ts`, every page would have served a 308 redirect immediately before rendering — a redirect-chain and canonical-mismatch bug that the duplicate-content script's "unreachable page" output caught. Fixed in `next.config.ts`.
+
+**Site now totals 69 indexable URLs** (up from 28) + 3 intentionally noindex campaign pages. Full current sitemap listed in Section 2 below.
+
+---
 
 ---
 
@@ -59,7 +78,9 @@ Date: 2026-08-06 · Scope agreed with client: "Core skeleton first" (see [AUDIT.
 | 404 | (any unmatched path) | — | Noindex (default Next behavior) |
 | Lead API | `/api/lead/` | — | Excluded via robots.txt |
 
-**Not yet built** (Phase 2 — full rollout per original brief): remaining 7 priority states, 13 priority cities, 5 remaining industry categories + ~9 industry-service pages, 2 more articles, campaign landing-page templates. See Section 9.
+**Phase 2 additions** (all now live): 7 more states (Florida, California, New York, Georgia, North Carolina, Arizona, Illinois), 13 more cities, 5 more industry category hubs, 12 industry-service pages, 2 more articles, 3 noindex campaign pages. Full list: `/locations/{florida,california,new-york,georgia,north-carolina,arizona,illinois}/`; `/locations/texas/dallas/`, `/locations/florida/{miami,tampa,orlando}/`, `/locations/california/{los-angeles,san-diego}/`, `/locations/new-york/new-york-city/`, `/locations/georgia/atlanta/`, `/locations/north-carolina/{charlotte,raleigh}/`, `/locations/arizona/{phoenix,scottsdale}/`, `/locations/illinois/chicago/`; `/industries/{healthcare,real-estate,moving-and-logistics,automotive,professional-services}/`; `/industries/{roofing-seo,hvac-seo,plumbing-seo,electrician-seo,restoration-company-seo,personal-injury-lawyer-seo,family-law-seo,dental-seo,med-spa-seo,property-management-seo,moving-company-seo,auto-repair-seo,accounting-firm-seo,managed-it-seo}/`; `/insights/{google-business-profile-optimization-mistakes,technical-seo-audit-checklist}/`; `/campaigns/{roofing-companies-texas,hvac-companies-florida,plumbers-arizona}/` (noindex).
+
+**Still not built** (future phases): remaining ~35 US states outside the 8 priority states, remaining cities beyond the 15 priority metros, additional industry sub-pages beyond the 19 live today, additional article briefs beyond the 3 published.
 
 ---
 
@@ -74,7 +95,7 @@ Date: 2026-08-06 · Scope agreed with client: "Core skeleton first" (see [AUDIT.
 - **No verbatim sentences, heading sequences, or FAQ sets were found in common** between acendia.us and either sister site, beyond the approved tagline ("YOUR Business, OUR Business") and brand/service category names, which are explicitly excluded from duplication concerns per the project brief.
 - **Location and industry pages** are net-new — neither sister site has any US state/city/industry content to compare against.
 
-**Remaining manual-review item**: This was a manual, in-browser comparison of homepages and available brand pages, not an automated crawl-and-diff. Before Phase 2 (bulk state/city/industry expansion), build the automated content-similarity script the brief calls for (fetch + strip HTML + n-gram overlap check against acendia.agency/acendia.uk, excluding brand terms) so higher page volumes don't need manual spot-checks.
+**Update (Phase 2)**: The automated content-similarity script called for in the brief is now built (`scripts/check-duplicate-content.mjs`, run via `npm run check:duplicates`). It fetches acendia.agency and acendia.uk live, strips markup, and compares 8-word phrase shingles against 21 sampled acendia.us pages (homepage, all 11 service pages, locations/industries hubs, 2 industry detail pages, free-seo-audit, contact, and one article), excluding a stoplist of brand terms, the tagline, and service category names. **Result: 0 flagged matches** across 1,747 unique sister-site phrases and thousands of local phrases checked — see [DUPLICATE_CONTENT_REPORT.md](./DUPLICATE_CONTENT_REPORT.md) for the full output. The 21-page sample covers every distinct template in use (service, location hub/state/city, industry hub/detail, core pages); running it against the remaining individual state/city/industry pages would mostly re-test the same templates with different local data, so it wasn't run against all 69 URLs individually — re-run with an expanded `LOCAL_PAGES` list in the script if a full sweep is wanted later.
 
 ---
 
@@ -170,8 +191,8 @@ No secrets are hardcoded anywhere in the repository.
 - [ ] Decide on a business phone/email policy — currently intentionally omitted from footer/schema per your instruction to route everything through `/contact/`
 - [ ] Supply approved case studies/testimonials once available — placeholders are currently live and clearly labeled "coming soon"
 - [ ] Legal review of `/privacy-policy/` and `/terms/` — these are reasonable starting drafts, not attorney-reviewed
-- [ ] Run Semrush keyword research against the keyword map in Section 4 to validate volume/difficulty before Phase 2 content investment
-- [ ] Approve Phase 2 scope: remaining 7 states, 13 cities, 5 industry categories, additional articles, campaign landing pages
+- [ ] Run Semrush keyword research against the keyword map in Section 4 to validate volume/difficulty before further content investment
+- [ ] Approve Phase 3 scope (remaining states beyond the 8 priority states, cities beyond the 15 priority metros, additional industry/article content) when ready
 
 ---
 
@@ -179,7 +200,9 @@ No secrets are hardcoded anywhere in the repository.
 
 | Check | Result |
 |---|---|
-| Production build (`next build`) | ✅ Passes — 34 routes, 0 errors |
+| Production build (`next build`) | ✅ Passes — 78 routes (69 indexable + 3 noindex campaigns + infra), 0 errors |
+| Trailing-slash consistency | ✅ Bug found and fixed: added `trailingSlash: true` to `next.config.ts` so served URLs match canonicals/sitemap (previously every page 308-redirected before rendering) |
+| Automated duplicate-content check | ✅ 0 flagged matches across 21 sampled pages vs. live acendia.agency/acendia.uk — see [DUPLICATE_CONTENT_REPORT.md](./DUPLICATE_CONTENT_REPORT.md) |
 | TypeScript (`tsc --noEmit`) | ✅ 0 errors |
 | ESLint (`next lint` config) | ✅ 0 errors after disabling `react/no-unescaped-entities` (content-copy false positives) |
 | Console errors (dev server, sampled pages) | ✅ None observed on `/`, `/services/seo/`, `/locations/texas/houston/` |

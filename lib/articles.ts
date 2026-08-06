@@ -25,14 +25,14 @@ export const ARTICLES: Article[] = [
     description: "Common, fixable errors that quietly suppress Map Pack visibility.",
     publishedAt: "2026-08-01",
     readTime: "7 min read",
-    published: false,
+    published: true,
   },
   {
     slug: "technical-seo-audit-checklist",
     title: "What Actually Belongs in a Technical SEO Audit in 2026",
     description: "Beyond broken links: crawl budget, indexation, and Core Web Vitals priorities.",
-    publishedAt: "2026-08-01",
+    publishedAt: "2026-08-06",
     readTime: "10 min read",
-    published: false,
+    published: true,
   },
 ];
