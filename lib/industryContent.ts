@@ -4,6 +4,7 @@ export type IndustryPageContent = {
   metaTitle: string;
   metaDescription: string;
   heroDescription: string;
+  heroImage?: { src: string; alt: string };
   challenges: { title: string; body: string }[];
   howCustomersSearch: string;
   seoOpportunities: string[];
@@ -19,11 +20,15 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "home-services": {
     slug: "home-services",
     name: "Home Services",
-    metaTitle: "SEO for Home Services Companies | Acendia",
+    metaTitle: "SEO for Home Services Companies",
     metaDescription:
       "SEO and local marketing strategy for home services businesses — roofing, HVAC, plumbing, electrical, restoration, and more — competing for local jobs across the US.",
     heroDescription:
       "Roofers, HVAC contractors, plumbers, and electricians all compete for the same thing: being the business a nearby customer calls first when something breaks.",
+    heroImage: {
+      src: "/images/us-home-services-team-onsite.webp",
+      alt: "US home services technician inspecting a rooftop HVAC unit on a suburban house",
+    },
     challenges: [
       { title: "Emergency-driven search", body: "A large share of home services searches happen in the moment of need, where Map Pack position and phone-answer speed decide who gets the job." },
       { title: "Seasonal and weather-driven demand", body: "Storm damage, extreme heat, and cold snaps create sudden demand spikes that businesses with weak local visibility largely miss." },

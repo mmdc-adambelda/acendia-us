@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
 import Card from "@/components/Card";
@@ -14,6 +15,15 @@ export const metadata: Metadata = buildMetadata({
     "Verified client results from Acendia's SEO, local search, and website work for US businesses — published as engagements complete.",
   path: "/case-studies/",
 });
+
+// Cover art for pending case studies. Only industries with a generated
+// cover appear here — others fall back to the plain text placeholder card.
+const COVER_IMAGES: Record<string, { src: string; alt: string }> = {
+  healthcare: {
+    src: "/images/healthcare-case-study-cover.webp",
+    alt: "Abstract medical cross and heartbeat pulse cover art",
+  },
+};
 
 export default function CaseStudiesPage() {
   return (
@@ -33,14 +43,25 @@ export default function CaseStudiesPage() {
       />
       <Section>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {INDUSTRIES.map((industry) => (
-            <Card key={industry.slug} className="flex h-44 flex-col items-center justify-center text-center">
-              <span className="text-sm font-medium text-white/40">{industry.name}</span>
-              <span className="mt-2 text-xs uppercase tracking-wide text-white/25">
-                Case study coming soon
-              </span>
-            </Card>
-          ))}
+          {INDUSTRIES.map((industry) => {
+            const cover = COVER_IMAGES[industry.slug];
+            return (
+              <Card key={industry.slug} className="relative flex h-44 flex-col items-center justify-center overflow-hidden text-center">
+                {cover && (
+                  <Image
+                    src={cover.src}
+                    alt={cover.alt}
+                    fill
+                    className="absolute inset-0 object-cover opacity-70"
+                  />
+                )}
+                <span className="relative z-10 text-sm font-medium text-white/70">{industry.name}</span>
+                <span className="relative z-10 mt-2 text-xs uppercase tracking-wide text-white/40">
+                  Case study coming soon
+                </span>
+              </Card>
+            );
+          })}
         </div>
       </Section>
       <CTASection

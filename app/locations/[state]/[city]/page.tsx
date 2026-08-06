@@ -61,6 +61,7 @@ export default async function CityPage({
           { name: content.stateName, path: `/locations/${content.stateSlug}/` },
           { name: content.city, path },
         ]}
+        image={content.heroImage}
       />
 
       <Section>

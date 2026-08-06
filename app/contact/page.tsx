@@ -9,7 +9,7 @@ import { buildMetadata } from "@/lib/seo";
 import { SOCIAL_LINKS } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Contact Acendia",
+  title: "Contact Us",
   description:
     "Talk to Acendia about SEO, local search, website design, or digital marketing for your US business. Tell us about your goals and we'll follow up within one business day.",
   path: "/contact/",

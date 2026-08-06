@@ -57,6 +57,7 @@ export default async function IndustryDetailPage({
           { name: "Industries", path: "/industries/" },
           { name: content.name, path },
         ]}
+        image={content.heroImage}
       />
 
       <Section>

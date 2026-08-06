@@ -6,6 +6,7 @@ export type CityContent = {
   metaTitle: string;
   metaDescription: string;
   heroDescription: string;
+  heroImage?: { src: string; alt: string };
   marketContext: string;
   industries: string[];
   challenges: { title: string; body: string }[];
@@ -386,6 +387,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
       "SEO and local search services for Houston businesses — home services, legal, healthcare, and real estate companies competing across Houston's sprawling metro market.",
     heroDescription:
       "Houston is the fourth-largest city in the US and one of the most fragmented metro markets for local search — winning here means winning across dozens of distinct neighborhoods.",
+    heroImage: { src: "/images/houston-tx-skyline.webp", alt: "Downtown Houston, Texas skyline at golden hour" },
     marketContext:
       "Houston's metro area spans over 10,000 square miles with no single dominant commercial center, which means \"ranking in Houston\" often really means ranking well across a patchwork of neighborhoods — the Heights, Katy, Sugar Land, The Woodlands, and dozens more — each with its own local competition. Businesses that treat Houston as one search market typically underperform against competitors who've built genuine neighborhood-level visibility.",
     industries: ["Home services and storm/water damage restoration", "Oil & gas adjacent B2B services", "Healthcare and medical specialists", "Legal services, particularly personal injury", "Real estate and property management"],
@@ -425,6 +427,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
       "SEO and local search services for Austin, TX businesses — from home services to professional services competing in one of the country's fastest-growing metros.",
     heroDescription:
       "Austin's population and business growth have outpaced its search competition maturity in some categories — creating real opportunity for businesses that move on SEO early.",
+    heroImage: { src: "/images/austin-tx-skyline.webp", alt: "Downtown Austin, Texas skyline at dusk reflected in the Colorado River" },
     marketContext:
       "Austin has grown faster than almost any major US metro over the past decade, with new residents and new businesses arriving continuously. That growth cuts both ways for SEO: search volume for local services keeps climbing, but so does the number of competitors — many of them recently arrived and not yet locally established, which creates a window for businesses willing to invest in local search now.",
     industries: ["Professional and B2B services (consulting, IT, staffing)", "Home services", "Healthcare and med spas", "Real estate", "Legal services"],

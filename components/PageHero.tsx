@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ReactNode } from "react";
 import Container from "./Container";
 import Breadcrumbs, { Crumb } from "./Breadcrumbs";
@@ -7,12 +8,14 @@ export default function PageHero({
   title,
   description,
   breadcrumbs,
+  image,
   children,
 }: {
   eyebrow?: string;
   title: string;
   description: string;
   breadcrumbs?: Crumb[];
+  image?: { src: string; alt: string };
   children?: ReactNode;
 }) {
   return (
@@ -30,6 +33,18 @@ export default function PageHero({
           </h1>
           <p className="text-balance mt-5 max-w-2xl text-lg text-white/60">{description}</p>
           {children}
+          {image && (
+            <div className="mt-10 overflow-hidden rounded-[var(--r-lg)] border border-[var(--border)]">
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={1600}
+                height={900}
+                className="h-auto w-full object-cover"
+                priority
+              />
+            </div>
+          )}
         </div>
       </Container>
     </div>

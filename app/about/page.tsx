@@ -9,7 +9,7 @@ import { buildMetadata } from "@/lib/seo";
 import { TAGLINE } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
-  title: "About Acendia",
+  title: "About Us",
   description:
     "Acendia is an AI-native digital growth agency helping US businesses improve search visibility, win local customers, and generate qualified leads.",
   path: "/about/",
