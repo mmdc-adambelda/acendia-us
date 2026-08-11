@@ -3,6 +3,9 @@ import { SERVICES } from "./site";
 export type ServiceContent = {
   slug: string;
   name: string;
+  /** Natural-language H1 variant of the primary target keyword. Falls back
+   * to `name` when omitted — see acendia-keyword-briefs.md for sourcing. */
+  h1?: string;
   metaTitle: string;
   metaDescription: string;
   heroDescription: string;
@@ -21,18 +24,19 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
   seo: {
     slug: "seo",
     name: "SEO",
-    metaTitle: "SEO Services for US Businesses",
+    h1: "An SEO Company Built Around Your Market",
+    metaTitle: "SEO Company for US Businesses",
     metaDescription:
-      "Full-funnel SEO services for US businesses — technical fixes, content strategy, and authority building designed to earn durable organic rankings.",
+      "Acendia is an SEO company for US businesses — technical fixes, content strategy, and authority building built around real search intent, not a template.",
     heroDescription:
-      "Search engine optimization built around how your specific market actually searches — not a generic national playbook applied to every client the same way.",
+      "Not just an SEO agency running a generic national playbook — an SEO company that builds strategy around how your specific market actually searches.",
     problem: {
       title: "Rankings that don't move, or move and don't matter",
-      body: "Many businesses have tried SEO before — a few blog posts, some backlinks, maybe a technical fix or two — without a documented strategy tying any of it to revenue. The result is often flat rankings for terms that don't drive calls, forms, or bookings.",
+      body: "Many businesses have tried SEO services before — a few blog posts, some backlinks, maybe a technical fix or two — without a documented strategy tying any of it to revenue. The result is often flat rankings for terms that don't drive calls, forms, or bookings. If you've searched for the best SEO company and gotten a dozen identical pitches, this is the difference: a strategy built for your business, not a repackaged template.",
     },
     solution: {
-      title: "A strategy built around commercial intent, not vanity keywords",
-      body: "We start by mapping the searches your actual buyers use at each stage of their decision, then build a technical, content, and authority roadmap around the terms with real business value — prioritized by effort versus payoff.",
+      title: "Professional SEO services built around commercial intent, not vanity keywords",
+      body: "As your SEO consultant and execution partner, we start by mapping the searches your actual buyers use at each stage of their decision, then build a technical, content, and authority roadmap around the terms with real business value — prioritized by effort versus payoff.",
     },
     includes: [
       "Full technical SEO audit and fix roadmap",
@@ -66,15 +70,19 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       { label: "Content Marketing", href: "/services/content-marketing/" },
     ],
     faqs: [
+      { question: "What are SEO services?", answer: "SEO services cover the technical, on-page, and content work needed to earn and grow organic search visibility — typically a mix of technical audits, keyword-driven content, on-page optimization, and authority building, reported against rankings and traffic rather than one-off tasks." },
+      { question: "What's included in SEO services?", answer: "A full engagement typically includes a technical SEO audit, on-page optimization, a content roadmap tied to search intent, competitor analysis, and monthly reporting — see the \"What's included\" section above for our specific scope." },
+      { question: "How much do SEO services cost?", answer: "Cost depends on your market's competitiveness, current site health, and scope of work — we quote after an initial audit rather than a flat rate, since a five-location home services company and a single-location dental practice need very different levels of investment." },
+      { question: "Are SEO services worth it?", answer: "For businesses with an existing customer base and a market where people search before buying, yes — SEO tends to produce a lower cost-per-lead over time than paid channels, though it takes longer to ramp up than a paid campaign." },
       { question: "How is this different from local SEO?", answer: "SEO covers your full organic footprint — national and category terms included. Local SEO is a more focused subset for businesses ranking primarily in map-based, city-specific results." },
-      { question: "Do you handle both technical fixes and content?", answer: "Yes — SEO engagements include technical audits, on-page optimization, and a content roadmap so nothing gets siloed." },
       { question: "What's a realistic timeline?", answer: "Most clients see measurable movement in 90 to 180 days, with results compounding as technical fixes and content accumulate." },
     ],
   },
   "local-seo": {
     slug: "local-seo",
     name: "Local SEO",
-    metaTitle: "Local SEO Services for US Businesses",
+    h1: "Local SEO Services Built for the Map Pack",
+    metaTitle: "Local SEO Services",
     metaDescription:
       "Local SEO services that improve Map Pack visibility, citation consistency, and review growth for businesses serving specific US cities and neighborhoods.",
     heroDescription:
@@ -85,7 +93,7 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
     },
     solution: {
       title: "A local-signal system, not a one-time profile cleanup",
-      body: "We build and maintain the specific signals that drive local rankings: an optimized Google Business Profile, consistent citations across directories, a sustainable review-generation process, and location pages with genuine local substance.",
+      body: "As your local SEO company, we build and maintain the specific signals that drive local rankings: an optimized Google Business Profile, consistent citations across directories, a sustainable review-generation process, and location pages with genuine local substance — the full scope you'd expect from a dedicated local SEO agency, not a bolt-on add to a national SEO package.",
     },
     includes: [
       "Google Business Profile optimization and ongoing management",
@@ -180,18 +188,19 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
   "google-business-profile-optimization": {
     slug: "google-business-profile-optimization",
     name: "Google Business Profile Optimization",
-    metaTitle: "Google Business Profile Optimization for US Businesses",
+    h1: "Google Maps SEO & Google Business Profile Optimization",
+    metaTitle: "Google Maps SEO for US Businesses",
     metaDescription:
-      "Google Business Profile optimization services to improve Map Pack rankings, profile completeness, and lead generation for US businesses.",
+      "Google Maps SEO and Google Business Profile optimization for US businesses — turn your free listing into a lead source, not an afterthought.",
     heroDescription:
-      "Turn your Google Business Profile from a static listing into an active lead source with regular optimization, posts, and monitoring.",
+      "Google Maps SEO that turns your Google Business Profile from a static listing into an active lead source with regular optimization, posts, and monitoring.",
     problem: {
       title: "A claimed profile is not an optimized profile",
-      body: "Most businesses claim their Google Business Profile once and never touch it again. Meanwhile, competitors are posting updates, responding to every review, and keeping categories and services current — all signals that affect ranking.",
+      body: "Most businesses claim their Google Business Profile once and never touch it again. Meanwhile, competitors are running real Google Maps SEO — posting updates, responding to every review, and keeping categories and services current — all signals that affect ranking.",
     },
     solution: {
-      title: "Ongoing profile management, not a one-time setup",
-      body: "We optimize every field that affects ranking and conversion — categories, services, attributes, Q&A, and photos — then keep the profile active with regular posts and prompt review responses.",
+      title: "Ongoing Google My Business optimization, not a one-time setup",
+      body: "We optimize every field that affects Google Maps SEO ranking and conversion — categories, services, attributes, Q&A, and photos — then keep the profile active with regular posts and prompt review responses. Think of it as a standing GMB optimization service, not a task you check off once.",
     },
     includes: [
       "Full profile audit and optimization across all fields",
@@ -228,23 +237,27 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       { question: "Can you help if our profile was suspended?", answer: "We can review the likely cause and guide reinstatement steps, though Google makes the final reinstatement decision, not us." },
       { question: "Do you respond to reviews on our behalf?", answer: "Yes, using a tone and voice guide you approve, with escalation to your team for sensitive or complex situations." },
       { question: "How often will the profile be updated?", answer: "We recommend at minimum weekly posting activity, with real-time review responses and monthly full-profile reviews." },
+      { question: "How do I optimize my Google Business Profile?", answer: "Start with a complete, accurate category and services list, add recent photos, respond to every review, and post updates weekly — this is the core of what our Google Maps SEO service manages on an ongoing basis." },
+      { question: "How do I set up a Google Business Profile?", answer: "You claim it directly through Google, verify your business (usually by mail, phone, or video), then fill out every available field — we can guide you through setup or handle full optimization once it's claimed." },
+      { question: "Is Google Business Profile optimization the same as local SEO?", answer: "It's a core part of local SEO but not the whole picture — local SEO also includes citation consistency, review strategy, and local content, which is why we treat Google Business Profile optimization as a component of our broader Local SEO service." },
     ],
   },
   "website-design": {
     slug: "website-design",
     name: "Website Design",
-    metaTitle: "Website Design Services for US Businesses",
+    h1: "A Web Design Company Built for Conversion",
+    metaTitle: "Web Design Company",
     metaDescription:
-      "Premium, conversion-focused website design for US businesses — built to establish trust in seconds and guide visitors toward a clear next action.",
+      "Acendia is a web design company for US businesses — premium, conversion-focused design built to establish trust in seconds and drive action.",
     heroDescription:
-      "Design that builds credibility in the first three seconds and makes the next step — call, form, or booking — obvious.",
+      "Not just a web design agency shipping templates — a web design company that builds credibility in the first three seconds and makes the next step obvious.",
     problem: {
       title: "A dated design quietly costs you every visitor's trust",
       body: "Visitors form a credibility judgment almost instantly. A cluttered, outdated, or generic-looking site — even with great content underneath — loses trust before anyone reads a word.",
     },
     solution: {
-      title: "Premium, on-brand design built around your conversion goal",
-      body: "We design every page around a clear objective — a call, a form, a booking — using clean typography, strong visual hierarchy, and a layout system that scales across your full site, not just the homepage.",
+      title: "Custom web design built around your conversion goal",
+      body: "As a full-service website design company, we design every page around a clear objective — a call, a form, a booking — using clean typography, strong visual hierarchy, and a layout system that scales across your full site, not just the homepage. Unlike a website design agency reusing the same three templates, every build here starts from your brand and your conversion goal.",
     },
     includes: [
       "Custom homepage and inner-page design system",
@@ -286,18 +299,19 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
   "website-development": {
     slug: "website-development",
     name: "Website Development",
-    metaTitle: "Website Development Services for US Businesses",
+    h1: "A Web Development Company Built for Speed and SEO",
+    metaTitle: "Web Development Company",
     metaDescription:
-      "Fast, technically sound website development for US businesses — built for Core Web Vitals, SEO, and conversion from the first line of code.",
+      "Acendia is a web development company for US businesses — fast, technically sound builds engineered for Core Web Vitals, SEO, and conversion.",
     heroDescription:
-      "Modern, fast website builds engineered for Core Web Vitals, clean SEO fundamentals, and conversion — not just a pretty template.",
+      "As your web development agency, we build modern, fast sites engineered for Core Web Vitals, clean SEO fundamentals, and conversion — not just a pretty template.",
     problem: {
       title: "A beautiful design that loads slowly is a beautiful loss",
       body: "Heavy page builders, unoptimized images, and bloated third-party scripts routinely undo good design work, pushing load times past the point where visitors simply leave.",
     },
     solution: {
-      title: "Performance-first development, SEO-aware from the ground up",
-      body: "We build with modern, efficient frameworks, optimize every asset, and structure the codebase so SEO fundamentals — clean URLs, semantic HTML, proper heading hierarchy — are correct by default, not bolted on after launch.",
+      title: "Custom web development services, performance-first from the ground up",
+      body: "As a website development company, we build with modern, efficient frameworks, optimize every asset, and structure the codebase so SEO fundamentals — clean URLs, semantic HTML, proper heading hierarchy — are correct by default, not bolted on after launch. Our web development services cover everything from architecture through launch QA.",
     },
     includes: [
       "Modern, framework-based development (fast, maintainable, scalable)",
@@ -339,23 +353,24 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
   "content-marketing": {
     slug: "content-marketing",
     name: "Content Marketing",
-    metaTitle: "Content Marketing Services for US Businesses",
+    h1: "Content Marketing Services That Move Buyers, Not Just Traffic",
+    metaTitle: "Content Marketing Services",
     metaDescription:
-      "Content marketing built to rank, answer real search intent, and move US buyers toward a decision — not generic blog posts for the sake of volume.",
+      "Acendia's content marketing services are built to rank, answer real search intent, and move US buyers toward a decision — not generic blog volume.",
     heroDescription:
-      "Content built to rank, answer the actual question being asked, and move a buyer one step closer to contacting you.",
+      "Content marketing services built to rank, answer the actual question being asked, and move a buyer one step closer to contacting you.",
     problem: {
       title: "Content for content's sake doesn't move revenue",
-      body: "Many businesses publish blog posts on a schedule without a clear tie to search intent, funnel stage, or commercial value — resulting in traffic, if any, that never converts.",
+      body: "Many businesses hire a content marketing agency that publishes blog posts on a schedule without a clear tie to search intent, funnel stage, or commercial value — resulting in traffic, if any, that never converts.",
     },
     solution: {
-      title: "Content mapped to funnel stage and internal linking, not just topics",
-      body: "Every piece is planned against a specific search intent and connected back to the commercial pages it should support — so content builds topical authority and drives qualified traffic toward a conversion point.",
+      title: "Content strategy mapped to funnel stage and internal linking, not just topics",
+      body: "Every piece is planned against a specific search intent and connected back to the commercial pages it should support — the content strategy work a generic content creation service usually skips — so content builds topical authority and drives qualified traffic toward a conversion point.",
     },
     includes: [
-      "Content strategy and editorial roadmap",
+      "Dedicated content strategy (not just an editorial calendar — a documented roadmap tied to your commercial pages)",
       "Keyword and search-intent research",
-      "SEO-optimized article writing",
+      "SEO-optimized article writing and content creation",
       "Internal linking strategy connecting content to commercial pages",
       "On-page optimization (titles, headers, schema)",
       "Performance tracking by article",
@@ -392,18 +407,19 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
   "lead-generation": {
     slug: "lead-generation",
     name: "Lead Generation",
-    metaTitle: "Lead Generation Services for US Businesses",
+    h1: "Lead Generation Built to Convert, Not Just Count Clicks",
+    metaTitle: "Lead Generation for US Businesses",
     metaDescription:
-      "Lead generation services that turn organic and paid traffic into booked calls and signed contracts for US businesses.",
+      "Acendia's lead generation services turn organic and paid traffic into booked calls and signed contracts for US businesses — not just clicks.",
     heroDescription:
-      "Turning visibility into booked calls, submitted forms, and signed contracts — not just traffic for its own sake.",
+      "Lead generation that turns visibility into booked calls, submitted forms, and signed contracts — not just traffic for its own sake.",
     problem: {
       title: "Traffic without a system doesn't become revenue",
-      body: "Many businesses invest in SEO or ads and see traffic increase, but leads stay flat because there's no clear conversion path, follow-up system, or tracking connecting clicks to closed business.",
+      body: "Many businesses invest in SEO or ads and see traffic increase, but leads stay flat because there's no clear conversion path, follow-up system, or tracking connecting clicks to closed business. A lead generation company that only chases volume misses this every time.",
     },
     solution: {
-      title: "A full-funnel lead system, not just a landing page",
-      body: "We connect the traffic-generating work (SEO, content, ads) to a conversion path built specifically to capture and qualify leads, with tracking that shows exactly where leads come from.",
+      title: "A full-funnel lead generation system, not just a landing page",
+      body: "As your lead generation agency, we connect the traffic-generating work (SEO, content, ads) to a conversion path built specifically to capture and qualify leads, with tracking that shows exactly where leads come from — built for how a local business actually generates leads, not a generic B2B playbook.",
     },
     includes: [
       "Lead capture strategy across your site (forms, calls, chat)",
@@ -425,7 +441,7 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       "Better visibility into which channels actually produce leads",
       "A conversion path built specifically around your offer",
     ],
-    suitableFor: ["Businesses buying leads from third-party platforms and wanting more control", "Companies with traffic but unclear conversion tracking", "Multi-location businesses needing centralized lead attribution", "Service businesses selling high-value jobs or contracts"],
+    suitableFor: ["Businesses buying leads from third-party platforms and wanting more control", "Companies with traffic but unclear conversion tracking", "Multi-location businesses needing centralized lead attribution", "Lead generation for small business owners who can't justify an enterprise martech stack"],
     examples: [
       "A Nevada moving company reducing reliance on paid lead marketplaces",
       "A Tennessee roofing company needing clearer attribution across five ad and organic channels",
@@ -437,6 +453,9 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       { label: "Free SEO Audit", href: "/free-seo-audit/" },
     ],
     faqs: [
+      { question: "What is lead generation?", answer: "Lead generation is the process of attracting and capturing interest from potential customers — turning anonymous website visitors or searchers into people who've given you a way to follow up, whether that's a form, a call, or a chat." },
+      { question: "How do you generate leads?", answer: "We connect your traffic sources (organic, local, paid) to a conversion path built to capture and qualify interest, then track every lead back to its source so you know which channels are actually working." },
+      { question: "How do I get more leads for my business?", answer: "Usually the fastest wins come from fixing conversion friction on your existing traffic before spending more to acquire new visitors — a slow form, unclear CTA, or missing call tracking often costs more leads than low traffic does." },
       { question: "Do you run paid ads as part of this?", answer: "Our core focus is organic and conversion infrastructure; paid campaign management can be scoped separately if it's part of your broader strategy." },
       { question: "Can this integrate with our CRM?", answer: "Yes — forms are built CRM-ready and can be connected to common CRM and workflow platforms once credentials are provided." },
       { question: "How do you track phone call leads?", answer: "We implement call tracking so calls generated by your site or campaigns are attributed back to their source channel." },
@@ -551,18 +570,19 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
   "ai-digital-marketing": {
     slug: "ai-digital-marketing",
     name: "AI Digital Marketing",
-    metaTitle: "AI Digital Marketing Services for US Businesses",
+    h1: "AI Digital Marketing for the Way Search Is Changing",
+    metaTitle: "AI Digital Marketing",
     metaDescription:
-      "AI-assisted digital marketing services helping US businesses show up in AI search summaries and generative answer engines, not just traditional search results.",
+      "Acendia's AI digital marketing services help US businesses show up in AI search summaries and generative answer engines, not just blue links.",
     heroDescription:
-      "Positioning your business to show up in AI-generated answers, not just the traditional ten blue links.",
+      "AI digital marketing that positions your business to show up in AI-generated answers, not just the traditional ten blue links.",
     problem: {
       title: "AI search summarizes your competitors, not you",
-      body: "A growing share of searches now surface an AI-generated summary before any traditional results. If your content isn't structured, specific, and well-sourced, AI answer engines simply cite someone else instead.",
+      body: "A growing share of searches now surface an AI-generated summary before any traditional results. If your content isn't structured, specific, and well-sourced, AI answer engines simply cite someone else instead — and a typical ai marketing agency retrofitting old SEO tactics won't fix that.",
     },
     solution: {
       title: "Content and structured data built to be cited, not just crawled",
-      body: "We combine clean structured data, clearly defined entities, and content written to directly answer specific questions — the traits AI Overviews and answer engines favor when selecting what to summarize and cite.",
+      body: "As an AI-native digital marketing services provider, we combine clean structured data, clearly defined entities, and content written to directly answer specific questions — the traits AI Overviews and answer engines favor when selecting what to summarize and cite. It's also where we apply AI automation to speed up the audits and research behind traditional digital marketing services.",
     },
     includes: [
       "AI search visibility audit (current citation and summary presence)",

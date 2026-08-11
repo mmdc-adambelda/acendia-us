@@ -29,6 +29,18 @@ export const NAV_LINKS = [
   { label: "About", href: "/about/" },
 ];
 
+// Core services surfaced in the header "Services" dropdown — a curated
+// subset of the full 11-service catalog, not the whole list (see
+// SERVICES below for that). Icon names match ICON_MAP in components/icons.tsx.
+export const CORE_SERVICES_MENU = [
+  { label: "Search Engine Optimization", href: "/services/seo/", icon: "search", blurb: "Durable organic rankings built on real search intent." },
+  { label: "Website Development", href: "/services/website-development/", icon: "code", blurb: "Fast, technically sound builds engineered to convert." },
+  { label: "Google Business Profile Optimization", href: "/services/google-business-profile-optimization/", icon: "badge-check", blurb: "Google Maps SEO that turns your listing into a lead source." },
+  { label: "Digital Marketing", href: "/services/ai-digital-marketing/", icon: "sparkles", blurb: "AI-native marketing built for how search is changing." },
+  { label: "Lead Generation", href: "/services/lead-generation/", icon: "target", blurb: "Turn traffic into booked calls and signed contracts." },
+  { label: "Content Marketing", href: "/services/content-marketing/", icon: "file-text", blurb: "Content built to rank and move buyers toward a decision." },
+];
+
 export const FOOTER_LINK_COLUMNS = [
   {
     title: "Services",

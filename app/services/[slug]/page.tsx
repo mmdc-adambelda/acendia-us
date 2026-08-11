@@ -57,7 +57,7 @@ export default async function ServiceDetailPage({
       />
       <PageHero
         eyebrow="Service"
-        title={content.name}
+        title={content.h1 ?? content.name}
         description={content.heroDescription}
         breadcrumbs={[
           { name: "Services", path: "/services/" },

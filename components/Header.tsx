@@ -3,11 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import SiteSwitcher from "./SiteSwitcher";
-import { NAV_LINKS } from "@/lib/site";
+import ServicesMenu from "./ServicesMenu";
+import { ServiceIcon } from "./icons";
+import { NAV_LINKS, CORE_SERVICES_MENU } from "@/lib/site";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border-dim)] bg-[var(--off-black)]/85 backdrop-blur">
@@ -24,15 +28,19 @@ export default function Header() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="focus-ring text-sm font-medium text-white/75 transition-colors hover:text-white"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) =>
+            link.label === "Services" ? (
+              <ServicesMenu key={link.href} />
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="focus-ring text-sm font-medium text-white/75 transition-colors hover:text-white"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -74,17 +82,61 @@ export default function Header() {
           className="border-t border-[var(--border-dim)] px-5 py-4 md:hidden"
         >
           <ul className="flex flex-col gap-1">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="focus-ring block rounded-[var(--r-sm)] px-3 py-3 text-base font-medium text-white/85 hover:bg-white/5"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            {NAV_LINKS.map((link) =>
+              link.label === "Services" ? (
+                <li key={link.href}>
+                  <button
+                    type="button"
+                    aria-expanded={mobileServicesOpen}
+                    aria-controls="mobile-services-submenu"
+                    onClick={() => setMobileServicesOpen((v) => !v)}
+                    className="focus-ring flex w-full items-center justify-between rounded-[var(--r-sm)] px-3 py-3 text-base font-medium text-white/85 hover:bg-white/5"
+                  >
+                    Services
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform ${mobileServicesOpen ? "rotate-180" : ""}`}
+                      strokeWidth={1.75}
+                      aria-hidden="true"
+                    />
+                  </button>
+                  {mobileServicesOpen && (
+                    <ul id="mobile-services-submenu" className="ml-3 mt-1 space-y-1 border-l border-[var(--border-dim)] pl-3">
+                      {CORE_SERVICES_MENU.map((service) => (
+                        <li key={service.href}>
+                          <Link
+                            href={service.href}
+                            onClick={() => setOpen(false)}
+                            className="focus-ring flex items-center gap-2.5 rounded-[var(--r-sm)] px-3 py-2.5 text-sm text-white/70 hover:bg-white/5 hover:text-white"
+                          >
+                            <ServiceIcon name={service.icon} className="h-4 w-4 shrink-0" />
+                            {service.label}
+                          </Link>
+                        </li>
+                      ))}
+                      <li>
+                        <Link
+                          href="/services/"
+                          onClick={() => setOpen(false)}
+                          className="focus-ring block rounded-[var(--r-sm)] px-3 py-2.5 text-sm font-medium text-white/50 hover:text-white"
+                        >
+                          View all services →
+                        </Link>
+                      </li>
+                    </ul>
+                  )}
+                </li>
+              ) : (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="focus-ring block rounded-[var(--r-sm)] px-3 py-3 text-base font-medium text-white/85 hover:bg-white/5"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              )
+            )}
             <li className="mt-2">
               <Link
                 href="/free-seo-audit/"
