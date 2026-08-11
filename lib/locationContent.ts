@@ -467,6 +467,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     metaTitle: "SEO Agency Dallas",
     metaDescription: "SEO and local search services for Dallas, TX businesses — professional services, legal, and home services companies competing in one of the largest metro economies in the US.",
     heroDescription: "Dallas-Fort Worth's sprawling, business-dense metro means most service categories face deep, well-funded local competition — precision targeting matters more here than in smaller markets.",
+    heroImage: { src: "/images/dallas-tx-skyline.png", alt: "Downtown Dallas, Texas skyline at golden hour" },
     marketContext: "The Dallas-Fort Worth metroplex is one of the largest metro economies in the country, with a business base skewed heavily toward corporate and professional services alongside a large, competitive home services sector. Because the metro spans dozens of distinct suburbs and business districts (Plano, Frisco, Arlington, and more), a single \"Dallas\" landing page rarely captures the specific submarket a customer is actually searching from.",
     industries: ["Professional and B2B services", "Legal services", "Home services", "Real estate", "Healthcare"],
     challenges: [
@@ -500,6 +501,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     metaTitle: "SEO Agency Miami",
     metaDescription: "SEO and local search services for Miami businesses — real estate, healthcare, legal, and home services companies competing in one of the most dynamic markets in the US.",
     heroDescription: "Miami's international population, tourism economy, and real estate intensity create local search dynamics unlike almost anywhere else in the country.",
+    heroImage: { src: "/images/miami-fl-skyline.png", alt: "Downtown Miami, Florida skyline at dusk over Biscayne Bay" },
     marketContext: "Miami's economy is shaped by constant international investment, a large multilingual population, and a real estate market that draws both local and out-of-state buyers. This creates unusually high search competition in real estate and property-adjacent categories, while healthcare and aesthetics benefit from year-round demand driven by both residents and visitors. Businesses that ignore Miami's international and multilingual search behavior typically leave real visibility on the table.",
     industries: ["Real estate and property management", "Healthcare and med spas", "Legal services", "Home services (hurricane-related)", "Hospitality-adjacent professional services"],
     challenges: [
@@ -533,6 +535,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     metaTitle: "SEO Agency Tampa",
     metaDescription: "SEO and local search services for Tampa, FL businesses — home services, healthcare, and professional services companies in one of Florida's fastest-growing metros.",
     heroDescription: "Tampa Bay's steady population growth and diverse economic base create solid, sustained local search demand without the extreme competitive intensity of Miami.",
+    heroImage: { src: "/images/tampa-fl-skyline.png", alt: "Downtown Tampa, Florida skyline along the riverwalk" },
     marketContext: "Tampa Bay has grown steadily as a destination for both new residents and relocating businesses, without reaching the saturated competitive intensity of South Florida markets. That makes it a strong market for businesses investing in local SEO now — visibility gains tend to be more achievable here than in Miami, while demand is still robust across home services, healthcare, and professional services.",
     industries: ["Home services", "Healthcare", "Professional and B2B services", "Real estate", "Legal services"],
     challenges: [
@@ -566,6 +569,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     metaTitle: "SEO Agency Orlando",
     metaDescription: "SEO and local search services for Orlando, FL businesses — home services, healthcare, and real estate companies in one of the fastest-growing metros in the Southeast.",
     heroDescription: "Orlando's tourism-driven economy and rapid residential growth create dual demand streams — visitor-facing businesses and a fast-growing base of full-time residents needing local services.",
+    heroImage: { src: "/images/orlando-fl-skyline.png", alt: "Downtown Orlando, Florida skyline reflected in a lake at dusk" },
     marketContext: "While Orlando is best known for tourism, the metro has also seen substantial residential growth, creating strong, sustained demand for home services, healthcare, and real estate that's separate from the tourism economy entirely. Businesses that only think of Orlando as a tourist market miss a large, steadily growing local customer base actively searching for everyday services.",
     industries: ["Home services", "Real estate and property management", "Healthcare", "Professional and B2B services"],
     challenges: [
@@ -599,6 +603,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     metaTitle: "SEO Agency Los Angeles",
     metaDescription: "SEO and local search services for Los Angeles businesses — legal, healthcare, and professional services companies competing in one of the largest, most fragmented metros in the US.",
     heroDescription: "Los Angeles is less a single city than dozens of distinct neighborhoods and submarkets — genuine local relevance at the neighborhood level is what separates visible businesses from invisible ones.",
+    heroImage: { src: "/images/los-angeles-ca-skyline.png", alt: "Downtown Los Angeles skyline at golden hour with palm trees in the foreground" },
     marketContext: "LA's sheer geographic and cultural sprawl — from Downtown to Santa Monica to the Valley — means \"ranking in Los Angeles\" is functionally meaningless without neighborhood-level specificity. Categories like legal, healthcare, and aesthetics see some of the highest search competition and paid search costs in the country here, making a well-built organic foundation especially valuable relative to the alternative of buying every lead.",
     industries: ["Legal services", "Healthcare and aesthetics", "Professional and B2B services", "Real estate"],
     challenges: [

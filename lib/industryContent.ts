@@ -77,6 +77,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "law-firm-seo": {
     slug: "law-firm-seo",
     icon: "badge-check",
+    heroImage: { src: "/images/us-law-firm-consultation-room.png", alt: "US law firm consultation room with an attorney reviewing documents with a client" },
     name: "Law Firm SEO",
     metaTitle: "Law Firm SEO",
     metaDescription:
@@ -127,6 +128,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "healthcare": {
     slug: "healthcare",
     icon: "sparkles",
+    heroImage: { src: "/images/us-medical-practice-exam-room.png", alt: "Bright, modern US medical practice exam room" },
     name: "Healthcare & Aesthetics",
     metaTitle: "Healthcare SEO",
     metaDescription:
@@ -177,6 +179,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "real-estate": {
     slug: "real-estate",
     icon: "map-pin",
+    heroImage: { src: "/images/us-real-estate-agent-showing-home.png", alt: "Real estate agent showing a modern US suburban home to a couple" },
     name: "Real Estate & Property",
     metaTitle: "Real Estate SEO",
     metaDescription:
@@ -227,6 +230,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "moving-and-logistics": {
     slug: "moving-and-logistics",
     icon: "layers",
+    heroImage: { src: "/images/us-moving-company-loading-truck.png", alt: "Professional movers loading boxes into a moving truck outside a US home" },
     name: "Moving & Logistics",
     metaTitle: "Moving & Logistics SEO",
     metaDescription:
@@ -277,6 +281,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "automotive": {
     slug: "automotive",
     icon: "cpu",
+    heroImage: { src: "/images/us-auto-repair-shop-technician.png", alt: "Auto repair technician working under the hood of a car in a US repair shop" },
     name: "Automotive Services",
     metaTitle: "Automotive SEO Services",
     metaDescription:
@@ -327,6 +332,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "professional-services": {
     slug: "professional-services",
     icon: "target",
+    heroImage: { src: "/images/us-professional-services-office-meeting.png", alt: "Small team meeting in a modern US professional services office" },
     name: "Professional & B2B Services",
     metaTitle: "Professional Services SEO",
     metaDescription:
@@ -377,6 +383,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "roofing-seo": {
     slug: "roofing-seo",
     icon: "layout",
+    heroImage: { src: "/images/us-roofing-contractor-on-roof.png", alt: "Roofing contractor installing shingles on a residential US roof" },
     name: "Roofing Companies",
     metaTitle: "Roofing SEO Services",
     metaDescription:
@@ -414,6 +421,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "hvac-seo": {
     slug: "hvac-seo",
     icon: "cpu",
+    heroImage: { src: "/images/us-hvac-technician-indoor-unit.png", alt: "HVAC technician servicing an indoor air handler in a US home" },
     name: "HVAC Contractors",
     metaTitle: "HVAC SEO Services",
     metaDescription: "SEO services for HVAC contractors — built around emergency repair searches, seasonal demand, and maintenance-plan lead generation.",
@@ -443,6 +451,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "plumbing-seo": {
     slug: "plumbing-seo",
     icon: "layout",
+    heroImage: { src: "/images/us-plumber-under-sink-repair.png", alt: "Plumber repairing pipes under a kitchen sink in a US home" },
     name: "Plumbing Companies",
     metaTitle: "Plumbing SEO Services",
     metaDescription: "SEO services for plumbing companies — built around emergency call volume, Map Pack competition, and local service-area visibility.",
@@ -472,6 +481,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "electrician-seo": {
     slug: "electrician-seo",
     icon: "cpu",
+    heroImage: { src: "/images/us-electrician-panel-upgrade.png", alt: "Electrician working on an open electrical panel in a US home" },
     name: "Electrical Contractors",
     metaTitle: "Electrician SEO Services",
     metaDescription: "SEO services for electrical contractors — covering emergency service, panel upgrade, and EV charger installation search demand.",
@@ -501,6 +511,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "restoration-company-seo": {
     slug: "restoration-company-seo",
     icon: "layout",
+    heroImage: { src: "/images/us-water-damage-restoration-crew.png", alt: "Water damage restoration crew running industrial drying equipment in a US home" },
     name: "Water Damage & Restoration Companies",
     metaTitle: "Restoration Company SEO",
     metaDescription: "SEO services for water damage, fire damage, and mold remediation companies — built around urgent, insurance-driven search demand.",
@@ -530,6 +541,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "personal-injury-lawyer-seo": {
     slug: "personal-injury-lawyer-seo",
     icon: "badge-check",
+    heroImage: { src: "/images/us-personal-injury-attorney-office.png", alt: "Personal injury attorney reviewing case files in a US law office" },
     name: "Personal Injury Law Firms",
     metaTitle: "Personal Injury Lawyer SEO",
     metaDescription: "SEO services for personal injury law firms competing in one of the most expensive, high-value search categories in the country.",
@@ -559,6 +571,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "family-law-seo": {
     slug: "family-law-seo",
     icon: "badge-check",
+    heroImage: { src: "/images/us-family-law-attorney-meeting.png", alt: "Family law attorney in a calm consultation with a client in a US law office" },
     name: "Family Law Firms",
     metaTitle: "Family Law SEO",
     metaDescription: "SEO services for family law and divorce attorneys — built around sensitive, research-heavy search behavior specific to this practice area.",
@@ -588,6 +601,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "dental-seo": {
     slug: "dental-seo",
     icon: "sparkles",
+    heroImage: { src: "/images/us-dental-practice-checkup.png", alt: "Dentist and assistant in a bright, modern US dental treatment room" },
     name: "Dental Practices",
     metaTitle: "Dental SEO Services",
     metaDescription: "SEO services for general and cosmetic dental practices competing for new-patient visibility in local search.",
@@ -617,6 +631,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "med-spa-seo": {
     slug: "med-spa-seo",
     icon: "sparkles",
+    heroImage: { src: "/images/us-med-spa-treatment-room.png", alt: "Elegant, premium US med spa treatment room" },
     name: "Medical Spas & Aesthetics",
     metaTitle: "Med Spa SEO Services",
     metaDescription: "SEO services for medical spas and aesthetics practices competing for high-value, visually-driven local search traffic.",
@@ -646,6 +661,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "property-management-seo": {
     slug: "property-management-seo",
     icon: "map-pin",
+    heroImage: { src: "/images/us-property-manager-inspection.png", alt: "Property manager inspecting a well-maintained US apartment building exterior" },
     name: "Property Management Companies",
     metaTitle: "Property Management SEO",
     metaDescription: "SEO services for property management companies focused on owner-facing lead generation across specific US markets.",
@@ -675,6 +691,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "moving-company-seo": {
     slug: "moving-company-seo",
     icon: "layers",
+    heroImage: { src: "/images/us-movers-carrying-furniture.png", alt: "Professional movers carrying a sofa into a moving truck outside a US home" },
     name: "Moving Companies",
     metaTitle: "Moving Company SEO",
     metaDescription: "SEO services specifically for local and long-distance moving companies competing for direct, non-marketplace bookings.",
@@ -704,6 +721,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "auto-repair-seo": {
     slug: "auto-repair-seo",
     icon: "cpu",
+    heroImage: { src: "/images/us-auto-repair-brake-service.png", alt: "Mechanic servicing a car's brakes on a lift in a US auto repair shop" },
     name: "Auto Repair Shops",
     metaTitle: "Auto Repair SEO",
     metaDescription: "SEO services for independent auto repair shops competing against franchise chains and price-comparison search behavior.",
@@ -733,6 +751,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "accounting-firm-seo": {
     slug: "accounting-firm-seo",
     icon: "file-text",
+    heroImage: { src: "/images/us-accounting-firm-consultation.png", alt: "Accountant reviewing financial documents with a small business owner client" },
     name: "Accounting & Bookkeeping Firms",
     metaTitle: "Accounting Firm SEO",
     metaDescription: "SEO and content strategy for accounting, bookkeeping, and tax firms targeting small-business and individual clients.",
@@ -762,6 +781,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "managed-it-seo": {
     slug: "managed-it-seo",
     icon: "code",
+    heroImage: { src: "/images/us-managed-it-server-room.png", alt: "IT professional working in a clean, modern server room" },
     name: "Managed IT & Cybersecurity Providers",
     metaTitle: "Managed IT SEO",
     metaDescription: "SEO and content strategy for managed IT service providers and cybersecurity firms selling trust and expertise to business buyers.",

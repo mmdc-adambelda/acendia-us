@@ -1,24 +1,51 @@
 # Image Inventory — What's Missing, Filenames, and ChatGPT Prompts
 
-Updated: 2026-08-06 (v2 — every page now has a visual, real photo or placeholder)
+Updated: 2026-08-11 (v3 — all 21 industry pages + 7 of 15 city pages now have real photos)
 
 ## What changed in this pass
 
-Every page listed below **already renders correctly today** — nothing is broken or blank. Pages without a real photo now show a code-generated placeholder (a subtle icon on the site's black/grid background, no AI credits used, no "coming soon" text visible to visitors). Swapping in a real photo later is a one-line code change per page once the file exists — no layout work needed.
+You uploaded 25 images (20 industry photos + 5 city skylines). All were resized to spec and wired in — **every industry page now has a real photo**. Pages still without a real photo show a code-generated placeholder (a subtle icon on the site's black/grid background) — nothing is broken or blank.
 
 ## Where images already exist (real photos, no action needed)
 
 | File | Used on |
 |---|---|
 | `public/brand/acendia-logo.png` / `acendia-favicon.png` | Header, footer, favicon |
-| `public/images/us-home-services-team-onsite.png` | `/industries/home-services/` |
-| `public/images/houston-tx-skyline.png` | `/locations/texas/houston/` |
-| `public/images/austin-tx-skyline.png` | `/locations/texas/austin/` |
-| `public/images/healthcare-case-study-cover.png` | `/case-studies/` (Healthcare card) |
+| `us-home-services-team-onsite.png` | `/industries/home-services/` |
+| `us-law-firm-consultation-room.png` | `/industries/law-firm-seo/` |
+| `us-medical-practice-exam-room.png` | `/industries/healthcare/` |
+| `us-real-estate-agent-showing-home.png` | `/industries/real-estate/` |
+| `us-moving-company-loading-truck.png` | `/industries/moving-and-logistics/` |
+| `us-auto-repair-shop-technician.png` | `/industries/automotive/` |
+| `us-professional-services-office-meeting.png` | `/industries/professional-services/` |
+| `us-roofing-contractor-on-roof.png` | `/industries/roofing-seo/` |
+| `us-hvac-technician-indoor-unit.png` | `/industries/hvac-seo/` |
+| `us-plumber-under-sink-repair.png` | `/industries/plumbing-seo/` |
+| `us-electrician-panel-upgrade.png` | `/industries/electrician-seo/` |
+| `us-water-damage-restoration-crew.png` | `/industries/restoration-company-seo/` |
+| `us-personal-injury-attorney-office.png` | `/industries/personal-injury-lawyer-seo/` |
+| `us-family-law-attorney-meeting.png` | `/industries/family-law-seo/` |
+| `us-dental-practice-checkup.png` | `/industries/dental-seo/` |
+| `us-med-spa-treatment-room.png` | `/industries/med-spa-seo/` |
+| `us-property-manager-inspection.png` | `/industries/property-management-seo/` |
+| `us-movers-carrying-furniture.png` | `/industries/moving-company-seo/` |
+| `us-auto-repair-brake-service.png` | `/industries/auto-repair-seo/` |
+| `us-accounting-firm-consultation.png` | `/industries/accounting-firm-seo/` |
+| `us-managed-it-server-room.png` | `/industries/managed-it-seo/` |
+| `houston-tx-skyline.png` | `/locations/texas/houston/` |
+| `austin-tx-skyline.png` | `/locations/texas/austin/` |
+| `dallas-tx-skyline.png` | `/locations/texas/dallas/` |
+| `miami-fl-skyline.png` | `/locations/florida/miami/` |
+| `tampa-fl-skyline.png` | `/locations/florida/tampa/` |
+| `orlando-fl-skyline.png` | `/locations/florida/orlando/` |
+| `los-angeles-ca-skyline.png` | `/locations/california/los-angeles/` |
+| `healthcare-case-study-cover.png` | `/case-studies/` (Healthcare card) |
+
+**All industry pages (21 of 21) are complete.** Remaining gaps are cities (8 of 15), states (20 of 20), services (11 of 11), articles (3 of 3), and case-study covers (6 of 7).
 
 ## Where to save new files
 
-Save everything to **`public/images/`** (flat folder, no subfolders). Use the exact filenames below. Once a file is there, tell me — I resize to spec (staying PNG) and wire it in.
+Save everything to **`public/images/`** (flat folder, no subfolders). Use the exact filenames below — exact spelling matters (one earlier upload had a missing hyphen and needed correcting). Once files are there, tell me — I resize to spec and wire them in.
 
 ## How to generate with ChatGPT
 
@@ -34,40 +61,10 @@ Save everything to **`public/images/`** (flat folder, no subfolders). Use the ex
 
 ---
 
-## 1. Industry pages — 20 of 21 missing (1600×1000)
+## 1. City pages — 8 of 15 still missing (1600×900)
 
 | Page | Filename | Prompt subject |
 |---|---|---|
-| `/industries/law-firm-seo/` | `us-law-firm-consultation-room.png` | a modern US law firm consultation room, polished wood conference table, leather chairs, large window overlooking a city skyline, warm natural light, an attorney in a suit discussing documents with a client at respectful mid-distance |
-| `/industries/healthcare/` | `us-medical-practice-exam-room.png` | a bright, modern US medical practice exam room, a doctor in a white coat reviewing a tablet, warm natural light |
-| `/industries/real-estate/` | `us-real-estate-agent-showing-home.png` | a real estate agent showing a modern US suburban home's entrance to a couple, sunny afternoon, For Sale sign softly visible |
-| `/industries/moving-and-logistics/` | `us-moving-company-loading-truck.png` | professional movers in matching uniforms loading boxes into an unmarked moving truck outside a US suburban home, daytime |
-| `/industries/automotive/` | `us-auto-repair-shop-technician.png` | an auto repair technician working under the hood of a car in a clean, well-lit US auto repair shop bay |
-| `/industries/professional-services/` | `us-professional-services-office-meeting.png` | a small team meeting in a modern US professional services office, laptops open, natural daylight |
-| `/industries/roofing-seo/` | `us-roofing-contractor-on-roof.png` | a roofing contractor in safety gear installing shingles on a residential US roof, clear sunny sky |
-| `/industries/hvac-seo/` | `us-hvac-technician-indoor-unit.png` | an HVAC technician servicing an indoor air handler in a US home utility closet |
-| `/industries/plumbing-seo/` | `us-plumber-under-sink-repair.png` | a plumber repairing pipes under a kitchen sink in a US home, tools laid out neatly |
-| `/industries/electrician-seo/` | `us-electrician-panel-upgrade.png` | an electrician working on an open electrical panel in a US home, safety glasses, multimeter in hand |
-| `/industries/restoration-company-seo/` | `us-water-damage-restoration-crew.png` | a water damage restoration crew in protective gear running industrial drying equipment in a US home living room |
-| `/industries/personal-injury-lawyer-seo/` | `us-personal-injury-attorney-office.png` | a personal injury attorney reviewing case files at a desk in a professional US law office |
-| `/industries/family-law-seo/` | `us-family-law-attorney-meeting.png` | a calm, warm consultation between a family law attorney and a client in a softly lit US law office |
-| `/industries/dental-seo/` | `us-dental-practice-checkup.png` | a friendly dentist and assistant in a bright, modern US dental treatment room |
-| `/industries/med-spa-seo/` | `us-med-spa-treatment-room.png` | an elegant, premium US med spa treatment room, soft lighting, minimalist decor |
-| `/industries/property-management-seo/` | `us-property-manager-inspection.png` | a property manager with a tablet inspecting a well-maintained US apartment building exterior |
-| `/industries/moving-company-seo/` | `us-movers-carrying-furniture.png` | two professional movers carefully carrying a sofa into a moving truck outside a US home |
-| `/industries/auto-repair-seo/` | `us-auto-repair-brake-service.png` | a mechanic servicing a car's brakes on a lift in a clean, organized US auto repair shop |
-| `/industries/accounting-firm-seo/` | `us-accounting-firm-consultation.png` | an accountant reviewing financial documents with a small business owner client in a modern US office |
-| `/industries/managed-it-seo/` | `us-managed-it-server-room.png` | an IT professional working on a laptop in a clean, modern server room, blue-toned ambient lighting |
-
-## 2. City pages — 11 of 13 missing (1600×900)
-
-| Page | Filename | Prompt subject |
-|---|---|---|
-| `/locations/texas/dallas/` | `dallas-tx-skyline.png` | downtown Dallas, Texas skyline at golden hour, distinctive tower silhouette, clear sky |
-| `/locations/florida/miami/` | `miami-fl-skyline.png` | downtown Miami, Florida skyline at dusk, colorful sunset over Biscayne Bay |
-| `/locations/florida/tampa/` | `tampa-fl-skyline.png` | downtown Tampa, Florida skyline along the riverwalk at golden hour |
-| `/locations/florida/orlando/` | `orlando-fl-skyline.png` | downtown Orlando, Florida skyline reflected in a lake at dusk |
-| `/locations/california/los-angeles/` | `los-angeles-ca-skyline.png` | downtown Los Angeles skyline at golden hour, palm trees in the foreground |
 | `/locations/california/san-diego/` | `san-diego-ca-skyline.png` | downtown San Diego skyline with the bay and boats in the foreground at sunset |
 | `/locations/new-york/new-york-city/` | `new-york-city-ny-skyline.png` | the Manhattan skyline at dusk with city lights turning on |
 | `/locations/georgia/atlanta/` | `atlanta-ga-skyline.png` | downtown Atlanta, Georgia skyline at golden hour |
@@ -79,7 +76,7 @@ Save everything to **`public/images/`** (flat folder, no subfolders). Use the ex
 
 All: append "no people, no text" to the end of the prompt.
 
-## 3. State pages — 20 of 20 missing (1600×900) — NEW slot added this pass
+## 2. State pages — 20 of 20 missing (1600×900)
 
 One representative landmark/skyline/landscape image per state works well here (can differ from the city image if the state has a covered city already — e.g., Texas can use a different city than Houston/Dallas/Austin, like San Antonio's River Walk).
 
@@ -108,7 +105,7 @@ One representative landmark/skyline/landscape image per state works well here (c
 
 All: append "wide landscape shot, no people, no text" to the end of the prompt.
 
-## 4. Service pages — 11 of 11 missing (1600×1000) — NEW slot added this pass
+## 3. Service pages — 11 of 11 missing (1600×1000)
 
 These are more abstract/conceptual than industry or location pages — a literal "person pointing at a chart" stock photo tends to look generic, so these lean toward clean, real work-in-progress shots instead.
 
@@ -128,7 +125,7 @@ These are more abstract/conceptual than industry or location pages — a literal
 
 All: append "no people's faces in extreme close-up, no visible screen text/UI detail, no logos" to the end of the prompt.
 
-## 5. Article featured images — 3 of 3 missing (1600×900) — NEW slot added this pass
+## 4. Article featured images — 3 of 3 missing (1600×900)
 
 | Page | Filename | Prompt subject |
 |---|---|---|
@@ -136,7 +133,7 @@ All: append "no people's faces in extreme close-up, no visible screen text/UI de
 | `/insights/google-business-profile-optimization-mistakes/` | `gbp-mistakes-featured.png` | a close-up of a Google Business Profile-style listing card concept displayed on a laptop screen, blurred coffee shop background |
 | `/insights/technical-seo-audit-checklist/` | `technical-seo-checklist-featured.png` | a developer's dual-monitor setup showing website performance charts and code, dark-mode editor, focused workspace |
 
-## 6. Case study covers — 6 of 7 missing (1200×800, abstract not photos)
+## 5. Case study covers — 6 of 7 missing (1200×800, abstract not photos)
 
 Use the **abstract style prefix** from above, not the photo one.
 
@@ -155,15 +152,13 @@ Use the **abstract style prefix** from above, not the photo one.
 
 | Category | Total pages | Have real photo | Need generation |
 |---|---|---|---|
-| Industry pages | 21 | 1 | 20 |
-| City pages | 13 | 2 | 11 |
+| Industry pages | 21 | **21** ✅ | 0 |
+| City pages | 15 | 7 | 8 |
 | State pages | 20 | 0 | 20 |
 | Service pages | 11 | 0 | 11 |
 | Article pages | 3 | 0 | 3 |
 | Case study covers | 7 | 1 | 6 |
-| **Total** | **75** | **4** | **71** |
-
-You don't need to do all 71 at once — every page already looks intentional with its placeholder. Prioritize whichever pages you expect the most traffic on first (likely the 8 SEO-brief service pages and your priority-state cities).
+| **Total** | **77** | **30** | **47** |
 
 ## Quality checklist
 
@@ -171,3 +166,4 @@ You don't need to do all 71 at once — every page already looks intentional wit
 - No visible text, logos, or watermarks baked into the image — regenerate if ChatGPT adds garbled text.
 - No identifiable real person, brand, or trademark — generic/stock-style only.
 - Alt text: I write this when I wire the file in — you don't need to supply it.
+- **Filename precision matters**: one upload in this batch had a typo (`agentshowing` instead of `agent-showing`) — I caught and renamed it, but double-check filenames match exactly before uploading to save a round-trip.
