@@ -24,9 +24,9 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "home-services",
     icon: "layout",
     name: "Home Services",
-    metaTitle: "SEO for Home Services Companies",
+    metaTitle: "Home Services SEO",
     metaDescription:
-      "SEO and local marketing strategy for home services businesses — roofing, HVAC, plumbing, electrical, restoration, and more — competing for local jobs across the US.",
+      "Home services SEO and local marketing strategy — roofing, HVAC, plumbing, electrical, restoration, and more — competing for local jobs across the US.",
     heroDescription:
       "Roofers, HVAC contractors, plumbers, and electricians all compete for the same thing: being the business a nearby customer calls first when something breaks.",
     heroImage: {
@@ -78,7 +78,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "law-firm-seo",
     icon: "badge-check",
     name: "Law Firm SEO",
-    metaTitle: "SEO for Law Firms | Legal SEO Services",
+    metaTitle: "Law Firm SEO",
     metaDescription:
       "SEO services built for law firms — personal injury, family law, immigration, and estate planning practices competing for high-value case leads across the US.",
     heroDescription:
@@ -128,7 +128,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "healthcare",
     icon: "sparkles",
     name: "Healthcare & Aesthetics",
-    metaTitle: "SEO for Healthcare, Dental & Med Spa Practices",
+    metaTitle: "Healthcare SEO",
     metaDescription:
       "SEO and local marketing for dental, medical, and med spa practices — built around how US patients actually search for and choose a provider.",
     heroDescription:
@@ -178,7 +178,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "real-estate",
     icon: "map-pin",
     name: "Real Estate & Property",
-    metaTitle: "SEO for Real Estate & Property Management Companies",
+    metaTitle: "Real Estate SEO",
     metaDescription:
       "SEO services for real estate agencies, property managers, and brokers competing for local visibility in specific US neighborhoods and markets.",
     heroDescription:
@@ -228,7 +228,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "moving-and-logistics",
     icon: "layers",
     name: "Moving & Logistics",
-    metaTitle: "SEO for Moving Companies & Logistics Businesses",
+    metaTitle: "Moving & Logistics SEO",
     metaDescription:
       "SEO and local marketing for moving companies, storage providers, and logistics businesses competing against national lead-gen platforms for direct bookings.",
     heroDescription:
@@ -278,11 +278,11 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "automotive",
     icon: "cpu",
     name: "Automotive Services",
-    metaTitle: "SEO for Auto Repair, Towing & Detailing Businesses",
+    metaTitle: "Automotive SEO Services",
     metaDescription:
-      "SEO and local marketing for auto repair shops, towing companies, and detailing businesses competing for local, often urgent, automotive service searches.",
+      "Automotive SEO and local marketing for auto repair shops, towing companies, and detailing businesses competing for urgent, local searches.",
     heroDescription:
-      "From breakdowns to routine maintenance, automotive searches are frequently urgent and hyper-local — the shop that shows up first on mobile usually wins the call.",
+      "Automotive SEO built for how these searches actually happen — frequently urgent and hyper-local, where the shop that shows up first on mobile usually wins the call.",
     challenges: [
       { title: "Urgent, mobile-first search behavior", body: "Towing and breakdown searches happen on a phone, often roadside, where speed and clarity of information decide the click." },
       { title: "Category price-shopping", body: "Routine service searches (\"oil change near me\") are heavily price- and review-driven, with thin differentiation between competitors." },
@@ -328,7 +328,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "professional-services",
     icon: "target",
     name: "Professional & B2B Services",
-    metaTitle: "SEO for Accounting, IT & Professional Services Firms",
+    metaTitle: "Professional Services SEO",
     metaDescription:
       "SEO and content strategy for accounting firms, managed IT providers, staffing agencies, and other B2B professional services firms building trust before a contract.",
     heroDescription:
@@ -378,7 +378,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "roofing-seo",
     icon: "layout",
     name: "Roofing Companies",
-    metaTitle: "SEO for Roofing Companies | Roofing SEO Services",
+    metaTitle: "Roofing SEO Services",
     metaDescription:
       "SEO services for roofing companies — built around storm-driven demand, insurance-claim searches, and the local competition specific to roofing.",
     heroDescription:
@@ -415,7 +415,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "hvac-seo",
     icon: "cpu",
     name: "HVAC Contractors",
-    metaTitle: "SEO for HVAC Companies | HVAC SEO Services",
+    metaTitle: "HVAC SEO Services",
     metaDescription: "SEO services for HVAC contractors — built around emergency repair searches, seasonal demand, and maintenance-plan lead generation.",
     heroDescription: "HVAC search behavior swings hard between emergency repair and planned maintenance — and each needs a different page, not one blended services page.",
     challenges: [
@@ -444,7 +444,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "plumbing-seo",
     icon: "layout",
     name: "Plumbing Companies",
-    metaTitle: "SEO for Plumbing Companies | Plumber SEO Services",
+    metaTitle: "Plumbing SEO Services",
     metaDescription: "SEO services for plumbing companies — built around emergency call volume, Map Pack competition, and local service-area visibility.",
     heroDescription: "Plumbing is one of the most Map-Pack-dependent categories in home services — a strong local profile often matters more than the website itself.",
     challenges: [
@@ -473,7 +473,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "electrician-seo",
     icon: "cpu",
     name: "Electrical Contractors",
-    metaTitle: "SEO for Electricians | Electrical Contractor SEO",
+    metaTitle: "Electrician SEO Services",
     metaDescription: "SEO services for electrical contractors — covering emergency service, panel upgrade, and EV charger installation search demand.",
     heroDescription: "Electrical searches range from urgent safety issues to planned upgrade projects, each needing a distinct approach to content and local visibility.",
     challenges: [
@@ -502,7 +502,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "restoration-company-seo",
     icon: "layout",
     name: "Water Damage & Restoration Companies",
-    metaTitle: "SEO for Restoration Companies | Water Damage SEO",
+    metaTitle: "Restoration Company SEO",
     metaDescription: "SEO services for water damage, fire damage, and mold remediation companies — built around urgent, insurance-driven search demand.",
     heroDescription: "Restoration searches are almost always urgent and insurance-adjacent — the company that answers fastest and shows up first usually gets the job.",
     challenges: [
@@ -531,7 +531,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "personal-injury-lawyer-seo",
     icon: "badge-check",
     name: "Personal Injury Law Firms",
-    metaTitle: "SEO for Personal Injury Lawyers | PI Law Firm SEO",
+    metaTitle: "Personal Injury Lawyer SEO",
     metaDescription: "SEO services for personal injury law firms competing in one of the most expensive, high-value search categories in the country.",
     heroDescription: "Personal injury is among the most competitive and highest-value search categories in the US — durable organic visibility is a meaningful edge against firms relying purely on paid spend.",
     challenges: [
@@ -560,7 +560,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "family-law-seo",
     icon: "badge-check",
     name: "Family Law Firms",
-    metaTitle: "SEO for Family Law Firms | Divorce Attorney SEO",
+    metaTitle: "Family Law SEO",
     metaDescription: "SEO services for family law and divorce attorneys — built around sensitive, research-heavy search behavior specific to this practice area.",
     heroDescription: "Family law clients often research extensively and privately before ever contacting a firm — content that answers real questions builds trust before the first call.",
     challenges: [
@@ -589,7 +589,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "dental-seo",
     icon: "sparkles",
     name: "Dental Practices",
-    metaTitle: "SEO for Dental Practices | Dentist SEO Services",
+    metaTitle: "Dental SEO Services",
     metaDescription: "SEO services for general and cosmetic dental practices competing for new-patient visibility in local search.",
     heroDescription: "New-patient acquisition for dental practices increasingly starts with a local search and a quick scan of reviews before a call is ever made.",
     challenges: [
@@ -618,7 +618,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "med-spa-seo",
     icon: "sparkles",
     name: "Medical Spas & Aesthetics",
-    metaTitle: "SEO for Med Spas | Medical Spa SEO Services",
+    metaTitle: "Med Spa SEO Services",
     metaDescription: "SEO services for medical spas and aesthetics practices competing for high-value, visually-driven local search traffic.",
     heroDescription: "Med spa search behavior is heavily visual and trust-dependent — before/after content and reviews often matter as much as the service page itself.",
     challenges: [
@@ -647,7 +647,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "property-management-seo",
     icon: "map-pin",
     name: "Property Management Companies",
-    metaTitle: "SEO for Property Management Companies",
+    metaTitle: "Property Management SEO",
     metaDescription: "SEO services for property management companies focused on owner-facing lead generation across specific US markets.",
     heroDescription: "Property management growth depends on owner-facing search visibility — a distinct funnel from tenant-facing rental search that's often under-invested in.",
     challenges: [
@@ -676,7 +676,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "moving-company-seo",
     icon: "layers",
     name: "Moving Companies",
-    metaTitle: "SEO for Moving Companies | Mover SEO Services",
+    metaTitle: "Moving Company SEO",
     metaDescription: "SEO services specifically for local and long-distance moving companies competing for direct, non-marketplace bookings.",
     heroDescription: "Moving companies that build genuine local and route-specific visibility reduce their dependence on paid lead marketplaces over time.",
     challenges: [
@@ -705,7 +705,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "auto-repair-seo",
     icon: "cpu",
     name: "Auto Repair Shops",
-    metaTitle: "SEO for Auto Repair Shops | Auto Shop SEO",
+    metaTitle: "Auto Repair SEO",
     metaDescription: "SEO services for independent auto repair shops competing against franchise chains and price-comparison search behavior.",
     heroDescription: "Independent auto repair shops win on trust and reviews where franchise chains win on paid spend — organic and local SEO is where that advantage compounds.",
     challenges: [
@@ -734,7 +734,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "accounting-firm-seo",
     icon: "file-text",
     name: "Accounting & Bookkeeping Firms",
-    metaTitle: "SEO for Accounting Firms | Accounting SEO Services",
+    metaTitle: "Accounting Firm SEO",
     metaDescription: "SEO and content strategy for accounting, bookkeeping, and tax firms targeting small-business and individual clients.",
     heroDescription: "Accounting clients research extensively before choosing a firm — clear, specific content on services and specialties builds the trust a referral used to provide.",
     challenges: [
@@ -763,7 +763,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     slug: "managed-it-seo",
     icon: "code",
     name: "Managed IT & Cybersecurity Providers",
-    metaTitle: "SEO for Managed IT Providers | MSP SEO Services",
+    metaTitle: "Managed IT SEO",
     metaDescription: "SEO and content strategy for managed IT service providers and cybersecurity firms selling trust and expertise to business buyers.",
     heroDescription: "MSP buyers research extensively and compare technical depth carefully — generic \"IT services\" pages rarely convert as well as specific, expertise-driven content.",
     challenges: [
