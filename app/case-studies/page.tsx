@@ -22,7 +22,7 @@ export const metadata: Metadata = buildMetadata({
 // so every card still looks intentional rather than empty.
 const COVER_IMAGES: Record<string, { src: string; alt: string }> = {
   healthcare: {
-    src: "/images/healthcare-case-study-cover.webp",
+    src: "/images/healthcare-case-study-cover.png",
     alt: "Abstract medical cross and heartbeat pulse cover art",
   },
 };

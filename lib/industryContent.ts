@@ -30,7 +30,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
     heroDescription:
       "Roofers, HVAC contractors, plumbers, and electricians all compete for the same thing: being the business a nearby customer calls first when something breaks.",
     heroImage: {
-      src: "/images/us-home-services-team-onsite.webp",
+      src: "/images/us-home-services-team-onsite.png",
       alt: "US home services technician inspecting a rooftop HVAC unit on a suburban house",
     },
     challenges: [

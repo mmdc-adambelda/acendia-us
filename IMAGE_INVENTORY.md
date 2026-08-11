@@ -11,14 +11,14 @@ Every page listed below **already renders correctly today** — nothing is broke
 | File | Used on |
 |---|---|
 | `public/brand/acendia-logo.png` / `acendia-favicon.png` | Header, footer, favicon |
-| `public/images/us-home-services-team-onsite.webp` | `/industries/home-services/` |
-| `public/images/houston-tx-skyline.webp` | `/locations/texas/houston/` |
-| `public/images/austin-tx-skyline.webp` | `/locations/texas/austin/` |
-| `public/images/healthcare-case-study-cover.webp` | `/case-studies/` (Healthcare card) |
+| `public/images/us-home-services-team-onsite.png` | `/industries/home-services/` |
+| `public/images/houston-tx-skyline.png` | `/locations/texas/houston/` |
+| `public/images/austin-tx-skyline.png` | `/locations/texas/austin/` |
+| `public/images/healthcare-case-study-cover.png` | `/case-studies/` (Healthcare card) |
 
 ## Where to save new files
 
-Save everything to **`public/images/`** (flat folder, no subfolders). Use the exact filenames below. Once a file is there, tell me — I resize to spec, convert to WebP, and wire it in.
+Save everything to **`public/images/`** (flat folder, no subfolders). Use the exact filenames below. Once a file is there, tell me — I resize to spec (staying PNG) and wire it in.
 
 ## How to generate with ChatGPT
 
@@ -38,44 +38,44 @@ Save everything to **`public/images/`** (flat folder, no subfolders). Use the ex
 
 | Page | Filename | Prompt subject |
 |---|---|---|
-| `/industries/law-firm-seo/` | `us-law-firm-consultation-room.webp` | a modern US law firm consultation room, polished wood conference table, leather chairs, large window overlooking a city skyline, warm natural light, an attorney in a suit discussing documents with a client at respectful mid-distance |
-| `/industries/healthcare/` | `us-medical-practice-exam-room.webp` | a bright, modern US medical practice exam room, a doctor in a white coat reviewing a tablet, warm natural light |
-| `/industries/real-estate/` | `us-real-estate-agent-showing-home.webp` | a real estate agent showing a modern US suburban home's entrance to a couple, sunny afternoon, For Sale sign softly visible |
-| `/industries/moving-and-logistics/` | `us-moving-company-loading-truck.webp` | professional movers in matching uniforms loading boxes into an unmarked moving truck outside a US suburban home, daytime |
-| `/industries/automotive/` | `us-auto-repair-shop-technician.webp` | an auto repair technician working under the hood of a car in a clean, well-lit US auto repair shop bay |
-| `/industries/professional-services/` | `us-professional-services-office-meeting.webp` | a small team meeting in a modern US professional services office, laptops open, natural daylight |
-| `/industries/roofing-seo/` | `us-roofing-contractor-on-roof.webp` | a roofing contractor in safety gear installing shingles on a residential US roof, clear sunny sky |
-| `/industries/hvac-seo/` | `us-hvac-technician-indoor-unit.webp` | an HVAC technician servicing an indoor air handler in a US home utility closet |
-| `/industries/plumbing-seo/` | `us-plumber-under-sink-repair.webp` | a plumber repairing pipes under a kitchen sink in a US home, tools laid out neatly |
-| `/industries/electrician-seo/` | `us-electrician-panel-upgrade.webp` | an electrician working on an open electrical panel in a US home, safety glasses, multimeter in hand |
-| `/industries/restoration-company-seo/` | `us-water-damage-restoration-crew.webp` | a water damage restoration crew in protective gear running industrial drying equipment in a US home living room |
-| `/industries/personal-injury-lawyer-seo/` | `us-personal-injury-attorney-office.webp` | a personal injury attorney reviewing case files at a desk in a professional US law office |
-| `/industries/family-law-seo/` | `us-family-law-attorney-meeting.webp` | a calm, warm consultation between a family law attorney and a client in a softly lit US law office |
-| `/industries/dental-seo/` | `us-dental-practice-checkup.webp` | a friendly dentist and assistant in a bright, modern US dental treatment room |
-| `/industries/med-spa-seo/` | `us-med-spa-treatment-room.webp` | an elegant, premium US med spa treatment room, soft lighting, minimalist decor |
-| `/industries/property-management-seo/` | `us-property-manager-inspection.webp` | a property manager with a tablet inspecting a well-maintained US apartment building exterior |
-| `/industries/moving-company-seo/` | `us-movers-carrying-furniture.webp` | two professional movers carefully carrying a sofa into a moving truck outside a US home |
-| `/industries/auto-repair-seo/` | `us-auto-repair-brake-service.webp` | a mechanic servicing a car's brakes on a lift in a clean, organized US auto repair shop |
-| `/industries/accounting-firm-seo/` | `us-accounting-firm-consultation.webp` | an accountant reviewing financial documents with a small business owner client in a modern US office |
-| `/industries/managed-it-seo/` | `us-managed-it-server-room.webp` | an IT professional working on a laptop in a clean, modern server room, blue-toned ambient lighting |
+| `/industries/law-firm-seo/` | `us-law-firm-consultation-room.png` | a modern US law firm consultation room, polished wood conference table, leather chairs, large window overlooking a city skyline, warm natural light, an attorney in a suit discussing documents with a client at respectful mid-distance |
+| `/industries/healthcare/` | `us-medical-practice-exam-room.png` | a bright, modern US medical practice exam room, a doctor in a white coat reviewing a tablet, warm natural light |
+| `/industries/real-estate/` | `us-real-estate-agent-showing-home.png` | a real estate agent showing a modern US suburban home's entrance to a couple, sunny afternoon, For Sale sign softly visible |
+| `/industries/moving-and-logistics/` | `us-moving-company-loading-truck.png` | professional movers in matching uniforms loading boxes into an unmarked moving truck outside a US suburban home, daytime |
+| `/industries/automotive/` | `us-auto-repair-shop-technician.png` | an auto repair technician working under the hood of a car in a clean, well-lit US auto repair shop bay |
+| `/industries/professional-services/` | `us-professional-services-office-meeting.png` | a small team meeting in a modern US professional services office, laptops open, natural daylight |
+| `/industries/roofing-seo/` | `us-roofing-contractor-on-roof.png` | a roofing contractor in safety gear installing shingles on a residential US roof, clear sunny sky |
+| `/industries/hvac-seo/` | `us-hvac-technician-indoor-unit.png` | an HVAC technician servicing an indoor air handler in a US home utility closet |
+| `/industries/plumbing-seo/` | `us-plumber-under-sink-repair.png` | a plumber repairing pipes under a kitchen sink in a US home, tools laid out neatly |
+| `/industries/electrician-seo/` | `us-electrician-panel-upgrade.png` | an electrician working on an open electrical panel in a US home, safety glasses, multimeter in hand |
+| `/industries/restoration-company-seo/` | `us-water-damage-restoration-crew.png` | a water damage restoration crew in protective gear running industrial drying equipment in a US home living room |
+| `/industries/personal-injury-lawyer-seo/` | `us-personal-injury-attorney-office.png` | a personal injury attorney reviewing case files at a desk in a professional US law office |
+| `/industries/family-law-seo/` | `us-family-law-attorney-meeting.png` | a calm, warm consultation between a family law attorney and a client in a softly lit US law office |
+| `/industries/dental-seo/` | `us-dental-practice-checkup.png` | a friendly dentist and assistant in a bright, modern US dental treatment room |
+| `/industries/med-spa-seo/` | `us-med-spa-treatment-room.png` | an elegant, premium US med spa treatment room, soft lighting, minimalist decor |
+| `/industries/property-management-seo/` | `us-property-manager-inspection.png` | a property manager with a tablet inspecting a well-maintained US apartment building exterior |
+| `/industries/moving-company-seo/` | `us-movers-carrying-furniture.png` | two professional movers carefully carrying a sofa into a moving truck outside a US home |
+| `/industries/auto-repair-seo/` | `us-auto-repair-brake-service.png` | a mechanic servicing a car's brakes on a lift in a clean, organized US auto repair shop |
+| `/industries/accounting-firm-seo/` | `us-accounting-firm-consultation.png` | an accountant reviewing financial documents with a small business owner client in a modern US office |
+| `/industries/managed-it-seo/` | `us-managed-it-server-room.png` | an IT professional working on a laptop in a clean, modern server room, blue-toned ambient lighting |
 
 ## 2. City pages — 11 of 13 missing (1600×900)
 
 | Page | Filename | Prompt subject |
 |---|---|---|
-| `/locations/texas/dallas/` | `dallas-tx-skyline.webp` | downtown Dallas, Texas skyline at golden hour, distinctive tower silhouette, clear sky |
-| `/locations/florida/miami/` | `miami-fl-skyline.webp` | downtown Miami, Florida skyline at dusk, colorful sunset over Biscayne Bay |
-| `/locations/florida/tampa/` | `tampa-fl-skyline.webp` | downtown Tampa, Florida skyline along the riverwalk at golden hour |
-| `/locations/florida/orlando/` | `orlando-fl-skyline.webp` | downtown Orlando, Florida skyline reflected in a lake at dusk |
-| `/locations/california/los-angeles/` | `los-angeles-ca-skyline.webp` | downtown Los Angeles skyline at golden hour, palm trees in the foreground |
-| `/locations/california/san-diego/` | `san-diego-ca-skyline.webp` | downtown San Diego skyline with the bay and boats in the foreground at sunset |
-| `/locations/new-york/new-york-city/` | `new-york-city-ny-skyline.webp` | the Manhattan skyline at dusk with city lights turning on |
-| `/locations/georgia/atlanta/` | `atlanta-ga-skyline.webp` | downtown Atlanta, Georgia skyline at golden hour |
-| `/locations/north-carolina/charlotte/` | `charlotte-nc-skyline.webp` | downtown Charlotte, North Carolina skyline at dusk |
-| `/locations/north-carolina/raleigh/` | `raleigh-nc-skyline.webp` | downtown Raleigh, North Carolina skyline at golden hour |
-| `/locations/arizona/phoenix/` | `phoenix-az-skyline.webp` | downtown Phoenix, Arizona skyline at sunset with desert mountains behind |
-| `/locations/arizona/scottsdale/` | `scottsdale-az-skyline.webp` | upscale desert cityscape of Scottsdale, Arizona at golden hour, palm-lined streets, desert mountains behind |
-| `/locations/illinois/chicago/` | `chicago-il-skyline.webp` | the Chicago skyline from the lakefront at golden hour |
+| `/locations/texas/dallas/` | `dallas-tx-skyline.png` | downtown Dallas, Texas skyline at golden hour, distinctive tower silhouette, clear sky |
+| `/locations/florida/miami/` | `miami-fl-skyline.png` | downtown Miami, Florida skyline at dusk, colorful sunset over Biscayne Bay |
+| `/locations/florida/tampa/` | `tampa-fl-skyline.png` | downtown Tampa, Florida skyline along the riverwalk at golden hour |
+| `/locations/florida/orlando/` | `orlando-fl-skyline.png` | downtown Orlando, Florida skyline reflected in a lake at dusk |
+| `/locations/california/los-angeles/` | `los-angeles-ca-skyline.png` | downtown Los Angeles skyline at golden hour, palm trees in the foreground |
+| `/locations/california/san-diego/` | `san-diego-ca-skyline.png` | downtown San Diego skyline with the bay and boats in the foreground at sunset |
+| `/locations/new-york/new-york-city/` | `new-york-city-ny-skyline.png` | the Manhattan skyline at dusk with city lights turning on |
+| `/locations/georgia/atlanta/` | `atlanta-ga-skyline.png` | downtown Atlanta, Georgia skyline at golden hour |
+| `/locations/north-carolina/charlotte/` | `charlotte-nc-skyline.png` | downtown Charlotte, North Carolina skyline at dusk |
+| `/locations/north-carolina/raleigh/` | `raleigh-nc-skyline.png` | downtown Raleigh, North Carolina skyline at golden hour |
+| `/locations/arizona/phoenix/` | `phoenix-az-skyline.png` | downtown Phoenix, Arizona skyline at sunset with desert mountains behind |
+| `/locations/arizona/scottsdale/` | `scottsdale-az-skyline.png` | upscale desert cityscape of Scottsdale, Arizona at golden hour, palm-lined streets, desert mountains behind |
+| `/locations/illinois/chicago/` | `chicago-il-skyline.png` | the Chicago skyline from the lakefront at golden hour |
 
 All: append "no people, no text" to the end of the prompt.
 
@@ -85,26 +85,26 @@ One representative landmark/skyline/landscape image per state works well here (c
 
 | Page | Filename | Prompt subject |
 |---|---|---|
-| `/locations/texas/` | `texas-state-hero.webp` | San Antonio River Walk at golden hour, iconic Texas riverside architecture |
-| `/locations/florida/` | `florida-state-hero.webp` | a palm-lined Florida coastline at sunset, turquoise water |
-| `/locations/california/` | `california-state-hero.webp` | the Golden Gate Bridge, San Francisco, at golden hour |
-| `/locations/new-york/` | `new-york-state-hero.webp` | Niagara Falls, New York, wide landscape shot, daytime |
-| `/locations/georgia/` | `georgia-state-hero.webp` | downtown Savannah, Georgia's historic riverfront at golden hour |
-| `/locations/north-carolina/` | `north-carolina-state-hero.webp` | the Blue Ridge Mountains, North Carolina, at sunrise |
-| `/locations/arizona/` | `arizona-state-hero.webp` | Camelback Mountain, Arizona, desert landscape at golden hour |
-| `/locations/illinois/` | `illinois-state-hero.webp` | the Chicago Riverwalk at golden hour |
-| `/locations/pennsylvania/` | `pennsylvania-state-hero.webp` | downtown Philadelphia skyline at dusk |
-| `/locations/new-jersey/` | `new-jersey-state-hero.webp` | the Jersey Shore boardwalk at golden hour |
-| `/locations/tennessee/` | `tennessee-state-hero.webp` | downtown Nashville, Tennessee skyline at dusk |
-| `/locations/colorado/` | `colorado-state-hero.webp` | downtown Denver, Colorado with the Rocky Mountains behind at golden hour |
-| `/locations/washington/` | `washington-state-hero.webp` | downtown Seattle skyline with Mount Rainier in the background at sunset |
-| `/locations/virginia/` | `virginia-state-hero.webp` | the Northern Virginia / DC-adjacent skyline at dusk |
-| `/locations/nevada/` | `nevada-state-hero.webp` | the Las Vegas Strip skyline at dusk |
-| `/locations/massachusetts/` | `massachusetts-state-hero.webp` | downtown Boston skyline along the Charles River at golden hour |
-| `/locations/ohio/` | `ohio-state-hero.webp` | downtown Columbus, Ohio skyline at dusk |
-| `/locations/michigan/` | `michigan-state-hero.webp` | downtown Detroit, Michigan skyline along the riverfront at golden hour |
-| `/locations/utah/` | `utah-state-hero.webp` | downtown Salt Lake City with the Wasatch Mountains behind at sunset |
-| `/locations/south-carolina/` | `south-carolina-state-hero.webp` | historic downtown Charleston, South Carolina at golden hour |
+| `/locations/texas/` | `texas-state-hero.png` | San Antonio River Walk at golden hour, iconic Texas riverside architecture |
+| `/locations/florida/` | `florida-state-hero.png` | a palm-lined Florida coastline at sunset, turquoise water |
+| `/locations/california/` | `california-state-hero.png` | the Golden Gate Bridge, San Francisco, at golden hour |
+| `/locations/new-york/` | `new-york-state-hero.png` | Niagara Falls, New York, wide landscape shot, daytime |
+| `/locations/georgia/` | `georgia-state-hero.png` | downtown Savannah, Georgia's historic riverfront at golden hour |
+| `/locations/north-carolina/` | `north-carolina-state-hero.png` | the Blue Ridge Mountains, North Carolina, at sunrise |
+| `/locations/arizona/` | `arizona-state-hero.png` | Camelback Mountain, Arizona, desert landscape at golden hour |
+| `/locations/illinois/` | `illinois-state-hero.png` | the Chicago Riverwalk at golden hour |
+| `/locations/pennsylvania/` | `pennsylvania-state-hero.png` | downtown Philadelphia skyline at dusk |
+| `/locations/new-jersey/` | `new-jersey-state-hero.png` | the Jersey Shore boardwalk at golden hour |
+| `/locations/tennessee/` | `tennessee-state-hero.png` | downtown Nashville, Tennessee skyline at dusk |
+| `/locations/colorado/` | `colorado-state-hero.png` | downtown Denver, Colorado with the Rocky Mountains behind at golden hour |
+| `/locations/washington/` | `washington-state-hero.png` | downtown Seattle skyline with Mount Rainier in the background at sunset |
+| `/locations/virginia/` | `virginia-state-hero.png` | the Northern Virginia / DC-adjacent skyline at dusk |
+| `/locations/nevada/` | `nevada-state-hero.png` | the Las Vegas Strip skyline at dusk |
+| `/locations/massachusetts/` | `massachusetts-state-hero.png` | downtown Boston skyline along the Charles River at golden hour |
+| `/locations/ohio/` | `ohio-state-hero.png` | downtown Columbus, Ohio skyline at dusk |
+| `/locations/michigan/` | `michigan-state-hero.png` | downtown Detroit, Michigan skyline along the riverfront at golden hour |
+| `/locations/utah/` | `utah-state-hero.png` | downtown Salt Lake City with the Wasatch Mountains behind at sunset |
+| `/locations/south-carolina/` | `south-carolina-state-hero.png` | historic downtown Charleston, South Carolina at golden hour |
 
 All: append "wide landscape shot, no people, no text" to the end of the prompt.
 
@@ -114,17 +114,17 @@ These are more abstract/conceptual than industry or location pages — a literal
 
 | Page | Filename | Prompt subject |
 |---|---|---|
-| `/services/seo/` | `us-seo-strategy-session.webp` | a marketer reviewing SEO analytics and keyword data on a laptop and external monitor, modern office, focused expression |
-| `/services/local-seo/` | `us-local-seo-map-review.webp` | a marketer reviewing a local map-pack search results screen alongside a laptop, modern office |
-| `/services/technical-seo/` | `us-technical-seo-code-review.webp` | a developer reviewing website performance and code on a large monitor, dark-mode code editor visible, modern office |
-| `/services/google-business-profile-optimization/` | `us-gbp-profile-management.webp` | a marketer updating a Google Business Profile listing on a laptop, coffee shop or storefront visible through a window in the background |
-| `/services/website-design/` | `us-website-design-workspace.webp` | a designer reviewing website mockups and wireframes on a large monitor, clean modern desk setup, natural light |
-| `/services/website-development/` | `us-website-development-workspace.webp` | a developer writing code on a dual-monitor setup, dark-mode editor, modern office, focused |
-| `/services/content-marketing/` | `us-content-marketing-writing.webp` | a content writer typing at a laptop with an editorial calendar visible on a second screen, bright modern office |
-| `/services/lead-generation/` | `us-lead-generation-dashboard.webp` | a marketer reviewing a lead-tracking dashboard with charts and contact cards on a large monitor |
-| `/services/conversion-rate-optimization/` | `us-conversion-rate-ab-testing.webp` | a marketer reviewing A/B test results and heatmap data on a monitor, modern office |
-| `/services/multi-location-seo/` | `us-multi-location-seo-planning.webp` | a marketer reviewing a US map with multiple highlighted city markers on a large screen, planning session |
-| `/services/ai-digital-marketing/` | `us-ai-marketing-workspace.webp` | a marketer working alongside an AI writing/analytics assistant interface on a laptop, modern minimal office, subtle blue accent lighting |
+| `/services/seo/` | `us-seo-strategy-session.png` | a marketer reviewing SEO analytics and keyword data on a laptop and external monitor, modern office, focused expression |
+| `/services/local-seo/` | `us-local-seo-map-review.png` | a marketer reviewing a local map-pack search results screen alongside a laptop, modern office |
+| `/services/technical-seo/` | `us-technical-seo-code-review.png` | a developer reviewing website performance and code on a large monitor, dark-mode code editor visible, modern office |
+| `/services/google-business-profile-optimization/` | `us-gbp-profile-management.png` | a marketer updating a Google Business Profile listing on a laptop, coffee shop or storefront visible through a window in the background |
+| `/services/website-design/` | `us-website-design-workspace.png` | a designer reviewing website mockups and wireframes on a large monitor, clean modern desk setup, natural light |
+| `/services/website-development/` | `us-website-development-workspace.png` | a developer writing code on a dual-monitor setup, dark-mode editor, modern office, focused |
+| `/services/content-marketing/` | `us-content-marketing-writing.png` | a content writer typing at a laptop with an editorial calendar visible on a second screen, bright modern office |
+| `/services/lead-generation/` | `us-lead-generation-dashboard.png` | a marketer reviewing a lead-tracking dashboard with charts and contact cards on a large monitor |
+| `/services/conversion-rate-optimization/` | `us-conversion-rate-ab-testing.png` | a marketer reviewing A/B test results and heatmap data on a monitor, modern office |
+| `/services/multi-location-seo/` | `us-multi-location-seo-planning.png` | a marketer reviewing a US map with multiple highlighted city markers on a large screen, planning session |
+| `/services/ai-digital-marketing/` | `us-ai-marketing-workspace.png` | a marketer working alongside an AI writing/analytics assistant interface on a laptop, modern minimal office, subtle blue accent lighting |
 
 All: append "no people's faces in extreme close-up, no visible screen text/UI detail, no logos" to the end of the prompt.
 
@@ -132,9 +132,9 @@ All: append "no people's faces in extreme close-up, no visible screen text/UI de
 
 | Page | Filename | Prompt subject |
 |---|---|---|
-| `/insights/local-seo-checklist-for-us-small-businesses/` | `local-seo-checklist-featured.webp` | a small business owner checking a local search results page on a tablet in their storefront, warm natural light |
-| `/insights/google-business-profile-optimization-mistakes/` | `gbp-mistakes-featured.webp` | a close-up of a Google Business Profile-style listing card concept displayed on a laptop screen, blurred coffee shop background |
-| `/insights/technical-seo-audit-checklist/` | `technical-seo-checklist-featured.webp` | a developer's dual-monitor setup showing website performance charts and code, dark-mode editor, focused workspace |
+| `/insights/local-seo-checklist-for-us-small-businesses/` | `local-seo-checklist-featured.png` | a small business owner checking a local search results page on a tablet in their storefront, warm natural light |
+| `/insights/google-business-profile-optimization-mistakes/` | `gbp-mistakes-featured.png` | a close-up of a Google Business Profile-style listing card concept displayed on a laptop screen, blurred coffee shop background |
+| `/insights/technical-seo-audit-checklist/` | `technical-seo-checklist-featured.png` | a developer's dual-monitor setup showing website performance charts and code, dark-mode editor, focused workspace |
 
 ## 6. Case study covers — 6 of 7 missing (1200×800, abstract not photos)
 
@@ -142,12 +142,12 @@ Use the **abstract style prefix** from above, not the photo one.
 
 | Card | Filename | Subject |
 |---|---|---|
-| Home Services | `home-services-case-study-cover.webp` | a stylized house and roof silhouette outline |
-| Legal | `legal-case-study-cover.webp` | stylized scales of justice |
-| Real Estate & Property | `real-estate-case-study-cover.webp` | a stylized building/skyline silhouette outline |
-| Moving & Logistics | `moving-logistics-case-study-cover.webp` | a stylized moving truck or shipping box outline |
-| Automotive Services | `automotive-case-study-cover.webp` | a stylized car silhouette outline |
-| Professional & B2B Services | `professional-services-case-study-cover.webp` | a stylized handshake or briefcase outline |
+| Home Services | `home-services-case-study-cover.png` | a stylized house and roof silhouette outline |
+| Legal | `legal-case-study-cover.png` | stylized scales of justice |
+| Real Estate & Property | `real-estate-case-study-cover.png` | a stylized building/skyline silhouette outline |
+| Moving & Logistics | `moving-logistics-case-study-cover.png` | a stylized moving truck or shipping box outline |
+| Automotive Services | `automotive-case-study-cover.png` | a stylized car silhouette outline |
+| Professional & B2B Services | `professional-services-case-study-cover.png` | a stylized handshake or briefcase outline |
 
 ---
 
