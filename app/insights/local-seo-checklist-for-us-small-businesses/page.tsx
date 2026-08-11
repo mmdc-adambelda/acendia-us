@@ -41,6 +41,7 @@ export default function ArticlePage() {
           { name: "Insights", path: "/insights/" },
           { name: "Local SEO Checklist", path: "/insights/local-seo-checklist-for-us-small-businesses/" },
         ]}
+        placeholderIcon="map-pin"
       />
       <Section>
         <article className="prose prose-invert max-w-3xl space-y-8 text-white/70">

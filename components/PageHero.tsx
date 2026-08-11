@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ReactNode } from "react";
 import Container from "./Container";
 import Breadcrumbs, { Crumb } from "./Breadcrumbs";
+import ImagePlaceholder from "./ImagePlaceholder";
 
 export default function PageHero({
   eyebrow,
@@ -9,6 +10,7 @@ export default function PageHero({
   description,
   breadcrumbs,
   image,
+  placeholderIcon,
   children,
 }: {
   eyebrow?: string;
@@ -16,6 +18,9 @@ export default function PageHero({
   description: string;
   breadcrumbs?: Crumb[];
   image?: { src: string; alt: string };
+  /** Rendered instead of `image` when no real photo exists yet — keeps
+   * every content page visually complete instead of shipping a blank gap. */
+  placeholderIcon?: string;
   children?: ReactNode;
 }) {
   return (
@@ -33,7 +38,7 @@ export default function PageHero({
           </h1>
           <p className="text-balance mt-5 max-w-2xl text-lg text-white/60">{description}</p>
           {children}
-          {image && (
+          {image ? (
             <div className="mt-10 overflow-hidden rounded-[var(--r-lg)] border border-[var(--border)]">
               <Image
                 src={image.src}
@@ -44,7 +49,9 @@ export default function PageHero({
                 priority
               />
             </div>
-          )}
+          ) : placeholderIcon ? (
+            <ImagePlaceholder icon={placeholderIcon} className="mt-10" />
+          ) : null}
         </div>
       </Container>
     </div>

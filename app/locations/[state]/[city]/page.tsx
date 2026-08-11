@@ -62,6 +62,7 @@ export default async function CityPage({
           { name: content.city, path },
         ]}
         image={content.heroImage}
+        placeholderIcon="map-pin"
       />
 
       <Section>

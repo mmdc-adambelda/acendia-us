@@ -53,6 +53,8 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
           { name: "Locations", path: "/locations/" },
           { name: content.name, path },
         ]}
+        image={content.heroImage}
+        placeholderIcon="map-pin"
       />
 
       <Section>

@@ -42,6 +42,7 @@ export default function ArticlePage() {
           { name: "Insights", path: "/insights/" },
           { name: "Technical SEO Audit Checklist", path },
         ]}
+        placeholderIcon="cpu"
       />
       <Section>
         <article className="prose prose-invert max-w-3xl space-y-8 text-white/70">

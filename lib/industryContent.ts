@@ -5,6 +5,9 @@ export type IndustryPageContent = {
   metaDescription: string;
   heroDescription: string;
   heroImage?: { src: string; alt: string };
+  /** Icon shown as a placeholder hero when heroImage isn't set yet —
+   * name must exist in ICON_MAP (components/icons.tsx). */
+  icon: string;
   challenges: { title: string; body: string }[];
   howCustomersSearch: string;
   seoOpportunities: string[];
@@ -19,6 +22,7 @@ export type IndustryPageContent = {
 export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   "home-services": {
     slug: "home-services",
+    icon: "layout",
     name: "Home Services",
     metaTitle: "SEO for Home Services Companies",
     metaDescription:
@@ -72,6 +76,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "law-firm-seo": {
     slug: "law-firm-seo",
+    icon: "badge-check",
     name: "Law Firm SEO",
     metaTitle: "SEO for Law Firms | Legal SEO Services",
     metaDescription:
@@ -121,6 +126,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
 
   "healthcare": {
     slug: "healthcare",
+    icon: "sparkles",
     name: "Healthcare & Aesthetics",
     metaTitle: "SEO for Healthcare, Dental & Med Spa Practices",
     metaDescription:
@@ -170,6 +176,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
 
   "real-estate": {
     slug: "real-estate",
+    icon: "map-pin",
     name: "Real Estate & Property",
     metaTitle: "SEO for Real Estate & Property Management Companies",
     metaDescription:
@@ -219,6 +226,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
 
   "moving-and-logistics": {
     slug: "moving-and-logistics",
+    icon: "layers",
     name: "Moving & Logistics",
     metaTitle: "SEO for Moving Companies & Logistics Businesses",
     metaDescription:
@@ -268,6 +276,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
 
   "automotive": {
     slug: "automotive",
+    icon: "cpu",
     name: "Automotive Services",
     metaTitle: "SEO for Auto Repair, Towing & Detailing Businesses",
     metaDescription:
@@ -317,6 +326,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
 
   "professional-services": {
     slug: "professional-services",
+    icon: "target",
     name: "Professional & B2B Services",
     metaTitle: "SEO for Accounting, IT & Professional Services Firms",
     metaDescription:
@@ -366,6 +376,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
 
   "roofing-seo": {
     slug: "roofing-seo",
+    icon: "layout",
     name: "Roofing Companies",
     metaTitle: "SEO for Roofing Companies | Roofing SEO Services",
     metaDescription:
@@ -402,6 +413,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "hvac-seo": {
     slug: "hvac-seo",
+    icon: "cpu",
     name: "HVAC Contractors",
     metaTitle: "SEO for HVAC Companies | HVAC SEO Services",
     metaDescription: "SEO services for HVAC contractors — built around emergency repair searches, seasonal demand, and maintenance-plan lead generation.",
@@ -430,6 +442,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "plumbing-seo": {
     slug: "plumbing-seo",
+    icon: "layout",
     name: "Plumbing Companies",
     metaTitle: "SEO for Plumbing Companies | Plumber SEO Services",
     metaDescription: "SEO services for plumbing companies — built around emergency call volume, Map Pack competition, and local service-area visibility.",
@@ -458,6 +471,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "electrician-seo": {
     slug: "electrician-seo",
+    icon: "cpu",
     name: "Electrical Contractors",
     metaTitle: "SEO for Electricians | Electrical Contractor SEO",
     metaDescription: "SEO services for electrical contractors — covering emergency service, panel upgrade, and EV charger installation search demand.",
@@ -486,6 +500,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "restoration-company-seo": {
     slug: "restoration-company-seo",
+    icon: "layout",
     name: "Water Damage & Restoration Companies",
     metaTitle: "SEO for Restoration Companies | Water Damage SEO",
     metaDescription: "SEO services for water damage, fire damage, and mold remediation companies — built around urgent, insurance-driven search demand.",
@@ -514,6 +529,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "personal-injury-lawyer-seo": {
     slug: "personal-injury-lawyer-seo",
+    icon: "badge-check",
     name: "Personal Injury Law Firms",
     metaTitle: "SEO for Personal Injury Lawyers | PI Law Firm SEO",
     metaDescription: "SEO services for personal injury law firms competing in one of the most expensive, high-value search categories in the country.",
@@ -542,6 +558,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "family-law-seo": {
     slug: "family-law-seo",
+    icon: "badge-check",
     name: "Family Law Firms",
     metaTitle: "SEO for Family Law Firms | Divorce Attorney SEO",
     metaDescription: "SEO services for family law and divorce attorneys — built around sensitive, research-heavy search behavior specific to this practice area.",
@@ -570,6 +587,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "dental-seo": {
     slug: "dental-seo",
+    icon: "sparkles",
     name: "Dental Practices",
     metaTitle: "SEO for Dental Practices | Dentist SEO Services",
     metaDescription: "SEO services for general and cosmetic dental practices competing for new-patient visibility in local search.",
@@ -598,6 +616,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "med-spa-seo": {
     slug: "med-spa-seo",
+    icon: "sparkles",
     name: "Medical Spas & Aesthetics",
     metaTitle: "SEO for Med Spas | Medical Spa SEO Services",
     metaDescription: "SEO services for medical spas and aesthetics practices competing for high-value, visually-driven local search traffic.",
@@ -626,6 +645,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "property-management-seo": {
     slug: "property-management-seo",
+    icon: "map-pin",
     name: "Property Management Companies",
     metaTitle: "SEO for Property Management Companies",
     metaDescription: "SEO services for property management companies focused on owner-facing lead generation across specific US markets.",
@@ -654,6 +674,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "moving-company-seo": {
     slug: "moving-company-seo",
+    icon: "layers",
     name: "Moving Companies",
     metaTitle: "SEO for Moving Companies | Mover SEO Services",
     metaDescription: "SEO services specifically for local and long-distance moving companies competing for direct, non-marketplace bookings.",
@@ -682,6 +703,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "auto-repair-seo": {
     slug: "auto-repair-seo",
+    icon: "cpu",
     name: "Auto Repair Shops",
     metaTitle: "SEO for Auto Repair Shops | Auto Shop SEO",
     metaDescription: "SEO services for independent auto repair shops competing against franchise chains and price-comparison search behavior.",
@@ -710,6 +732,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "accounting-firm-seo": {
     slug: "accounting-firm-seo",
+    icon: "file-text",
     name: "Accounting & Bookkeeping Firms",
     metaTitle: "SEO for Accounting Firms | Accounting SEO Services",
     metaDescription: "SEO and content strategy for accounting, bookkeeping, and tax firms targeting small-business and individual clients.",
@@ -738,6 +761,7 @@ export const INDUSTRY_CONTENT: Record<string, IndustryPageContent> = {
   },
   "managed-it-seo": {
     slug: "managed-it-seo",
+    icon: "code",
     name: "Managed IT & Cybersecurity Providers",
     metaTitle: "SEO for Managed IT Providers | MSP SEO Services",
     metaDescription: "SEO and content strategy for managed IT service providers and cybersecurity firms selling trust and expertise to business buyers.",

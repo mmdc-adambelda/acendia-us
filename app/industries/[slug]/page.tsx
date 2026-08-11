@@ -58,6 +58,7 @@ export default async function IndustryDetailPage({
           { name: content.name, path },
         ]}
         image={content.heroImage}
+        placeholderIcon={content.icon}
       />
 
       <Section>

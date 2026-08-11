@@ -22,6 +22,7 @@ export type StateContent = {
   metaTitle: string;
   metaDescription: string;
   heroDescription: string;
+  heroImage?: { src: string; alt: string };
   marketContext: string;
   industries: string[];
   cities: { label: string; href: string }[];

@@ -10,6 +10,7 @@ import JsonLd from "@/components/JsonLd";
 import { webPageSchema, faqSchema, serviceSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
 import { SERVICE_CONTENT, SERVICE_SLUGS } from "@/lib/serviceContent";
+import { SERVICES } from "@/lib/site";
 
 export function generateStaticParams() {
   return SERVICE_SLUGS.map((slug) => ({ slug }));
@@ -63,6 +64,7 @@ export default async function ServiceDetailPage({
           { name: "Services", path: "/services/" },
           { name: content.name, path },
         ]}
+        placeholderIcon={SERVICES.find((s) => s.slug === content.slug)?.icon}
       />
 
       <Section>

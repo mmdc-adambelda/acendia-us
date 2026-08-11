@@ -1,13 +1,16 @@
 # Image Inventory — What's Missing, Filenames, and ChatGPT Prompts
 
-Generated: 2026-08-06
+Updated: 2026-08-06 (v2 — every page now has a visual, real photo or placeholder)
 
-## Where images already exist
+## What changed in this pass
+
+Every page listed below **already renders correctly today** — nothing is broken or blank. Pages without a real photo now show a code-generated placeholder (a subtle icon on the site's black/grid background, no AI credits used, no "coming soon" text visible to visitors). Swapping in a real photo later is a one-line code change per page once the file exists — no layout work needed.
+
+## Where images already exist (real photos, no action needed)
 
 | File | Used on |
 |---|---|
-| `public/brand/acendia-logo.png` | Header, footer, favicon fallback |
-| `public/brand/acendia-favicon.png` | Browser tab icon |
+| `public/brand/acendia-logo.png` / `acendia-favicon.png` | Header, footer, favicon |
 | `public/images/us-home-services-team-onsite.webp` | `/industries/home-services/` |
 | `public/images/houston-tx-skyline.webp` | `/locations/texas/houston/` |
 | `public/images/austin-tx-skyline.webp` | `/locations/texas/austin/` |
@@ -15,99 +18,156 @@ Generated: 2026-08-06
 
 ## Where to save new files
 
-Save everything to **`public/images/`** (flat, no subfolders — matches the 4 files already there). Use the exact filenames below — lowercase, hyphenated, descriptive, no `image1.jpg`-style names. Once a file is in that folder, tell me and I'll wire it into the page (one line of code each) — for `/industries/*` and `/locations/*/*` pages the slot already exists in the code; for state, service, and article pages I'd need to add the image slot first (noted below).
+Save everything to **`public/images/`** (flat folder, no subfolders). Use the exact filenames below. Once a file is there, tell me — I resize to spec, convert to WebP, and wire it in.
 
 ## How to generate with ChatGPT
 
-1. Go to ChatGPT (with image generation / DALL·E 3).
-2. Paste the prompt from the tables below.
-3. Ask for **landscape / widescreen** orientation (ChatGPT doesn't take exact pixel dimensions — I'll resize whatever you download to the exact spec automatically).
-4. Download the PNG, drop it in `public/images/` with the exact filename listed, and let me know — I'll resize, convert to WebP, and wire it in.
+1. Paste the prompt from the tables below into ChatGPT (with image generation).
+2. Ask for **landscape / widescreen** orientation — exact pixel dimensions aren't critical, I crop precisely on my end.
+3. Download the PNG, save to `public/images/` with the exact filename, tell me it's ready.
 
-**Style prefix to prepend to every prompt** (keeps everything visually consistent):
+**Style prefix for all photo prompts** (prepend to every one below unless noted otherwise):
 > "Photorealistic, high-end commercial stock photography style, natural lighting, sharp focus, no visible logos, no text overlays, no watermarks —"
 
----
-
-## 1. Industry pages missing a hero image (20 of 21)
-
-Slot already wired in code (`heroImage` field in `lib/industryContent.ts`) — just needs the file + I add one line per page. Target size: **1600×1000**.
-
-| Page | Filename | ChatGPT prompt (append to style prefix above) |
-|---|---|---|
-| `/industries/law-firm-seo/` | `us-law-firm-consultation-room.webp` | "a modern US law firm consultation room, polished wood conference table, leather chairs, large window overlooking a city skyline, warm natural light, an attorney in a suit discussing documents with a client at a respectful mid-distance" |
-| `/industries/healthcare/` | `us-medical-practice-exam-room.webp` | "a bright, modern US medical practice exam room, clean and reassuring, a doctor in a white coat reviewing a tablet, warm natural light through a window" |
-| `/industries/real-estate/` | `us-real-estate-agent-showing-home.webp` | "a real estate agent in business casual attire showing a modern US suburban home's front entrance to a couple, sunny afternoon, For Sale sign softly visible in the background" |
-| `/industries/moving-and-logistics/` | `us-moving-company-loading-truck.webp` | "professional movers in matching uniforms loading boxes into a branded-but-unmarked moving truck outside a US suburban home, daytime, organized and efficient" |
-| `/industries/automotive/` | `us-auto-repair-shop-technician.webp` | "an auto repair technician in coveralls working under the hood of a car in a clean, well-lit US auto repair shop bay" |
-| `/industries/professional-services/` | `us-professional-services-office-meeting.webp` | "a small team meeting in a modern US professional services office, laptops open, whiteboard with light diagrams, natural daylight, business casual attire" |
-| `/industries/roofing-seo/` | `us-roofing-contractor-on-roof.webp` | "a roofing contractor in safety gear installing shingles on a residential US roof, clear sunny sky, ladder visible" |
-| `/industries/hvac-seo/` | `us-hvac-technician-indoor-unit.webp` | "an HVAC technician servicing an indoor air handler unit in a US home utility closet, work light, focused expression" |
-| `/industries/plumbing-seo/` | `us-plumber-under-sink-repair.webp` | "a plumber in a branded-but-unmarked uniform repairing pipes under a kitchen sink in a US home, tools laid out neatly" |
-| `/industries/electrician-seo/` | `us-electrician-panel-upgrade.webp` | "an electrician working on an open electrical panel in a US home, safety glasses, multimeter in hand, focused" |
-| `/industries/restoration-company-seo/` | `us-water-damage-restoration-crew.webp` | "a water damage restoration crew in protective gear running industrial drying equipment in a US home living room" |
-| `/industries/personal-injury-lawyer-seo/` | `us-personal-injury-attorney-office.webp` | "a personal injury attorney reviewing case files at a desk in a professional US law office, confident and approachable" |
-| `/industries/family-law-seo/` | `us-family-law-attorney-meeting.webp` | "a calm, warm consultation between a family law attorney and a client in a softly lit US law office, non-adversarial and reassuring tone" |
-| `/industries/dental-seo/` | `us-dental-practice-checkup.webp` | "a friendly dentist and assistant in a bright, modern US dental practice treatment room, patient chair visible, clean and welcoming" |
-| `/industries/med-spa-seo/` | `us-med-spa-treatment-room.webp` | "an elegant, premium US med spa treatment room, soft lighting, clean modern decor, minimalist and calming" |
-| `/industries/property-management-seo/` | `us-property-manager-inspection.webp` | "a property manager with a clipboard/tablet inspecting a well-maintained US apartment building exterior, professional attire" |
-| `/industries/moving-company-seo/` | `us-movers-carrying-furniture.webp` | "two professional movers carefully carrying a sofa into a moving truck outside a US home, teamwork, daytime" |
-| `/industries/auto-repair-seo/` | `us-auto-repair-brake-service.webp` | "a mechanic servicing a car's brakes on a lift in a clean, organized US auto repair shop" |
-| `/industries/accounting-firm-seo/` | `us-accounting-firm-consultation.webp` | "an accountant reviewing financial documents with a small business owner client in a modern US accounting firm office" |
-| `/industries/managed-it-seo/` | `us-managed-it-server-room.webp` | "an IT professional working on a laptop in a clean, modern server room / data closet, blue-toned ambient lighting, professional and secure feeling" |
-
-## 2. City pages missing a skyline image (11 of 13)
-
-Slot already wired (`heroImage` field in `lib/locationContent.ts`) — same as above. Target size: **1600×900**.
-
-| Page | Filename | ChatGPT prompt |
-|---|---|---|
-| `/locations/texas/dallas/` | `dallas-tx-skyline.webp` | "wide cityscape of downtown Dallas, Texas skyline at golden hour, modern skyscrapers including a distinctive tower silhouette, clear sky, no people, no text" |
-| `/locations/florida/miami/` | `miami-fl-skyline.webp` | "wide cityscape of downtown Miami, Florida skyline at dusk, colorful sunset over Biscayne Bay, modern high-rises, no people, no text" |
-| `/locations/florida/tampa/` | `tampa-fl-skyline.webp` | "wide cityscape of downtown Tampa, Florida skyline along the riverwalk at golden hour, no people, no text" |
-| `/locations/florida/orlando/` | `orlando-fl-skyline.webp` | "wide cityscape of downtown Orlando, Florida skyline reflected in a lake at dusk, no people, no text" |
-| `/locations/california/los-angeles/` | `los-angeles-ca-skyline.webp` | "wide cityscape of downtown Los Angeles skyline at golden hour with palm trees in the foreground, no people, no text" |
-| `/locations/california/san-diego/` | `san-diego-ca-skyline.webp` | "wide cityscape of downtown San Diego skyline with the bay and boats in the foreground at sunset, no people, no text" |
-| `/locations/new-york/new-york-city/` | `new-york-city-ny-skyline.webp` | "wide cityscape of the Manhattan skyline at dusk with city lights turning on, no people, no text" |
-| `/locations/georgia/atlanta/` | `atlanta-ga-skyline.webp` | "wide cityscape of downtown Atlanta, Georgia skyline at golden hour, modern skyscrapers, no people, no text" |
-| `/locations/north-carolina/charlotte/` | `charlotte-nc-skyline.webp` | "wide cityscape of downtown Charlotte, North Carolina skyline at dusk, no people, no text" |
-| `/locations/north-carolina/raleigh/` | `raleigh-nc-skyline.webp` | "wide cityscape of downtown Raleigh, North Carolina skyline at golden hour, no people, no text" |
-| `/locations/arizona/phoenix/` | `phoenix-az-skyline.webp` | "wide cityscape of downtown Phoenix, Arizona skyline at sunset with desert mountains in the background, no people, no text" |
-| `/locations/arizona/scottsdale/` | `scottsdale-az-skyline.webp` | "wide upscale desert cityscape of Scottsdale, Arizona at golden hour, palm-lined streets and modern low-rise architecture, desert mountains in background, no people, no text" |
-| `/locations/illinois/chicago/` | `chicago-il-skyline.webp` | "wide cityscape of the Chicago skyline from the lakefront at golden hour, no people, no text" |
-
-## 3. Case study cover art missing (6 of 7)
-
-Slot already wired (`COVER_IMAGES` map in `app/case-studies/page.tsx`) — same pattern as the Healthcare one already live. Target size: **1200×800**. These are **abstract, not photos** — keep them that way so nothing implies a real case study exists yet.
-
-**Style prefix for these** (different from the one above): *"Abstract minimalist premium brand cover art, pure black background, subtle thin white glowing geometric line-art outline, clean modern monochrome design, no text, no people, no logos —"*
-
-| Page card | Filename | Subject |
-|---|---|---|
-| Home Services | `home-services-case-study-cover.webp` | "a stylized house and roof silhouette outline" |
-| Legal | `legal-case-study-cover.webp` | "stylized scales of justice" |
-| Real Estate & Property | `real-estate-case-study-cover.webp` | "a stylized building/skyline silhouette outline" |
-| Moving & Logistics | `moving-logistics-case-study-cover.webp` | "a stylized moving truck or shipping box outline" |
-| Automotive Services | `automotive-case-study-cover.webp` | "a stylized car silhouette outline" |
-| Professional & B2B Services | `professional-services-case-study-cover.webp` | "a stylized handshake or briefcase outline" |
+**Style prefix for abstract cover art** (case study covers only):
+> "Abstract minimalist premium brand cover art, pure black background, subtle thin white glowing geometric line-art outline, clean modern monochrome design, no text, no people, no logos —"
 
 ---
 
-## 4. Pages that don't have an image slot yet (need a small code change first)
+## 1. Industry pages — 20 of 21 missing (1600×1000)
 
-These weren't part of the original image plan, so the templates don't currently render an image at all. I can add the slot in a few minutes if you want visuals here too — just say so.
+| Page | Filename | Prompt subject |
+|---|---|---|
+| `/industries/law-firm-seo/` | `us-law-firm-consultation-room.webp` | a modern US law firm consultation room, polished wood conference table, leather chairs, large window overlooking a city skyline, warm natural light, an attorney in a suit discussing documents with a client at respectful mid-distance |
+| `/industries/healthcare/` | `us-medical-practice-exam-room.webp` | a bright, modern US medical practice exam room, a doctor in a white coat reviewing a tablet, warm natural light |
+| `/industries/real-estate/` | `us-real-estate-agent-showing-home.webp` | a real estate agent showing a modern US suburban home's entrance to a couple, sunny afternoon, For Sale sign softly visible |
+| `/industries/moving-and-logistics/` | `us-moving-company-loading-truck.webp` | professional movers in matching uniforms loading boxes into an unmarked moving truck outside a US suburban home, daytime |
+| `/industries/automotive/` | `us-auto-repair-shop-technician.webp` | an auto repair technician working under the hood of a car in a clean, well-lit US auto repair shop bay |
+| `/industries/professional-services/` | `us-professional-services-office-meeting.webp` | a small team meeting in a modern US professional services office, laptops open, natural daylight |
+| `/industries/roofing-seo/` | `us-roofing-contractor-on-roof.webp` | a roofing contractor in safety gear installing shingles on a residential US roof, clear sunny sky |
+| `/industries/hvac-seo/` | `us-hvac-technician-indoor-unit.webp` | an HVAC technician servicing an indoor air handler in a US home utility closet |
+| `/industries/plumbing-seo/` | `us-plumber-under-sink-repair.webp` | a plumber repairing pipes under a kitchen sink in a US home, tools laid out neatly |
+| `/industries/electrician-seo/` | `us-electrician-panel-upgrade.webp` | an electrician working on an open electrical panel in a US home, safety glasses, multimeter in hand |
+| `/industries/restoration-company-seo/` | `us-water-damage-restoration-crew.webp` | a water damage restoration crew in protective gear running industrial drying equipment in a US home living room |
+| `/industries/personal-injury-lawyer-seo/` | `us-personal-injury-attorney-office.webp` | a personal injury attorney reviewing case files at a desk in a professional US law office |
+| `/industries/family-law-seo/` | `us-family-law-attorney-meeting.webp` | a calm, warm consultation between a family law attorney and a client in a softly lit US law office |
+| `/industries/dental-seo/` | `us-dental-practice-checkup.webp` | a friendly dentist and assistant in a bright, modern US dental treatment room |
+| `/industries/med-spa-seo/` | `us-med-spa-treatment-room.webp` | an elegant, premium US med spa treatment room, soft lighting, minimalist decor |
+| `/industries/property-management-seo/` | `us-property-manager-inspection.webp` | a property manager with a tablet inspecting a well-maintained US apartment building exterior |
+| `/industries/moving-company-seo/` | `us-movers-carrying-furniture.webp` | two professional movers carefully carrying a sofa into a moving truck outside a US home |
+| `/industries/auto-repair-seo/` | `us-auto-repair-brake-service.webp` | a mechanic servicing a car's brakes on a lift in a clean, organized US auto repair shop |
+| `/industries/accounting-firm-seo/` | `us-accounting-firm-consultation.webp` | an accountant reviewing financial documents with a small business owner client in a modern US office |
+| `/industries/managed-it-seo/` | `us-managed-it-server-room.webp` | an IT professional working on a laptop in a clean, modern server room, blue-toned ambient lighting |
 
-- **State pages** (20 of 20 — `/locations/texas/`, `/locations/florida/`, etc.) — no `heroImage` field exists on `StateContent` yet.
-- **Service pages** (11 of 11 — `/services/seo/`, `/services/local-seo/`, etc.) — currently icon-driven by design (bento grid), no photo slot.
-- **Articles** (3 of 3 — all `/insights/*` posts) — no featured-image field on `Article` type; would also improve social-share (OG image) previews.
+## 2. City pages — 11 of 13 missing (1600×900)
 
-If you want these too, tell me and I'll (a) add the code slot, then (b) give you the filenames/prompts in the same format as above.
+| Page | Filename | Prompt subject |
+|---|---|---|
+| `/locations/texas/dallas/` | `dallas-tx-skyline.webp` | downtown Dallas, Texas skyline at golden hour, distinctive tower silhouette, clear sky |
+| `/locations/florida/miami/` | `miami-fl-skyline.webp` | downtown Miami, Florida skyline at dusk, colorful sunset over Biscayne Bay |
+| `/locations/florida/tampa/` | `tampa-fl-skyline.webp` | downtown Tampa, Florida skyline along the riverwalk at golden hour |
+| `/locations/florida/orlando/` | `orlando-fl-skyline.webp` | downtown Orlando, Florida skyline reflected in a lake at dusk |
+| `/locations/california/los-angeles/` | `los-angeles-ca-skyline.webp` | downtown Los Angeles skyline at golden hour, palm trees in the foreground |
+| `/locations/california/san-diego/` | `san-diego-ca-skyline.webp` | downtown San Diego skyline with the bay and boats in the foreground at sunset |
+| `/locations/new-york/new-york-city/` | `new-york-city-ny-skyline.webp` | the Manhattan skyline at dusk with city lights turning on |
+| `/locations/georgia/atlanta/` | `atlanta-ga-skyline.webp` | downtown Atlanta, Georgia skyline at golden hour |
+| `/locations/north-carolina/charlotte/` | `charlotte-nc-skyline.webp` | downtown Charlotte, North Carolina skyline at dusk |
+| `/locations/north-carolina/raleigh/` | `raleigh-nc-skyline.webp` | downtown Raleigh, North Carolina skyline at golden hour |
+| `/locations/arizona/phoenix/` | `phoenix-az-skyline.webp` | downtown Phoenix, Arizona skyline at sunset with desert mountains behind |
+| `/locations/arizona/scottsdale/` | `scottsdale-az-skyline.webp` | upscale desert cityscape of Scottsdale, Arizona at golden hour, palm-lined streets, desert mountains behind |
+| `/locations/illinois/chicago/` | `chicago-il-skyline.webp` | the Chicago skyline from the lakefront at golden hour |
+
+All: append "no people, no text" to the end of the prompt.
+
+## 3. State pages — 20 of 20 missing (1600×900) — NEW slot added this pass
+
+One representative landmark/skyline/landscape image per state works well here (can differ from the city image if the state has a covered city already — e.g., Texas can use a different city than Houston/Dallas/Austin, like San Antonio's River Walk).
+
+| Page | Filename | Prompt subject |
+|---|---|---|
+| `/locations/texas/` | `texas-state-hero.webp` | San Antonio River Walk at golden hour, iconic Texas riverside architecture |
+| `/locations/florida/` | `florida-state-hero.webp` | a palm-lined Florida coastline at sunset, turquoise water |
+| `/locations/california/` | `california-state-hero.webp` | the Golden Gate Bridge, San Francisco, at golden hour |
+| `/locations/new-york/` | `new-york-state-hero.webp` | Niagara Falls, New York, wide landscape shot, daytime |
+| `/locations/georgia/` | `georgia-state-hero.webp` | downtown Savannah, Georgia's historic riverfront at golden hour |
+| `/locations/north-carolina/` | `north-carolina-state-hero.webp` | the Blue Ridge Mountains, North Carolina, at sunrise |
+| `/locations/arizona/` | `arizona-state-hero.webp` | Camelback Mountain, Arizona, desert landscape at golden hour |
+| `/locations/illinois/` | `illinois-state-hero.webp` | the Chicago Riverwalk at golden hour |
+| `/locations/pennsylvania/` | `pennsylvania-state-hero.webp` | downtown Philadelphia skyline at dusk |
+| `/locations/new-jersey/` | `new-jersey-state-hero.webp` | the Jersey Shore boardwalk at golden hour |
+| `/locations/tennessee/` | `tennessee-state-hero.webp` | downtown Nashville, Tennessee skyline at dusk |
+| `/locations/colorado/` | `colorado-state-hero.webp` | downtown Denver, Colorado with the Rocky Mountains behind at golden hour |
+| `/locations/washington/` | `washington-state-hero.webp` | downtown Seattle skyline with Mount Rainier in the background at sunset |
+| `/locations/virginia/` | `virginia-state-hero.webp` | the Northern Virginia / DC-adjacent skyline at dusk |
+| `/locations/nevada/` | `nevada-state-hero.webp` | the Las Vegas Strip skyline at dusk |
+| `/locations/massachusetts/` | `massachusetts-state-hero.webp` | downtown Boston skyline along the Charles River at golden hour |
+| `/locations/ohio/` | `ohio-state-hero.webp` | downtown Columbus, Ohio skyline at dusk |
+| `/locations/michigan/` | `michigan-state-hero.webp` | downtown Detroit, Michigan skyline along the riverfront at golden hour |
+| `/locations/utah/` | `utah-state-hero.webp` | downtown Salt Lake City with the Wasatch Mountains behind at sunset |
+| `/locations/south-carolina/` | `south-carolina-state-hero.webp` | historic downtown Charleston, South Carolina at golden hour |
+
+All: append "wide landscape shot, no people, no text" to the end of the prompt.
+
+## 4. Service pages — 11 of 11 missing (1600×1000) — NEW slot added this pass
+
+These are more abstract/conceptual than industry or location pages — a literal "person pointing at a chart" stock photo tends to look generic, so these lean toward clean, real work-in-progress shots instead.
+
+| Page | Filename | Prompt subject |
+|---|---|---|
+| `/services/seo/` | `us-seo-strategy-session.webp` | a marketer reviewing SEO analytics and keyword data on a laptop and external monitor, modern office, focused expression |
+| `/services/local-seo/` | `us-local-seo-map-review.webp` | a marketer reviewing a local map-pack search results screen alongside a laptop, modern office |
+| `/services/technical-seo/` | `us-technical-seo-code-review.webp` | a developer reviewing website performance and code on a large monitor, dark-mode code editor visible, modern office |
+| `/services/google-business-profile-optimization/` | `us-gbp-profile-management.webp` | a marketer updating a Google Business Profile listing on a laptop, coffee shop or storefront visible through a window in the background |
+| `/services/website-design/` | `us-website-design-workspace.webp` | a designer reviewing website mockups and wireframes on a large monitor, clean modern desk setup, natural light |
+| `/services/website-development/` | `us-website-development-workspace.webp` | a developer writing code on a dual-monitor setup, dark-mode editor, modern office, focused |
+| `/services/content-marketing/` | `us-content-marketing-writing.webp` | a content writer typing at a laptop with an editorial calendar visible on a second screen, bright modern office |
+| `/services/lead-generation/` | `us-lead-generation-dashboard.webp` | a marketer reviewing a lead-tracking dashboard with charts and contact cards on a large monitor |
+| `/services/conversion-rate-optimization/` | `us-conversion-rate-ab-testing.webp` | a marketer reviewing A/B test results and heatmap data on a monitor, modern office |
+| `/services/multi-location-seo/` | `us-multi-location-seo-planning.webp` | a marketer reviewing a US map with multiple highlighted city markers on a large screen, planning session |
+| `/services/ai-digital-marketing/` | `us-ai-marketing-workspace.webp` | a marketer working alongside an AI writing/analytics assistant interface on a laptop, modern minimal office, subtle blue accent lighting |
+
+All: append "no people's faces in extreme close-up, no visible screen text/UI detail, no logos" to the end of the prompt.
+
+## 5. Article featured images — 3 of 3 missing (1600×900) — NEW slot added this pass
+
+| Page | Filename | Prompt subject |
+|---|---|---|
+| `/insights/local-seo-checklist-for-us-small-businesses/` | `local-seo-checklist-featured.webp` | a small business owner checking a local search results page on a tablet in their storefront, warm natural light |
+| `/insights/google-business-profile-optimization-mistakes/` | `gbp-mistakes-featured.webp` | a close-up of a Google Business Profile-style listing card concept displayed on a laptop screen, blurred coffee shop background |
+| `/insights/technical-seo-audit-checklist/` | `technical-seo-checklist-featured.webp` | a developer's dual-monitor setup showing website performance charts and code, dark-mode editor, focused workspace |
+
+## 6. Case study covers — 6 of 7 missing (1200×800, abstract not photos)
+
+Use the **abstract style prefix** from above, not the photo one.
+
+| Card | Filename | Subject |
+|---|---|---|
+| Home Services | `home-services-case-study-cover.webp` | a stylized house and roof silhouette outline |
+| Legal | `legal-case-study-cover.webp` | stylized scales of justice |
+| Real Estate & Property | `real-estate-case-study-cover.webp` | a stylized building/skyline silhouette outline |
+| Moving & Logistics | `moving-logistics-case-study-cover.webp` | a stylized moving truck or shipping box outline |
+| Automotive Services | `automotive-case-study-cover.webp` | a stylized car silhouette outline |
+| Professional & B2B Services | `professional-services-case-study-cover.webp` | a stylized handshake or briefcase outline |
 
 ---
 
-## Quality checklist for whatever you generate
+## Full count
 
-- **Landscape orientation**, roughly matching the target ratio (industries/services: 8:5, cities: 16:9, case covers: 3:2) — I'll crop precisely on my end regardless.
-- **No visible text, logos, or watermarks** baked into the image — ChatGPT sometimes adds garbled text; regenerate if so.
-- **No identifiable real person, brand, or trademark** — keep it generic/stock-style.
-- **Alt text**: I'll write descriptive alt text matching each page's context when I wire the file in (already done for the 4 live images) — you don't need to do this part.
+| Category | Total pages | Have real photo | Need generation |
+|---|---|---|---|
+| Industry pages | 21 | 1 | 20 |
+| City pages | 13 | 2 | 11 |
+| State pages | 20 | 0 | 20 |
+| Service pages | 11 | 0 | 11 |
+| Article pages | 3 | 0 | 3 |
+| Case study covers | 7 | 1 | 6 |
+| **Total** | **75** | **4** | **71** |
+
+You don't need to do all 71 at once — every page already looks intentional with its placeholder. Prioritize whichever pages you expect the most traffic on first (likely the 8 SEO-brief service pages and your priority-state cities).
+
+## Quality checklist
+
+- Landscape orientation, roughly matching the target ratio noted per section.
+- No visible text, logos, or watermarks baked into the image — regenerate if ChatGPT adds garbled text.
+- No identifiable real person, brand, or trademark — generic/stock-style only.
+- Alt text: I write this when I wire the file in — you don't need to supply it.
