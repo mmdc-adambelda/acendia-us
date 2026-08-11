@@ -1,0 +1,9 @@
+# Prevent Git from mangling binary files with line-ending conversion.
+*.pdf binary
+*.png binary
+*.webp binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
