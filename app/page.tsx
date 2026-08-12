@@ -7,7 +7,7 @@ import IndustryGrid from "@/components/IndustryGrid";
 import CTASection from "@/components/CTASection";
 import FAQAccordion from "@/components/FAQAccordion";
 import Card from "@/components/Card";
-import MarketSignalGraphic from "@/components/MarketSignalGraphic";
+import PricingPreviewWidget from "@/components/PricingPreviewWidget";
 import JsonLd from "@/components/JsonLd";
 import { webPageSchema, faqSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
@@ -99,7 +99,7 @@ export default function HomePage() {
               </div>
               <p className="mt-8 text-sm font-medium tracking-wide text-white/40">{TAGLINE}</p>
             </div>
-            <MarketSignalGraphic />
+            <PricingPreviewWidget />
           </div>
         </Section>
       </div>
