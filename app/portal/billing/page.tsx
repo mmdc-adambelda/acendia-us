@@ -45,8 +45,17 @@ export default async function BillingPage() {
             <h2 className="text-lg font-semibold text-white">{planName ?? "No active plan"}</h2>
             {ctx.subscription?.current_period_end && (
               <p className="mt-1 text-sm text-white/50">
-                {ctx.subscription.cancel_at_period_end ? "Cancels" : "Renews"}{" "}
+                {ctx.subscription.cancel_at_period_end
+                  ? "Cancels"
+                  : ctx.subscription.status === "trialing"
+                    ? "Monthly billing starts"
+                    : "Renews"}{" "}
                 {new Date(ctx.subscription.current_period_end).toLocaleDateString("en-US")}
+              </p>
+            )}
+            {ctx.subscription?.status === "trialing" && (
+              <p className="mt-1 text-xs text-white/40">
+                Setup fee paid — nothing else is due until your monthly plan starts.
               </p>
             )}
           </div>

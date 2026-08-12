@@ -34,6 +34,9 @@ The database tables don't exist yet — you need to run 4 SQL files once.
 4. Repeat for `supabase/migrations/0002_rls_policies.sql`.
 5. Repeat for `supabase/migrations/0003_seed_plans.sql` (this loads your real pricing: $199 setup + $499/mo Growth Package, $299/mo Social Media add-on).
 6. Repeat for `supabase/migrations/0004_seed_onboarding_items.sql` (this loads the default onboarding checklist).
+7. Repeat for `supabase/migrations/0006_add_went_live_at.sql` (adds the column staff uses to record a client's real go-live date — see "Real billing schedule" below) and `supabase/migrations/0007_rename_plans.sql` (renames the seeded plans to "SEO Package" / "Social Media Add-On", if you ran 0003 before this rename shipped — safe to skip if you're running everything fresh, since 0003 already uses the new names).
+
+**Note on `0005_payment_provider_ids_template.sql`**: this one is a template, not a numbered step to run as-is — see Part 2 below.
 
 Run them **in that exact order** (0001 → 0002 → 0003 → 0004) — later files depend on tables/policies created by earlier ones.
 
@@ -77,15 +80,32 @@ The keys you added to `.env.local` only work on your own computer. For the live 
 
 ---
 
+## Real billing schedule (confirmed by you, built into checkout)
+
+This is the actual payment timeline every provider below follows — not the industry-default "charge everything today":
+
+1. **Today** — the client pays only the one-time setup fee at checkout. Nothing recurring is created or charged yet.
+2. **~2-3 business days later** — their site typically goes live (varies by project).
+3. **14 days after that real go-live date** — the first monthly charge happens automatically.
+
+Because the exact go-live date isn't known at checkout, the system uses an estimate (19 days from signup) until a staff member records the real date. **You do this in `/admin/clients/[client]` — click "Mark Site Live" and enter the actual date.** That one action:
+- Corrects the Stripe subscription's billing date to the *exact* 14-days-after-go-live date (no re-approval needed from the client).
+- For Wise, generates the next invoice (the first monthly payment) for you to send the client near that date.
+- For PayPal, only updates your own records — see the PayPal section below for why the date can't be corrected there.
+
+**Do this for every client once their site is actually live** — it's the only way the billing date becomes exact instead of an estimate.
+
+---
+
 ## Part 2: Stripe (Phase 2 — code is live, needs your account)
 
 Card checkout won't appear as an option on `/checkout` until `STRIPE_SECRET_KEY` is set — the code checks for it and hides the option rather than offering something broken.
 
 1. Create a Stripe account at [stripe.com](https://stripe.com) if you don't have one.
 2. Stay in **Test mode** (toggle in the top-right of the Stripe Dashboard) until everything is verified working.
-3. Go to **Products** → create a product called "Acendia Growth Package" with a recurring price of $499/month.
-4. Create a second product, "Social Media Management," at $299/month recurring.
-5. Copy each recurring **Price ID** (starts with `price_...`). These do **not** go into an env var — copy `supabase/migrations/0005_payment_provider_ids_template.sql`, fill in the real Price IDs, and run it in the Supabase SQL Editor (this sets `plans.stripe_price_id_monthly`). The one-time $199 setup fee is added automatically as an ad-hoc Checkout line item — no separate Stripe product needed for it.
+3. Go to **Products** → create a product called "SEO Package" with a recurring price of $499/month.
+4. Create a second product, "Social Media Add-On," at $299/month recurring.
+5. Copy each recurring **Price ID** (starts with `price_...`). These do **not** go into an env var — copy `supabase/migrations/0005_payment_provider_ids_template.sql`, fill in the real Price IDs, and run it in the Supabase SQL Editor (this sets `plans.stripe_price_id_monthly`). The one-time $199 setup fee needs no separate Stripe product — it's charged as an ad-hoc Checkout line item today, and the $499/$299 Price IDs above are only used ~14 days after go-live when the real subscription is created.
 6. Go to **Developers** → **API keys**. Copy the **Secret key** (`sk_test_...` in test mode) into `STRIPE_SECRET_KEY`, and the **Publishable key** (`pk_test_...`) into `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
 7. Go to **Developers** → **Webhooks** → **Add endpoint**, point it at `https://acendia.us/api/webhooks/stripe`, subscribe to at least `checkout.session.completed`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`, and copy the **Signing secret** into `STRIPE_WEBHOOK_SECRET`.
 8. Configure the **Customer Portal** (Settings → Billing → Customer portal) with your branding — this is what the "Manage Billing" button in `/portal/billing` opens.
@@ -95,13 +115,17 @@ Card checkout won't appear as an option on `/checkout` until `STRIPE_SECRET_KEY`
 
 PayPal won't appear as a checkout option until both `PAYPAL_CLIENT_ID` and `PAYPAL_CLIENT_SECRET` are set.
 
+**Important limitation, please read before setting this up:** PayPal Subscriptions don't support a separate one-time setup-fee charge the way Stripe does, and once a subscription is approved, PayPal won't let us move its first-billing date the way we can with Stripe. Two ways to handle this — pick one when you create your Plan in step 7:
+- **Recommended:** give the Plan a first billing cycle that's a one-time $199 charge (`tenure_type: TRIAL`, 1 cycle), followed by the regular $499/mo cycle. The client approves once, pays the $199 immediately, and the $499/mo cycle starts automatically after that trial cycle ends — set the trial cycle's duration to your best estimate of "when this client's site will be live + 14 days" (19 days is what the code defaults to for Stripe/Wise).
+- **Simpler, less accurate:** skip the trial cycle and let the code's `start_time` estimate (19 days out) apply directly to a $499/mo-only Plan; you'll need to separately invoice the $199 setup fee (e.g. via a Wise/Stripe one-off, or a manual PayPal invoice) since the Plan alone won't collect it.
+
 1. Create a PayPal **Business** account at [paypal.com](https://paypal.com) if you don't have one.
 2. Go to [developer.paypal.com](https://developer.paypal.com) → **Apps & Credentials**.
 3. Make sure you're in **Sandbox** mode (toggle at the top) for testing.
 4. Click **Create App**, name it "Acendia US".
 5. Copy the **Client ID** into `PAYPAL_CLIENT_ID` and the **Secret** into `PAYPAL_CLIENT_SECRET`.
 6. Set `PAYPAL_ENVIRONMENT=sandbox` for now.
-7. Create a Product + Plan (via the PayPal Dashboard or API) matching the Stripe plan structure ($499/mo Growth Package, $299/mo Social Media). Copy each Plan ID (starts with `P-...`) into `supabase/migrations/0005_payment_provider_ids_template.sql` (`paypal_plan_id_monthly`) and run it in the Supabase SQL Editor.
+7. Create a Product + Plan (via the PayPal Dashboard or API) using one of the two structures above ($499/mo SEO Package, $299/mo Social Media Add-On). Copy each Plan ID (starts with `P-...`) into `supabase/migrations/0005_payment_provider_ids_template.sql` (`paypal_plan_id_monthly`) and run it in the Supabase SQL Editor.
 8. Configure a webhook (Developer Dashboard → your app → Webhooks) pointed at `https://acendia.us/api/webhooks/paypal`, subscribed to at least `BILLING.SUBSCRIPTION.ACTIVATED`, `PAYMENT.SALE.COMPLETED`, `BILLING.SUBSCRIPTION.CANCELLED`, `BILLING.SUBSCRIPTION.EXPIRED`, `BILLING.SUBSCRIPTION.SUSPENDED`, `PAYMENT.SALE.DENIED`; copy the **Webhook ID** into `PAYPAL_WEBHOOK_ID`.
 9. Switch to **Live** credentials and `PAYPAL_ENVIRONMENT=live` when ready for real payments.
 

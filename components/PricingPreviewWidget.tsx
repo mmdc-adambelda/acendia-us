@@ -7,9 +7,14 @@
 // zero new brand colors introduced. Real pricing only — mirrors
 // supabase/migrations/0003_seed_plans.sql exactly, so this card can never
 // drift out of sync with what /pricing and /register actually charge.
+//
+// Real billing schedule (see lib/billing.ts): only the setup fee is due
+// today. The monthly plan doesn't start billing until 14 days after the
+// client's site goes live — never bundled into the same charge.
 
 import { useState } from "react";
 import Link from "next/link";
+import { POST_GOLIVE_BILLING_DELAY_DAYS } from "@/lib/billing";
 
 const CORE_FEATURES = [
   "One-time setup and onboarding",
@@ -45,7 +50,7 @@ export default function PricingPreviewWidget() {
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[11px] font-bold text-black">
               A
             </span>
-            <span className="text-sm font-semibold text-white">Acendia Growth Package</span>
+            <span className="text-sm font-semibold text-white">SEO Package</span>
           </div>
           <span className="rounded-full border border-[var(--border-hi)] px-2.5 py-1 text-[10px] font-medium tracking-wide text-white/50 uppercase">
             Most clients start here
@@ -66,7 +71,7 @@ export default function PricingPreviewWidget() {
                   : "border-[var(--border)] text-white/60 hover:border-[var(--border-hi)]"
               }`}
             >
-              <span>SEO Growth Package</span>
+              <span>SEO Package</span>
               <span className="font-medium">{formatMoney(CORE_MONTHLY_CENTS)}/mo</span>
             </button>
             <button
@@ -79,7 +84,7 @@ export default function PricingPreviewWidget() {
                   : "border-[var(--border)] text-white/60 hover:border-[var(--border-hi)]"
               }`}
             >
-              <span>+ Social Media Management</span>
+              <span>+ Social Media Add-On</span>
               <span className="font-medium">+{formatMoney(ADDON_MONTHLY_CENTS)}/mo</span>
             </button>
           </div>
@@ -96,15 +101,14 @@ export default function PricingPreviewWidget() {
           </div>
 
           <div className="mt-5 space-y-1.5 border-t border-[var(--border-dim)] pt-4 text-sm">
-            <div className="flex justify-between text-white/50">
-              <span>One-time setup</span>
+            <div className="flex justify-between font-semibold text-white">
+              <span>Due today (setup only)</span>
               <span>{formatMoney(SETUP_FEE_CENTS)}</span>
             </div>
-            <div className="flex justify-between font-semibold text-white">
-              <span>Total due today</span>
-              <span>{formatMoney(SETUP_FEE_CENTS + monthlyTotal)}</span>
-            </div>
-            <p className="text-[11px] text-white/35">then {formatMoney(monthlyTotal)}/month</p>
+            <p className="text-[11px] text-white/35">
+              Then {formatMoney(monthlyTotal)}/month, starting {POST_GOLIVE_BILLING_DELAY_DAYS} days after your site
+              goes live — not before.
+            </p>
           </div>
 
           <Link

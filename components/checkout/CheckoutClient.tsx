@@ -56,14 +56,15 @@ export default function CheckoutClient({ availableProviders, planSummary }: Prop
   if (wiseResult) {
     return (
       <div className="rounded-[var(--r-md)] border border-[var(--border-dim)] bg-white/[0.03] p-6">
-        <h2 className="text-lg font-semibold text-white">Complete your payment via Wise</h2>
+        <h2 className="text-lg font-semibold text-white">Complete your setup payment via Wise</h2>
         <p className="mt-2 text-sm text-white/60">
-          Wise payments are confirmed manually by our team — your plan activates once we verify the transfer arrived,
-          usually within one business day. This is not instant, unlike card or PayPal.
+          This is your one-time setup fee only — confirmed manually by our team once the transfer arrives, usually
+          within one business day. Your monthly plan is a separate Wise invoice we&apos;ll send 14 days after your
+          site goes live; nothing else is due today.
         </p>
         <dl className="mt-4 space-y-2 text-sm">
           <div className="flex justify-between border-b border-[var(--border-dim)] pb-2">
-            <dt className="text-white/50">Amount due</dt>
+            <dt className="text-white/50">Setup fee due today</dt>
             <dd className="font-medium text-white">{formatCents(wiseResult.amountCents)}</dd>
           </div>
           <div className="flex justify-between border-b border-[var(--border-dim)] pb-2">
@@ -111,15 +112,19 @@ export default function CheckoutClient({ availableProviders, planSummary }: Prop
         ))}
       </ul>
       <dl className="mt-4 space-y-2 border-t border-[var(--border-dim)] pt-4 text-sm">
-        <div className="flex justify-between">
-          <dt className="text-white/50">One-time setup fee</dt>
+        <div className="flex justify-between font-semibold">
+          <dt className="text-white">Due today (setup only)</dt>
           <dd className="text-white">{formatCents(totalSetup)}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-white/50">Monthly total</dt>
-          <dd className="text-white">{formatCents(totalMonthly)}/mo</dd>
+          <dt className="text-white/50">Then, starting 14 days after go-live</dt>
+          <dd className="text-white/70">{formatCents(totalMonthly)}/mo</dd>
         </div>
       </dl>
+      <p className="mt-2 text-xs text-white/40">
+        Your site typically goes live within 2-3 business days. You&apos;re not charged your monthly plan until 14
+        days after that — never today, and never bundled with the setup fee.
+      </p>
 
       <h3 className="mt-6 text-sm font-semibold text-white">Choose a payment method</h3>
       <div className="mt-3 space-y-2">

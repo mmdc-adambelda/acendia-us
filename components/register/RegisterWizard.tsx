@@ -360,8 +360,8 @@ export default function RegisterWizard({ plans }: { plans: PlanOption[] }) {
           )}
 
           <p className="text-xs text-white/40">
-            Payment isn't collected on this step yet — checkout is coming online shortly. Continuing creates your
-            account and business profile now so nothing you've entered is lost.
+            Continuing takes you to checkout, where you&apos;ll pay only the one-time setup fee today. Your monthly
+            plan isn&apos;t billed until 14 days after your site goes live — never bundled with the setup fee.
           </p>
 
           <StepActions

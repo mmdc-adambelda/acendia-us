@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createStripeCheckoutSession } from "@/lib/payments/stripe";
+import { createStripeSetupFeeCheckoutSession } from "@/lib/payments/stripe";
 import { createPaypalSubscription } from "@/lib/payments/paypal";
 import { generateWiseReference, getWisePaymentLink, isWiseAvailable } from "@/lib/payments/wise";
 import { isRateLimited } from "@/lib/rateLimit";
@@ -103,7 +103,6 @@ export async function POST(req: NextRequest) {
   }
 
   const setupFeeCents = plans.reduce((sum, p) => sum + (p.setup_fee_cents ?? 0), 0);
-  const monthlyTotalCents = plans.reduce((sum, p) => sum + (p.monthly_price_cents ?? 0), 0);
   const corePlan = plans.find((p) => p.id === requestedPlanId) ?? plans[0];
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? new URL(req.url).origin;
@@ -148,11 +147,16 @@ export async function POST(req: NextRequest) {
         { status: 422 },
       );
     }
-    const result = await createStripeCheckoutSession({
+    // Only the setup fee is charged today — the recurring monthly
+    // subscription is created by the webhook once this payment succeeds,
+    // with its first charge delayed to ~14 days after go-live. See
+    // lib/billing.ts and app/api/webhooks/stripe/route.ts.
+    const result = await createStripeSetupFeeCheckoutSession({
       organizationId,
       userId: user.id,
       userEmail: user.email ?? "",
-      priceIds,
+      planId: corePlan.id,
+      addonPlanIds: addonPlanIds.filter((id) => id !== corePlan.id),
       setupFeeCents,
       successUrl: `${appUrl}/checkout/success/`,
       cancelUrl: `${appUrl}/checkout/cancel/`,
@@ -179,7 +183,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, redirectUrl: result.approvalUrl });
   }
 
-  // wise — manual pending-payment flow, never auto-activates.
+  // wise — manual pending-payment flow, never auto-activates. Only the
+  // setup fee is collected today, same schedule as Stripe/PayPal: the
+  // first monthly payment is a SEPARATE Wise invoice staff creates from
+  // /admin/clients once the site's real go-live date is recorded (see
+  // app/api/admin/subscriptions/mark-live), never bundled with setup.
   if (!isWiseAvailable()) {
     return NextResponse.json({ ok: false, error: "Wise payment isn't configured yet. Please contact us." }, { status: 422 });
   }
@@ -190,16 +198,16 @@ export async function POST(req: NextRequest) {
     subscription_id: subscriptionId,
     payment_provider: "wise",
     status: "pending",
-    amount_cents: setupFeeCents + monthlyTotalCents,
+    amount_cents: setupFeeCents,
     currency: "usd",
     wise_reference: reference,
-    description: `Setup fee + first month — ${plans.map((p) => p.name).join(" + ")}`,
+    description: `One-time setup fee — ${plans.map((p) => p.name).join(" + ")}`,
   });
   await admin.from("activity_logs").insert({
     organization_id: organizationId,
     actor_id: user.id,
     action: "wise_payment_pending_created",
-    metadata: { reference, amountCents: setupFeeCents + monthlyTotalCents },
+    metadata: { reference, amountCents: setupFeeCents },
   });
 
   return NextResponse.json({
@@ -207,6 +215,6 @@ export async function POST(req: NextRequest) {
     provider: "wise",
     reference,
     paymentLink: getWisePaymentLink(),
-    amountCents: setupFeeCents + monthlyTotalCents,
+    amountCents: setupFeeCents,
   });
 }

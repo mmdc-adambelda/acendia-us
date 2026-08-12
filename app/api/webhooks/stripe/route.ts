@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { constructStripeWebhookEvent } from "@/lib/payments/stripe";
+import { constructStripeWebhookEvent, createStripeDelayedSubscription, getStripeClient } from "@/lib/payments/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notifyOrganization, getOrgContactInfo } from "@/lib/notifications";
 import { sendEmail, emailTemplates } from "@/lib/email";
@@ -46,20 +46,17 @@ export async function POST(req: NextRequest) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const organizationId = session.metadata?.organizationId ?? session.client_reference_id;
-        if (organizationId && session.subscription) {
-          await admin
-            .from("subscriptions")
-            .update({
-              status: "active",
-              payment_provider: "stripe",
-              stripe_customer_id: typeof session.customer === "string" ? session.customer : null,
-              stripe_subscription_id: typeof session.subscription === "string" ? session.subscription : null,
-              current_period_start: new Date().toISOString(),
-            })
-            .eq("organization_id", organizationId)
-            .order("created_at", { ascending: false })
-            .limit(1);
+        const userId = session.metadata?.userId;
+        const planId = session.metadata?.planId;
+        const addonPlanIdsRaw = session.metadata?.addonPlanIds ?? "";
+        const stripeCustomerId = typeof session.customer === "string" ? session.customer : null;
 
+        // mode: "payment" — the one-time setup fee just cleared. Nothing
+        // recurring exists yet; create the delayed subscription now. (A
+        // mode: "subscription" session would land here too under the old
+        // flow, but every session this app creates today is payment-mode
+        // — see lib/payments/stripe.ts createStripeSetupFeeCheckoutSession.)
+        if (organizationId && userId && planId && stripeCustomerId && session.mode === "payment") {
           await admin.from("payments").insert({
             organization_id: organizationId,
             payment_provider: "stripe",
@@ -67,29 +64,80 @@ export async function POST(req: NextRequest) {
             amount_cents: session.amount_total ?? 0,
             currency: session.currency ?? "usd",
             stripe_payment_intent_id: typeof session.payment_intent === "string" ? session.payment_intent : null,
-            description: "Stripe Checkout session completed",
+            description: "One-time setup fee",
             paid_at: new Date().toISOString(),
           });
 
-          await admin.from("activity_logs").insert({
-            organization_id: organizationId,
-            action: "subscription_activated",
-            metadata: { provider: "stripe", stripeSubscriptionId: session.subscription },
-          });
+          const stripe = getStripeClient();
+          const paymentIntentId = typeof session.payment_intent === "string" ? session.payment_intent : null;
+          const paymentMethodId =
+            stripe && paymentIntentId
+              ? ((await stripe.paymentIntents.retrieve(paymentIntentId)).payment_method as string | null)
+              : null;
+
+          const addonPlanIds = addonPlanIdsRaw ? addonPlanIdsRaw.split(",").filter(Boolean) : [];
+          const { data: plans } = await admin
+            .from("plans")
+            .select("id, stripe_price_id_monthly")
+            .in("id", [planId, ...addonPlanIds]);
+          const priceIds = (plans ?? []).map((p) => p.stripe_price_id_monthly).filter((id): id is string => Boolean(id));
+
+          if (paymentMethodId && priceIds.length > 0) {
+            const subResult = await createStripeDelayedSubscription({
+              stripeCustomerId,
+              stripePaymentMethodId: paymentMethodId,
+              priceIds,
+              organizationId,
+              userId,
+            });
+
+            if (subResult.ok) {
+              const trialEndIso = subResult.subscription.trial_end
+                ? new Date(subResult.subscription.trial_end * 1000).toISOString()
+                : null;
+              await admin
+                .from("subscriptions")
+                .update({
+                  status: "trialing", // no monthly charge yet — see current_period_end for the estimated first-charge date
+                  payment_provider: "stripe",
+                  stripe_customer_id: stripeCustomerId,
+                  stripe_subscription_id: subResult.subscription.id,
+                  current_period_start: new Date().toISOString(),
+                  current_period_end: trialEndIso,
+                })
+                .eq("organization_id", organizationId)
+                .order("created_at", { ascending: false })
+                .limit(1);
+
+              await admin.from("activity_logs").insert({
+                organization_id: organizationId,
+                action: "setup_fee_paid_subscription_scheduled",
+                metadata: { provider: "stripe", stripeSubscriptionId: subResult.subscription.id, estimatedFirstChargeAt: trialEndIso },
+              });
+            } else {
+              console.error("Failed to create delayed Stripe subscription after setup fee payment", subResult.error);
+            }
+          } else {
+            console.error("Missing payment method or price IDs — could not schedule delayed Stripe subscription", {
+              organizationId,
+              paymentMethodId,
+              priceIds,
+            });
+          }
 
           const contact = await getOrgContactInfo(organizationId);
           await notifyOrganization({
             organizationId,
-            type: "subscription_activated",
-            title: "Your subscription is active",
-            body: "Payment received — welcome aboard!",
-            linkUrl: "/portal/",
+            type: "setup_fee_paid",
+            title: "Setup payment received",
+            body: "We're building your site now. Monthly billing starts automatically 14 days after it goes live.",
+            linkUrl: "/portal/billing/",
           });
           if (contact?.email) {
             await sendEmail({
               to: contact.email,
-              subject: "You're all set — your Acendia subscription is active",
-              html: emailTemplates.subscriptionActivated(contact.orgName),
+              subject: "Payment received — we're building your site",
+              html: emailTemplates.setupFeePaid(contact.orgName),
             });
           }
         }

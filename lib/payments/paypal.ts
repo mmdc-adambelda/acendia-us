@@ -1,4 +1,5 @@
 import "server-only";
+import { estimateDefaultBillingStart } from "@/lib/billing";
 
 /**
  * PayPal Subscriptions API client using plain fetch() — no SDK dependency.
@@ -75,6 +76,17 @@ export async function createPaypalSubscription(
       body: JSON.stringify({
         plan_id: params.planId,
         custom_id: params.organizationId,
+        // Real Acendia billing schedule: the client pays the one-time setup
+        // fee separately at checkout (see the "wise"/"stripe" branches in
+        // app/api/checkout/create) — this PayPal *recurring* plan should
+        // only cover the monthly amount, and start_time delays its first
+        // charge to the same estimated date used for Stripe (see
+        // lib/billing.ts). PayPal doesn't support moving this date once
+        // the subscription exists, so unlike Stripe this is a one-shot
+        // estimate — see CLIENT-PORTAL-SETUP.md Part 3 for the
+        // recommended PayPal Plan configuration (a $0 trial cycle to cover
+        // this gap) so a mistimed estimate never double-bills the client.
+        start_time: estimateDefaultBillingStart().toISOString(),
         application_context: {
           brand_name: "Acendia International",
           user_action: "SUBSCRIBE_NOW",

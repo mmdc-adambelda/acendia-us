@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Card from "@/components/Card";
 import StatusBadge from "@/components/portal/StatusBadge";
 import SubscriptionStatusSelect from "@/components/admin/SubscriptionStatusSelect";
+import MarkSiteLiveForm from "@/components/admin/MarkSiteLiveForm";
 import { buildMetadata } from "@/lib/seo";
 import { getAdminContext } from "@/lib/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -29,7 +30,11 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
 
   const [{ data: members }, { data: website }, { data: subs }, { data: project }, { data: tickets }] = await Promise.all([
     supabase.from("organization_members").select("user_id, role").eq("organization_id", id),
-    supabase.from("websites").select("url, primary_service, current_seo_provider").eq("organization_id", id).maybeSingle(),
+    supabase
+      .from("websites")
+      .select("url, primary_service, current_seo_provider, went_live_at")
+      .eq("organization_id", id)
+      .maybeSingle(),
     supabase
       .from("subscriptions")
       .select("id, plan_id, status, payment_provider, billing_cycle, current_period_end")
@@ -97,6 +102,12 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
 
       <div className="mt-6">
         <h2 className="text-sm font-medium text-white/50">Subscriptions</h2>
+        <p className="mt-1 text-xs text-white/40">
+          Real billing schedule: setup fee is paid today; monthly billing starts 14 days after the site goes live.
+          {website?.went_live_at
+            ? ` Went live ${new Date(website.went_live_at).toLocaleDateString("en-US")}.`
+            : " Go-live not recorded yet — mark it below once the site is actually live to lock in the real billing date."}
+        </p>
         <div className="mt-3 space-y-2">
           {(!subs || subs.length === 0) && (
             <Card>
@@ -109,7 +120,8 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
                 <p className="text-sm text-white">{planNameById.get(s.plan_id) ?? "Plan"}</p>
                 <p className="text-xs text-white/40 capitalize">
                   {s.payment_provider ?? "no provider"} · {s.billing_cycle}
-                  {s.current_period_end && ` · renews ${new Date(s.current_period_end).toLocaleDateString("en-US")}`}
+                  {s.current_period_end &&
+                    ` · ${s.status === "trialing" ? "billing starts" : "renews"} ${new Date(s.current_period_end).toLocaleDateString("en-US")}`}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -119,6 +131,11 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
             </Card>
           ))}
         </div>
+        {subs && subs.length > 0 && !website?.went_live_at && (
+          <div className="mt-3">
+            <MarkSiteLiveForm organizationId={org.id} />
+          </div>
+        )}
       </div>
 
       {project && (

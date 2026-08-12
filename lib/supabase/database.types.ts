@@ -125,6 +125,7 @@ export interface Database {
           approx_monthly_leads: string | null;
           approx_monthly_traffic: string | null;
           primary_challenge: string | null;
+          went_live_at: string | null;
           created_at: string;
           updated_at: string;
         },
@@ -139,6 +140,7 @@ export interface Database {
           approx_monthly_leads?: string | null;
           approx_monthly_traffic?: string | null;
           primary_challenge?: string | null;
+          went_live_at?: string | null;
         }
       >;
       locations: TableDef<

@@ -66,10 +66,20 @@ export const emailTemplates = {
       "You're all set!",
       `<p>Hi ${orgName},</p><p>Your Acendia subscription is now active. Log in to your portal to continue onboarding and track your campaign.</p>`,
     ),
+  setupFeePaid: (orgName: string) =>
+    wrapEmailHtml(
+      "Payment received — we're building your site",
+      `<p>Hi ${orgName},</p><p>We've received your one-time setup payment. Your site typically goes live within 2-3 business days, and your first monthly payment isn't due until 14 days after that — nothing else is charged today.</p>`,
+    ),
+  monthlyBillingScheduled: (orgName: string, dateLabel: string) =>
+    wrapEmailHtml(
+      "Your site is live — here's when billing starts",
+      `<p>Hi ${orgName},</p><p>Your site is live! Your monthly plan will begin billing on ${dateLabel} (14 days after go-live), not before.</p>`,
+    ),
   wisePaymentConfirmed: (orgName: string) =>
     wrapEmailHtml(
       "Payment confirmed",
-      `<p>Hi ${orgName},</p><p>We've confirmed your Wise transfer and activated your subscription. Welcome aboard!</p>`,
+      `<p>Hi ${orgName},</p><p>We've confirmed your Wise transfer. Welcome aboard!</p>`,
     ),
   paymentFailed: (orgName: string) =>
     wrapEmailHtml(

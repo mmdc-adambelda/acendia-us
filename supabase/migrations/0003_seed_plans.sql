@@ -10,7 +10,7 @@ insert into plans (
   setup_fee_cents, monthly_price_cents,
   wise_available, features, is_active, display_order
 ) values (
-  'Acendia Growth Package',
+  'SEO Package',
   'growth-package',
   'Acendia''s core SEO and digital growth engagement — a one-time setup followed by ongoing monthly work.',
   'core',
@@ -33,7 +33,7 @@ insert into plans (
   monthly_price_cents,
   wise_available, features, is_active, display_order
 ) values (
-  'Social Media Management',
+  'Social Media Add-On',
   'social-media-addon',
   'Optional add-on for clients on the Growth Package who want ongoing social media management alongside their SEO work.',
   'addon',
