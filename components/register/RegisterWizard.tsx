@@ -67,34 +67,40 @@ export default function RegisterWizard({ plans }: { plans: PlanOption[] }) {
     }
 
     setSubmitting(true);
-    const supabase = createClient();
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email: values.email,
-      password: values.password,
-      options: {
-        data: { first_name: values.firstName, last_name: values.lastName, phone: values.phone },
-        emailRedirectTo: `${window.location.origin}/verify-email/`,
-      },
-    });
-    setSubmitting(false);
+    try {
+      const supabase = createClient();
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: {
+          data: { first_name: values.firstName, last_name: values.lastName, phone: values.phone },
+          emailRedirectTo: `${window.location.origin}/verify-email/`,
+        },
+      });
 
-    if (signUpError) {
-      setError(
-        signUpError.message.toLowerCase().includes("already registered") ||
-          signUpError.message.toLowerCase().includes("already exists")
-          ? "An account already exists for this email. Try logging in instead."
-          : signUpError.message
-      );
-      return;
-    }
-    if (!data.user) {
-      setError("Something went wrong creating your account. Please try again.");
-      return;
-    }
+      if (signUpError) {
+        setError(
+          signUpError.message.toLowerCase().includes("already registered") ||
+            signUpError.message.toLowerCase().includes("already exists")
+            ? "An account already exists for this email. Try logging in instead."
+            : signUpError.message
+        );
+        return;
+      }
+      if (!data.user) {
+        setError("Something went wrong creating your account. Please try again.");
+        return;
+      }
 
-    setUserId(data.user.id);
-    setAccount(values);
-    setStep(1);
+      setUserId(data.user.id);
+      setAccount(values);
+      setStep(1);
+    } catch (err) {
+      console.error("signUp failed", err);
+      setError("We couldn't reach our servers to create your account. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function handleBusinessSubmit(e: React.FormEvent<HTMLFormElement>) {

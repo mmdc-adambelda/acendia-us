@@ -28,18 +28,24 @@ export default function ResetPasswordForm() {
     }
 
     setSubmitting(true);
-    const supabase = createClient();
-    const { error: updateError } = await supabase.auth.updateUser({ password });
-    setSubmitting(false);
+    try {
+      const supabase = createClient();
+      const { error: updateError } = await supabase.auth.updateUser({ password });
 
-    if (updateError) {
-      setError(
-        "That reset link may have expired. Request a new one from the forgot password page."
-      );
-      return;
+      if (updateError) {
+        setError(
+          "That reset link may have expired. Request a new one from the forgot password page."
+        );
+        return;
+      }
+      setDone(true);
+      setTimeout(() => router.push("/login/"), 1500);
+    } catch (err) {
+      console.error("updateUser failed", err);
+      setError("We couldn't reach our servers. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
     }
-    setDone(true);
-    setTimeout(() => router.push("/login/"), 1500);
   }
 
   if (done) {

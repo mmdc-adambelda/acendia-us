@@ -16,19 +16,25 @@ export default function ForgotPasswordForm() {
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email") || "");
 
-    const supabase = createClient();
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password/`,
-    });
-    setSubmitting(false);
+    try {
+      const supabase = createClient();
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password/`,
+      });
 
-    // Always show the same success state regardless of whether the email
-    // exists — prevents using this form to enumerate registered accounts.
-    if (resetError) {
-      setError("Something went wrong. Please try again in a moment.");
-      return;
+      // Always show the same success state regardless of whether the email
+      // exists — prevents using this form to enumerate registered accounts.
+      if (resetError) {
+        setError("Something went wrong. Please try again in a moment.");
+        return;
+      }
+      setSent(true);
+    } catch (err) {
+      console.error("resetPasswordForEmail failed", err);
+      setError("We couldn't reach our servers. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
     }
-    setSent(true);
   }
 
   if (sent) {

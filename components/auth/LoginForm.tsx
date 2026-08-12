@@ -20,22 +20,28 @@ export default function LoginForm() {
     const email = String(form.get("email") || "");
     const password = String(form.get("password") || "");
 
-    const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-    setSubmitting(false);
+    try {
+      const supabase = createClient();
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (signInError) {
-      setError(
-        signInError.message.toLowerCase().includes("email not confirmed")
-          ? "Please verify your email before logging in — check your inbox for the confirmation link."
-          : "Incorrect email or password."
-      );
-      return;
+      if (signInError) {
+        setError(
+          signInError.message.toLowerCase().includes("email not confirmed")
+            ? "Please verify your email before logging in — check your inbox for the confirmation link."
+            : "Incorrect email or password."
+        );
+        return;
+      }
+
+      const next = searchParams.get("next") || "/portal/";
+      router.push(next);
+      router.refresh();
+    } catch (err) {
+      console.error("signIn failed", err);
+      setError("We couldn't reach our servers. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
     }
-
-    const next = searchParams.get("next") || "/portal/";
-    router.push(next);
-    router.refresh();
   }
 
   return (
