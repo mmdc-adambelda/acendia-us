@@ -8,6 +8,7 @@ const STATIC_PATHS = [
   "/",
   "/about/",
   "/services/",
+  "/pricing/",
   "/contact/",
   "/case-studies/",
   "/insights/",
@@ -17,6 +18,12 @@ const STATIC_PATHS = [
   "/privacy-policy/",
   "/terms/",
 ];
+
+// Never add anything under these prefixes here — they're authenticated app
+// routes (client portal, admin, checkout, auth) and must stay out of the
+// sitemap. See middleware.ts + robots.ts for the enforcement layers.
+// /login/ /register/ /forgot-password/ /reset-password/ /verify-email/
+// /get-started/ /checkout/* /onboarding/ /portal/* /admin/*
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

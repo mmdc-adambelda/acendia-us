@@ -46,6 +46,12 @@ export default function Header() {
         <div className="hidden items-center gap-3 md:flex">
           <SiteSwitcher />
           <Link
+            href="/login/"
+            className="focus-ring text-sm font-medium text-white/70 hover:text-white"
+          >
+            Client Login
+          </Link>
+          <Link
             href="/free-seo-audit/"
             data-event="audit_cta_clicked"
             className="focus-ring inline-flex items-center rounded-[var(--r-sm)] bg-white px-5 py-2.5 text-sm font-semibold text-black transition-all hover:shadow-[var(--glow-white)]"
@@ -145,6 +151,15 @@ export default function Header() {
                 className="focus-ring block rounded-[var(--r-sm)] bg-white px-3 py-3 text-center text-base font-semibold text-black"
               >
                 Get Your Free SEO Audit
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/login/"
+                onClick={() => setOpen(false)}
+                className="focus-ring block rounded-[var(--r-sm)] border border-[var(--border)] px-3 py-3 text-center text-base font-medium text-white/80"
+              >
+                Client Login
               </Link>
             </li>
           </ul>
