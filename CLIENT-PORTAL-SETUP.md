@@ -1,6 +1,6 @@
 # Acendia Client Portal — Setup Guide (for the Acendia owner/admin)
 
-This is written for you, not developers — step-by-step, with exactly where to click. Foundation-phase steps (Supabase) are needed **now** for the portal to actually work. The Stripe/PayPal/Wise/Email sections describe what **Phase 2 and Phase 5** will need — you don't need to do those yet, but the instructions are here so you can prepare or hand this off later.
+This is written for you, not developers — step-by-step, with exactly where to click. **All 5 phases are now fully built and code-complete.** Every part below (Supabase, Stripe, PayPal, Wise, Resend, domain) is something you need to actually do to bring the portal fully live — none of it is "later" anymore. See `ACENDIA-OWNER-ACTION-REQUIRED.md` for the single prioritized checklist; this document has the detailed how-to for each item.
 
 ---
 
@@ -54,7 +54,13 @@ Supabase needs to know which URLs are allowed to receive password-reset and emai
 
 Supabase requires email verification before an account can log in, out of the box — no action needed. If you want to customize the confirmation email's look (currently Supabase's generic template), go to **Authentication** → **Email Templates** and edit the "Confirm signup" template. This is optional and can be done anytime.
 
-### 1.6 Add the same environment variables to Vercel
+### 1.6 Create the private file storage bucket (needed for `/portal/files`)
+
+1. In the Supabase Dashboard, go to **Storage** → **Create a new bucket**.
+2. Name it exactly `client-files`, and leave it **Private** (do not make it public — files are served via short-lived signed URLs generated server-side, never a public URL).
+3. No further configuration needed — the app writes files at `{organization_id}/{filename}` and reads them back with RLS-equivalent checks in application code.
+
+### 1.7 Add the same environment variables to Vercel
 
 The keys you added to `.env.local` only work on your own computer. For the live site to work, add the same three variables in Vercel:
 
@@ -71,21 +77,23 @@ The keys you added to `.env.local` only work on your own computer. For the live 
 
 ---
 
-## Part 2: Stripe (Phase 2 — not needed yet)
+## Part 2: Stripe (Phase 2 — code is live, needs your account)
 
-This section is here for when Phase 2 (real checkout) is built. Nothing to do yet.
+Card checkout won't appear as an option on `/checkout` until `STRIPE_SECRET_KEY` is set — the code checks for it and hides the option rather than offering something broken.
 
 1. Create a Stripe account at [stripe.com](https://stripe.com) if you don't have one.
 2. Stay in **Test mode** (toggle in the top-right of the Stripe Dashboard) until everything is verified working.
-3. Go to **Products** → create a product called "Acendia Growth Package" with a recurring price of $499/month, and a separate one-time price of $199 for setup (or a combined price, depending on how Phase 2 implements the setup fee — this will be finalized when that phase is built).
+3. Go to **Products** → create a product called "Acendia Growth Package" with a recurring price of $499/month.
 4. Create a second product, "Social Media Management," at $299/month recurring.
-5. Copy each **Price ID** (starts with `price_...`) — these go into `STRIPE_PRICE_ID_GROWTH_PACKAGE_MONTHLY` and `STRIPE_PRICE_ID_SOCIAL_MEDIA_ADDON_MONTHLY`.
+5. Copy each recurring **Price ID** (starts with `price_...`). These do **not** go into an env var — copy `supabase/migrations/0005_payment_provider_ids_template.sql`, fill in the real Price IDs, and run it in the Supabase SQL Editor (this sets `plans.stripe_price_id_monthly`). The one-time $199 setup fee is added automatically as an ad-hoc Checkout line item — no separate Stripe product needed for it.
 6. Go to **Developers** → **API keys**. Copy the **Secret key** (`sk_test_...` in test mode) into `STRIPE_SECRET_KEY`, and the **Publishable key** (`pk_test_...`) into `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
-7. Once webhook handling is built (Phase 2), go to **Developers** → **Webhooks** → **Add endpoint**, point it at `https://acendia.us/api/webhooks/stripe`, and copy the **Signing secret** into `STRIPE_WEBHOOK_SECRET`.
-8. Configure the **Customer Portal** (Settings → Billing → Customer portal) with your branding before going live.
-9. When ready for real payments, switch the Dashboard toggle to **Live mode** and repeat steps 5-7 for live keys.
+7. Go to **Developers** → **Webhooks** → **Add endpoint**, point it at `https://acendia.us/api/webhooks/stripe`, subscribe to at least `checkout.session.completed`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`, and copy the **Signing secret** into `STRIPE_WEBHOOK_SECRET`.
+8. Configure the **Customer Portal** (Settings → Billing → Customer portal) with your branding — this is what the "Manage Billing" button in `/portal/billing` opens.
+9. When ready for real payments, switch the Dashboard toggle to **Live mode** and repeat steps 5-7 for live keys (and re-run the migration template with live Price IDs).
 
-## Part 3: PayPal (Phase 2 — not needed yet)
+## Part 3: PayPal (Phase 2 — code is live, needs your account)
+
+PayPal won't appear as a checkout option until both `PAYPAL_CLIENT_ID` and `PAYPAL_CLIENT_SECRET` are set.
 
 1. Create a PayPal **Business** account at [paypal.com](https://paypal.com) if you don't have one.
 2. Go to [developer.paypal.com](https://developer.paypal.com) → **Apps & Credentials**.
@@ -93,26 +101,27 @@ This section is here for when Phase 2 (real checkout) is built. Nothing to do ye
 4. Click **Create App**, name it "Acendia US".
 5. Copy the **Client ID** into `PAYPAL_CLIENT_ID` and the **Secret** into `PAYPAL_CLIENT_SECRET`.
 6. Set `PAYPAL_ENVIRONMENT=sandbox` for now.
-7. Once Phase 2 builds subscription plan creation, you'll create Products/Plans either via the API or Dashboard, matching the Stripe plan structure.
-8. Configure a webhook (Developer Dashboard → your app → Webhooks) pointed at `https://acendia.us/api/webhooks/paypal` once that endpoint exists; copy the **Webhook ID** into `PAYPAL_WEBHOOK_ID`.
+7. Create a Product + Plan (via the PayPal Dashboard or API) matching the Stripe plan structure ($499/mo Growth Package, $299/mo Social Media). Copy each Plan ID (starts with `P-...`) into `supabase/migrations/0005_payment_provider_ids_template.sql` (`paypal_plan_id_monthly`) and run it in the Supabase SQL Editor.
+8. Configure a webhook (Developer Dashboard → your app → Webhooks) pointed at `https://acendia.us/api/webhooks/paypal`, subscribed to at least `BILLING.SUBSCRIPTION.ACTIVATED`, `PAYMENT.SALE.COMPLETED`, `BILLING.SUBSCRIPTION.CANCELLED`, `BILLING.SUBSCRIPTION.EXPIRED`, `BILLING.SUBSCRIPTION.SUSPENDED`, `PAYMENT.SALE.DENIED`; copy the **Webhook ID** into `PAYPAL_WEBHOOK_ID`.
 9. Switch to **Live** credentials and `PAYPAL_ENVIRONMENT=live` when ready for real payments.
 
-## Part 4: Wise (Phase 2 — not needed yet)
+## Part 4: Wise (Phase 2 — code is live; intentionally manual, not automated)
 
-Wise doesn't offer Stripe-style automated subscription billing — see `CLIENT-PORTAL-IMPLEMENTATION.md` §5 for why. What you'll need when Phase 2 builds this:
+Wise doesn't offer Stripe-style automated subscription billing — see `CLIENT-PORTAL-IMPLEMENTATION.md` §5 for why. The built flow: a client choosing Wise at checkout gets a unique reference and (if configured) a payment link; **your team manually confirms the transfer arrived in `/admin/payments`**, which is what actually activates their subscription. Nothing here auto-activates.
 
 1. Confirm your **Wise Business** account is verified and can receive payments from US customers.
-2. Log in to Wise, go to **Get Paid** (or equivalent) and check whether your account has **payment link** functionality available (this varies by account/region — Wise's available features aren't identical everywhere).
-3. If payment links are available, generate one (or note the process) — this becomes `WISE_PAYMENT_LINK`.
-4. Check whether your account has API access for transaction reconciliation (**Settings** → **API tokens**, or contact Wise support) — this determines whether Phase 2 can automate payment confirmation or whether it must stay a manual "admin marks as paid" process, as required by the brief.
-5. If an API token is available, generate one into `WISE_API_TOKEN`, and find your **Profile ID** into `WISE_PROFILE_ID`.
+2. Log in to Wise, go to **Get Paid** (or equivalent) and check whether your account has **payment link** functionality available (this varies by account/region).
+3. If payment links are available, generate one — this becomes `WISE_PAYMENT_LINK`. Wise won't appear as a checkout option until this is set (if you don't have a payment link, clients can still be told the reference and asked to wire manually — set `WISE_PAYMENT_LINK` to any placeholder page in that case, or ask us to hide Wise entirely).
+4. `WISE_API_TOKEN`/`WISE_PROFILE_ID` are optional — reserved for a future automated-reconciliation upgrade. Today's flow doesn't require them; confirmation is manual via `/admin/payments` by design (this is what the original brief requires — Wise must never be presented as equivalent to instant/automatic activation).
 
-## Part 5: Transactional Email (Phase 5 — not needed yet)
+## Part 5: Transactional Email (Phase 5 — code is live, needs your account)
+
+Emails (payment confirmations, new messages, new reports, admin alerts) are silently skipped (logged to the server console only) until `RESEND_API_KEY` and `EMAIL_FROM` are set — nothing breaks without it, you just won't get the emails yet.
 
 1. Create a [Resend](https://resend.com) account (or tell us if you'd prefer a different provider).
 2. Add and verify your sending domain (e.g. `mail.acendia.us`) — Resend will give you DNS records (usually a few `TXT` and `CNAME` records) to add wherever `acendia.us`'s DNS is managed.
 3. Create an API key, copy it into `RESEND_API_KEY`.
-4. Set `EMAIL_FROM` to something like `Acendia <hello@acendia.us>` and `ADMIN_NOTIFICATION_EMAIL` to the inbox that should get new-client/payment alerts.
+4. Set `EMAIL_FROM` to something like `Acendia <hello@acendia.us>` and `ADMIN_NOTIFICATION_EMAIL` to the inbox that should get new-client-signup, new-message, and new-support-ticket alerts.
 
 ## Part 6: Domain & Vercel
 

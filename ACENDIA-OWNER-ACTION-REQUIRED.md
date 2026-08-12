@@ -1,79 +1,92 @@
-# Acendia Owner Action Required
+# Acendia Owner Action Required — Consolidated List
 
-Two lists: what's already done, and exactly what you need to do next — where to go, what to click, what value to copy, and where it goes.
-
----
-
-## ✅ COMPLETED BY CLAUDE (Foundation phase)
-
-- `CLIENT-PORTAL-IMPLEMENTATION.md` — full architecture plan
-- Supabase client/server/admin wiring (`lib/supabase/`)
-- `proxy.ts` — session handling, `/portal` + `/admin` + `/onboarding` route protection, noindex headers
-- Full database schema — 20+ tables, enums, triggers (`supabase/migrations/0001_schema.sql`)
-- Row Level Security policies on every table (`supabase/migrations/0002_rls_policies.sql`)
-- Real pricing seeded (`supabase/migrations/0003_seed_plans.sql`): Growth Package ($199 setup + $499/mo), Social Media Management add-on ($299/mo)
-- Default onboarding checklist seeded (`supabase/migrations/0004_seed_onboarding_items.sql`)
-- `/pricing/` — public, indexable, pulls real plan data
-- `/register/` — 5-step wizard (Account → Business → Website & Marketing → Goals → Plan), creates a real Supabase Auth user + organization + website
-- `/login/`, `/forgot-password/`, `/reset-password/`, `/verify-email/`, `/get-started/`
-- `/checkout/`, `/checkout/success/`, `/checkout/cancel/`, `/onboarding/`, `/portal/`, `/admin/` — real, auth/role-gated stub pages (Phase 2-4 build out the full functionality)
-- All new authenticated/auth routes: `noindex, nofollow` + excluded from `robots.txt` and `sitemap.xml`
-- Privacy Policy and Terms of Service updated for accounts/portal/payments (flagged for your attorney's review)
-- `.env.example` — full documented variable list
-- `.env.local` — pre-filled with your Supabase project URL (not a secret), keys left blank for you
-- Found and fixed a critical bug during testing: the new route-protection code was crashing the **entire site**, including existing marketing pages, whenever Supabase wasn't configured — fixed and verified the homepage/pricing/register all render correctly with or without Supabase configured
-
-**Not touched**: any existing marketing page content, URLs, metadata, sitemap entries, or SEO work from earlier passes.
+All 5 phases (Foundation, Payments, Client Portal, Admin Portal, Comms/Testing) are **code-complete and pushed**. Nothing further needs to be built for the system to work end-to-end — everything below is credentials, accounts, and one-time configuration only you can provide. Full step-by-step detail for every item is in `CLIENT-PORTAL-SETUP.md`; this is the prioritized checklist.
 
 ---
 
-## 🔴 ACTION REQUIRED FROM ACENDIA
+## ✅ What's built (all 5 phases)
 
-### 1. Get your Supabase API keys — REQUIRED for the portal to work at all
-
-- **Where to go**: [supabase.com/dashboard](https://supabase.com/dashboard) → your project → **Project Settings** (gear icon) → **API**
-- **What to copy**: the **anon / public** key and the **service_role** key (both long strings starting with `eyJ`)
-- **Where it goes**:
-  - anon key → `.env.local`'s `NEXT_PUBLIC_SUPABASE_ANON_KEY` (locally) **and** Vercel's `NEXT_PUBLIC_SUPABASE_ANON_KEY` (Production + Preview)
-  - service_role key → `.env.local`'s `SUPABASE_SERVICE_ROLE_KEY` **and** Vercel's `SUPABASE_SERVICE_ROLE_KEY` (Production + Preview)
-- **Is it secret?** anon key: no, safe to expose. service_role key: **yes, extremely** — treat it like a database master password.
-- **Belongs in Vercel?** Yes, both.
-- **Can it be committed to GitHub?** No — never. `.env.local` is already gitignored.
-- **How to test**: after adding both keys (locally and in Vercel, then redeploying), visit `/register/` and submit Step 1 — you should receive a confirmation email and see rows appear in Supabase's Table Editor under `profiles`.
-
-### 2. Run the 4 database migration files — REQUIRED
-
-- **Where to go**: Supabase Dashboard → **SQL Editor** → **New query**
-- **What to do**: copy/paste and run each file in `supabase/migrations/` in order: `0001_schema.sql`, `0002_rls_policies.sql`, `0003_seed_plans.sql`, `0004_seed_onboarding_items.sql`
-- **Is it secret?** No.
-- **Belongs in Vercel?** No — this runs directly in Supabase, not in your app deployment.
-- **How to test**: Table Editor should show a `plans` table with 2 rows after running.
-
-### 3. Configure Supabase auth redirect URLs — REQUIRED
-
-- **Where to go**: Supabase Dashboard → **Authentication** → **URL Configuration**
-- **What to do**: set Site URL to your production URL; add `http://localhost:3000/**`, `https://acendia-us.vercel.app/**`, and (once connected) `https://acendia.us/**` to Redirect URLs
-- **Is it secret?** No.
-- **How to test**: password reset and email confirmation links should land on the correct domain instead of erroring.
-
-### 4. Connect the `acendia.us` domain to Vercel — recommended, not blocking
-
-- **Where to go**: Vercel → `acendia-us` project → **Settings** → **Domains**
-- **What to do**: add `acendia.us`, follow the DNS instructions shown
-- **Is it secret?** No.
-- **How to test**: `acendia.us` loads the site over HTTPS.
-
-### 5. Stripe, PayPal, Wise, Resend accounts — not needed yet (Phase 2/5)
-
-Full step-by-step instructions are in `CLIENT-PORTAL-SETUP.md` Parts 2-5. **Nothing to do here right now** — checkout is intentionally stubbed until those integrations are built. When you're ready to move to Phase 2, let us know and we'll build the real checkout flow against whichever of these you've set up.
-
-### 6. Have a licensed attorney review the updated Privacy Policy and Terms
-
-- **Where**: `/privacy-policy/` and `/terms/` on the live site (both flagged in-page with a visible note for you)
-- **Why**: these were updated in good faith to reflect accounts/portal/payments but are not a substitute for legal review, especially before real payments go live.
+- **Foundation**: Supabase auth, full database schema + Row Level Security, real pricing ($199 setup + $499/mo Growth Package, $299/mo Social Media add-on), 5-step registration wizard, login/password reset/email verification, public `/pricing/`.
+- **Phase 2 — Payments**: Stripe Checkout + Billing Portal + webhooks, PayPal Subscriptions + webhooks, Wise manual payment-link + admin-confirmation flow, real `/checkout` with provider selection, server-side-only pricing (never trusts the browser).
+- **Phase 3 — Client Portal** (`/portal/*`): dashboard, campaign, SEO performance, tasks, reports, files, messages, billing, support, settings.
+- **Phase 4 — Admin Portal** (`/admin/*`): dashboard (MRR, active clients, past-due, open tickets), client list/detail, manual client creation, projects, tasks, reports (publish workflow), **payments (Wise confirmation queue)**, subscriptions (manual override), messages, plans, full activity log.
+- **Phase 5 — Comms & Testing**: transactional email via Resend (gated, degrades silently if not configured), in-app notification bell, 15 automated unit tests (`npm test`) covering payment-config gating, Wise reference generation, and registration validation.
+- Every authenticated route stays `noindex, nofollow` and out of the sitemap; nothing about the existing marketing site's URLs, content, or SEO was touched.
 
 ---
 
-## What happens once you complete items 1-3 above
+## 🔴 Required for the portal to work at all
 
-Registration, login, password reset, and the pricing page will be **fully live and functional** — real accounts, real database records, real email verification. Checkout itself stays a "we'll follow up" stub until Phase 2. Nothing else needs to happen for the Foundation phase to be considered complete and working.
+### 1. Get your Supabase API keys
+- **Where**: [supabase.com/dashboard](https://supabase.com/dashboard) → your project → **Project Settings** → **API**
+- **Copy**: anon/public key → `.env.local` + Vercel `NEXT_PUBLIC_SUPABASE_ANON_KEY`; service_role key (**secret**) → `.env.local` + Vercel `SUPABASE_SERVICE_ROLE_KEY`
+- **Test**: `/register/` → step 1 should send a confirmation email and create a `profiles` row.
+
+### 2. Run the database migrations, in order
+- **Where**: Supabase Dashboard → **SQL Editor**
+- **Run**: `0001_schema.sql` → `0002_rls_policies.sql` → `0003_seed_plans.sql` → `0004_seed_onboarding_items.sql`
+- **Test**: Table Editor shows a `plans` table with 2 rows.
+
+### 3. Configure Supabase auth redirect URLs
+- **Where**: Supabase Dashboard → **Authentication** → **URL Configuration**
+- **Do**: set Site URL to your production URL; add `http://localhost:3000/**`, your Vercel URL, and `https://acendia.us/**` to Redirect URLs.
+
+### 4. Create the private `client-files` Storage bucket
+- **Where**: Supabase Dashboard → **Storage** → Create bucket named exactly `client-files`, **private** (not public).
+- **Why**: `/portal/files` serves everything through short-lived signed URLs — no bucket, no file downloads.
+
+### 5. Add all env vars to Vercel (Production + Preview)
+- The three Supabase vars above, plus `NEXT_PUBLIC_APP_URL`. See `.env.example` for the full documented list.
+
+---
+
+## 🟡 Required to accept real payments
+
+### 6. Create your Stripe account and connect it
+- Create products/prices ($499/mo Growth Package, $299/mo Social Media) in **Test mode** first.
+- Copy the recurring Price IDs into `supabase/migrations/0005_payment_provider_ids_template.sql` (fill in, then run in SQL Editor) — **not** an env var, so pricing always comes from the database.
+- Add `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` to Vercel.
+- Add a webhook endpoint at `https://acendia.us/api/webhooks/stripe` (events: `checkout.session.completed`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`); copy the signing secret into `STRIPE_WEBHOOK_SECRET`.
+- Configure the Stripe Customer Portal (branding) — this powers "Manage Billing" in `/portal/billing`.
+- Full detail: `CLIENT-PORTAL-SETUP.md` Part 2.
+
+### 7. Create your PayPal Business account and app
+- Create a Product/Plan matching the same pricing; copy the Plan ID into the same `0005_...sql` template file.
+- Add `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENVIRONMENT=sandbox` (then `live` when ready) to Vercel.
+- Add a webhook at `https://acendia.us/api/webhooks/paypal`; copy the Webhook ID into `PAYPAL_WEBHOOK_ID`.
+- Full detail: `CLIENT-PORTAL-SETUP.md` Part 3.
+
+### 8. Decide on Wise
+- Wise payments are **manual by design** — your team confirms each transfer in `/admin/payments`, nothing auto-activates. This matches the brief's explicit requirement that Wise never be presented as equivalent to instant billing.
+- If you want Wise offered at checkout at all, set `WISE_PAYMENT_LINK` (a real payment link, if your Wise account supports one) in Vercel. If you'd rather not offer Wise yet, skip this — it simply won't appear as a checkout option.
+- Full detail: `CLIENT-PORTAL-SETUP.md` Part 4.
+
+---
+
+## 🟢 Recommended, not blocking
+
+### 9. Connect the `acendia.us` domain to Vercel
+Vercel → project → **Settings** → **Domains** → add `acendia.us`, follow DNS instructions. Update `NEXT_PUBLIC_APP_URL` and Supabase redirect URLs to match once connected.
+
+### 10. Set up transactional email (Resend)
+Without this, payment confirmations, new-message, and new-report emails are silently skipped (logged only) — the app still works, clients just won't get emailed. Create a Resend account, verify your sending domain, add `RESEND_API_KEY`, `EMAIL_FROM`, and `ADMIN_NOTIFICATION_EMAIL` (the inbox that gets new-signup/new-message/new-ticket alerts) to Vercel. Full detail: `CLIENT-PORTAL-SETUP.md` Part 5.
+
+### 11. Assign your first staff/admin users
+New accounts default to the `client` role. To make someone `staff`/`admin`/`super_admin` (so they can reach `/admin`), update their `profiles.role` directly in Supabase's Table Editor — there's no self-service way to grant this, intentionally.
+
+### 12. Have a licensed attorney review Privacy Policy and Terms
+`/privacy-policy/` and `/terms/` were updated for accounts/payments and are flagged in-page for your review — not a substitute for legal counsel, especially before real payments go live.
+
+### 13. Run the manual QA checklist once credentials exist
+`CLIENT-PORTAL-IMPLEMENTATION.md` §13 has an 8-step checklist (registration → verification → login, org isolation, Stripe/PayPal/Wise activation, failed payment, cancellation, admin access control) to run once Stripe/PayPal sandbox credentials are wired up — these flows can't be tested from this environment since no live provider credentials exist here.
+
+---
+
+## What happens once you complete the 🔴 items (1-5)
+Registration, login, the full client portal, and the full admin portal are live and functional with real data — clients just can't pay online yet (checkout shows a "contact us" fallback if no payment provider is configured).
+
+## What happens once you also complete the 🟡 items (6-8)
+Real online checkout works end-to-end: Stripe/PayPal activate automatically via verified webhooks, Wise activates when your team confirms a transfer in `/admin/payments`.
+
+## What the 🟢 items add
+Custom domain, email notifications, and legal review — polish and completeness, not blocking functionality.

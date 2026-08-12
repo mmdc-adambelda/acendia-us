@@ -196,10 +196,58 @@ Stripe/PayPal/Wise/Resend vars are documented in `.env.example` now (so the shap
 
 | Phase | Scope | Status |
 |---|---|---|
-| **Foundation** (this pass) | Plan doc, DB schema + RLS, Supabase auth, registration wizard, login/password-reset, `/pricing` with real pricing, SEO protection, env scaffolding | **In progress** |
-| **Phase 2 — Payments** | Stripe Checkout + Billing + webhooks + Customer Portal; PayPal Subscriptions + webhooks; Wise payment-link flow; real `/checkout` flow; subscription activation on verified webhook only | Not started — needs real (sandbox) provider credentials from the owner first |
-| **Phase 3 — Client Portal** | `/portal` dashboard, campaign, SEO performance, tasks, reports, files, messages, support, billing, settings | Not started |
-| **Phase 4 — Admin Portal** | `/admin` dashboard, client management, manual client creation, plan management, activity/audit log review | Not started |
-| **Phase 5 — Comms, Testing, Docs** | Transactional emails (Resend), in-app notifications, automated tests for the critical flows listed in the brief, final `CLIENT-PORTAL-SETUP.md` completion, `ACENDIA-OWNER-ACTION-REQUIRED.md` completion | Partially started (docs) |
+| **Foundation** | Plan doc, DB schema + RLS, Supabase auth, registration wizard, login/password-reset, `/pricing` with real pricing, SEO protection, env scaffolding | **Complete** |
+| **Phase 2 — Payments** | Stripe Checkout + Billing + webhooks + Customer Portal; PayPal Subscriptions + webhooks; Wise payment-link flow; real `/checkout` flow; subscription activation on verified webhook only | **Complete** — code-complete; needs real (sandbox or live) provider credentials from the owner to actually process a payment (see §12) |
+| **Phase 3 — Client Portal** | `/portal` dashboard, campaign, SEO performance, tasks, reports, files, messages, support, billing, settings | **Complete** |
+| **Phase 4 — Admin Portal** | `/admin` dashboard, client management, manual client creation, plan management, activity/audit log review | **Complete** |
+| **Phase 5 — Comms, Testing, Docs** | Transactional emails (Resend), in-app notifications, automated tests for the critical flows listed in the brief, final `CLIENT-PORTAL-SETUP.md` completion, `ACENDIA-OWNER-ACTION-REQUIRED.md` completion | **Complete** |
 
 This mirrors the same "propose scope → build → report → confirm next phase" pattern used for the rest of this site build.
+
+---
+
+## 12. Phases 2-5 — What Was Actually Built
+
+### Phase 2 — Payments
+- **Provider abstraction** (`lib/payments/types.ts`): `isProviderConfigured(provider)` checks env-var presence per provider so checkout only ever offers a payment method that will actually work — never a dead option.
+- **Stripe** (`lib/payments/stripe.ts`): `createStripeCheckoutSession()` (subscription mode, one-time setup-fee line item, `client_reference_id`/metadata carry `organizationId`), `createStripeCustomerPortalSession()`, `constructStripeWebhookEvent()` (signature-verified, returns `null` — never throws — on bad signature or missing config).
+- **PayPal** (`lib/payments/paypal.ts`): plain `fetch()`-based OAuth client-credentials flow (cached token), `createPaypalSubscription()`, `verifyPaypalWebhookSignature()` (via PayPal's own verify-webhook-signature API, since PayPal doesn't support local HMAC verification the way Stripe does).
+- **Wise** (`lib/payments/wise.ts`): **manual-only, by design** — `generateWiseReference()` produces a unique reference (`ACND-{orgId}-{timestamp}`) the client is shown at checkout and must include in their transfer; a `payments` row is created with `status='pending'`; nothing auto-activates. Activation only happens when staff clicks **Confirm Payment Received** in `/admin/payments` (`app/api/admin/payments/confirm/route.ts`) — the one and only code path that can mark a Wise payment `paid`.
+- **Checkout flow**: `app/api/checkout/create/route.ts` re-derives the plan and price **from the `plans` table**, never from the request body; creates/reuses a `pending` `subscriptions` row; branches per provider. `app/checkout/page.tsx` + `components/checkout/CheckoutClient.tsx` render only the providers `isProviderConfigured()` says are ready.
+- **Webhooks**: `app/api/webhooks/stripe/route.ts` and `app/api/webhooks/paypal/route.ts` — both signature-verified, both idempotent via a `(provider, event_id)` unique-constrained insert into `payment_webhook_events` *before* processing, both update `subscriptions`/`payments`/`activity_logs`, both trigger the client notification + email described in Phase 5.
+- **`/checkout/success`** reads the **real** subscription status from the database and reflects it back — it is never itself the source of truth that a payment succeeded, per the brief's explicit requirement.
+- Stripe/PayPal price & plan IDs live on the `plans` table (`stripe_price_id_monthly`, `paypal_plan_id_monthly`), not in env vars — see `supabase/migrations/0005_payment_provider_ids_template.sql`.
+
+### Phase 3 — Client Portal (`/portal/*`)
+Shared shell: `app/portal/layout.tsx` (sidebar nav, org name, notification bell, sign out) + `lib/portal.ts`'s `getPortalContext()` (cached per-request; redirects to `/register/` if a signed-in user has no organization yet).
+- `/portal` — dashboard: subscription status, campaign health/stage, current work, action-required-from-you, quick links to latest report and billing.
+- `/portal/campaign` — project stage timeline, active services, target keywords/locations, milestones.
+- `/portal/seo` — keyword rankings, organic traffic, leads — all real `keyword_metrics`/`traffic_metrics`/`lead_metrics` rows, empty-state until real data exists (never estimated or fabricated).
+- `/portal/tasks`, `/portal/reports` (published-only), `/portal/files` (Supabase Storage signed URLs, 10-min expiry), `/portal/messages` (conversation thread + send), `/portal/billing` (plan, renewal, payment history, Stripe Customer Portal button), `/portal/support` (ticket submission + history), `/portal/settings` (profile + business name).
+
+### Phase 4 — Admin Portal (`/admin/*`)
+Shared shell: `app/admin/layout.tsx` + `lib/admin.ts`'s `getAdminContext()` (role-gated `staff`/`admin`/`super_admin`, RLS is the real boundary underneath).
+- `/admin` — dashboard KPIs (total/new clients, active subscriptions, MRR computed from real active-subscription plan prices, pending onboarding, past-due accounts, tasks waiting on client, open tickets) + a banner surfacing any Wise payments awaiting confirmation.
+- `/admin/clients` + `/admin/clients/[id]` — client list/detail (business info, contacts, subscriptions with inline status override, campaign snapshot, recent tickets).
+- `/admin/clients/new` — manual client creation: creates a real Supabase Auth user (`admin.auth.admin.createUser`), organization, membership, optional pending plan, and returns a password-set link (`admin.auth.admin.generateLink`) for staff to send directly, since email delivery isn't assumed.
+- `/admin/projects`, `/admin/tasks` (inline status change), `/admin/reports` (publish/unpublish — publishing triggers the client notification + email), `/admin/payments` (**the Wise confirmation queue** — this is the operational heart of the Wise flow), `/admin/subscriptions` (list + inline status override, logged to `activity_logs`), `/admin/messages` + `/admin/messages/[id]` (staff reply to any client conversation), `/admin/plans` (view; activate/deactivate is admin+ only per RLS — price/feature edits stay in Supabase's Table Editor by design, so checkout amounts can never be UI-tampered), `/admin/activity` (full audit trail).
+
+### Phase 5 — Comms, Notifications, Tests
+- **`lib/email.ts`**: Resend wrapper, gated behind `RESEND_API_KEY`/`EMAIL_FROM` — every send is try/catch-wrapped and logs-and-continues rather than throwing, so a missing/misconfigured Resend key never breaks a webhook, ticket submission, or message send. Templates: subscription activated, Wise payment confirmed, payment failed, new message, new report, plus three admin-facing templates (new client message, new support ticket, new signup) sent to `ADMIN_NOTIFICATION_EMAIL`.
+- **`lib/notifications.ts`**: in-app notifications, always written via the service-role client (the RLS `notifications_insert_staff` policy intentionally blocks a client from writing their own notification rows). `notifyOrganization()` fans out to every org member.
+- **Notification bell**: `components/portal/NotificationBell.tsx` in the portal header — unread badge, dropdown, mark-all-read.
+- **Wired trigger points**: Stripe/PayPal webhook activation, Wise confirmation, payment-failed (both providers), admin message reply, client message (→ admin email), new support ticket (→ admin email), report publish, new registration (→ admin email).
+- **Automated tests** (`tests/`, run via `npm test`, using Vitest): payment-provider config gating, Wise reference generation, registration Zod schema validation (password match, uuid-only plan IDs, password never re-echoed in the server payload), rate-limiter behavior. **What isn't covered by automated tests** — and why: true end-to-end flows (registration → email verification → login; Stripe/PayPal checkout → webhook → active; org-isolation via RLS) require a live Supabase project and live/sandbox Stripe & PayPal credentials, none of which exist in this environment. §13 below is the manual QA checklist to run once those credentials are in place.
+
+---
+
+## 13. Manual QA Checklist (run once real credentials exist)
+
+1. **Registration → verification → login**: `/register/` through all 5 steps → confirmation email arrives → click link → `/login/` → land on `/portal/`.
+2. **Org isolation**: create two client accounts (A and B). Confirm A cannot see B's tasks/files/messages/reports by trying `/portal/...` URLs directly — RLS should return empty results, not an error leaking existence.
+3. **Stripe checkout → webhook → active**: complete checkout with a Stripe test card → `/checkout/success` shows "confirming" → within seconds, Stripe sends `checkout.session.completed` → subscription flips to `active` in `/portal/billing` and `/admin/subscriptions`, notification + email arrive.
+4. **PayPal subscription → webhook → active**: same, via PayPal sandbox buyer account.
+5. **Wise pending → admin confirms → active**: choose Wise at checkout → reference is shown → in `/admin/payments`, click **Confirm Payment Received** → subscription activates, client is notified.
+6. **Failed payment → past_due**: use a Stripe test card that declines on renewal → `customer.subscription.updated`/`invoice.payment_failed` → subscription flips to `past_due`, client sees the billing banner + email.
+7. **Cancellation**: cancel via the Stripe Customer Portal → `customer.subscription.deleted` → status `cancelled`.
+8. **Admin-can / client-cannot**: confirm a `client`-role login gets redirected away from `/admin` (`requireRole` + RLS both block it); confirm `staff` can reach `/admin` but plan activation toggles are hidden/blocked (admin+ only, per RLS `plans_write_admin`).

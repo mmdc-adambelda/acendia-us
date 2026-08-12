@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/Container";
 import Card from "@/components/Card";
+import CheckoutClient from "@/components/checkout/CheckoutClient";
 import { buildMetadata } from "@/lib/seo";
 import { requireAuth } from "@/lib/auth";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { isProviderConfigured, type PaymentProvider } from "@/lib/payments/types";
 
 export const metadata: Metadata = buildMetadata({
   title: "Checkout",
@@ -12,30 +15,90 @@ export const metadata: Metadata = buildMetadata({
   noIndex: true,
 });
 
-// Real checkout (Stripe Checkout / PayPal Subscriptions / Wise payment
-// link) ships in Phase 2, once real (even sandbox) provider credentials
-// exist — see CLIENT-PORTAL-IMPLEMENTATION.md §5. This stub keeps the
-// discover -> register -> checkout -> onboarding -> portal flow intact and
-// auth-gated in the meantime, rather than dead-ending or 404ing.
+const PROVIDER_META: Record<PaymentProvider, { label: string; description: string }> = {
+  stripe: { label: "Card (Stripe)", description: "Instant activation. Visa, Mastercard, Amex, and more." },
+  paypal: { label: "PayPal", description: "Pay with your PayPal balance, bank, or card via PayPal." },
+  wise: {
+    label: "Wise Transfer",
+    description: "Manual bank transfer. Activation confirmed by our team, typically within 1 business day.",
+  },
+};
+
 export default async function CheckoutPage() {
-  await requireAuth();
+  const { user, profile } = await requireAuth();
+
+  let planSummary: { name: string; setupFeeCents: number; monthlyPriceCents: number }[] = [];
+  let hasPlanSelection = false;
+
+  try {
+    const admin = createAdminClient();
+    const { data: membership } = await admin
+      .from("organization_members")
+      .select("organization_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (membership) {
+      const { data: goalsLog } = await admin
+        .from("activity_logs")
+        .select("metadata")
+        .eq("organization_id", membership.organization_id)
+        .eq("action", "registration_goals_captured")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      const metadata = goalsLog?.metadata as Record<string, unknown> | undefined;
+      const requestedPlanId = metadata?.requestedPlanId as string | undefined;
+      const addonPlanIds = (metadata?.addonPlanIds as string[] | undefined) ?? [];
+
+      if (requestedPlanId) {
+        const { data: plans } = await admin
+          .from("plans")
+          .select("name, setup_fee_cents, monthly_price_cents")
+          .in("id", [requestedPlanId, ...addonPlanIds]);
+        if (plans && plans.length > 0) {
+          hasPlanSelection = true;
+          planSummary = plans.map((p) => ({
+            name: p.name,
+            setupFeeCents: p.setup_fee_cents ?? 0,
+            monthlyPriceCents: p.monthly_price_cents ?? 0,
+          }));
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Checkout page: failed to load plan summary", err);
+  }
+
+  const availableProviders = (Object.keys(PROVIDER_META) as PaymentProvider[])
+    .filter((p) => isProviderConfigured(p))
+    .map((provider) => ({ provider, ...PROVIDER_META[provider] }));
 
   return (
     <div className="flex min-h-screen items-center justify-center py-20">
-      <Container className="max-w-lg text-center">
-        <Card>
-          <h1 className="text-2xl font-semibold text-white">Checkout is almost ready</h1>
-          <p className="mt-3 text-sm text-white/60">
-            Your account and business profile are saved. Online payment (card, PayPal, or Wise) is being connected
-            now — our team will follow up directly to activate your plan in the meantime.
-          </p>
-          <Link
-            href="/contact/"
-            className="focus-ring mt-6 inline-flex items-center rounded-[var(--r-sm)] bg-white px-6 py-3 text-sm font-semibold text-black transition-all hover:shadow-[var(--glow-white)]"
-          >
-            Contact Our Team
-          </Link>
-        </Card>
+      <Container className="max-w-lg">
+        <h1 className="text-center text-2xl font-semibold text-white">
+          {profile?.first_name ? `Almost there, ${profile.first_name}` : "Almost there"}
+        </h1>
+        {!hasPlanSelection ? (
+          <Card className="mt-6 text-center">
+            <p className="text-sm text-white/60">
+              We couldn't find a plan selection on your account yet. Please contact us and we'll get your checkout
+              sorted directly.
+            </p>
+            <Link
+              href="/contact/"
+              className="focus-ring mt-6 inline-flex items-center rounded-[var(--r-sm)] bg-white px-6 py-3 text-sm font-semibold text-black transition-all hover:shadow-[var(--glow-white)]"
+            >
+              Contact Our Team
+            </Link>
+          </Card>
+        ) : (
+          <div className="mt-6">
+            <CheckoutClient availableProviders={availableProviders} planSummary={planSummary} />
+          </div>
+        )}
       </Container>
     </div>
   );

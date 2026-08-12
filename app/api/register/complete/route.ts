@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { registerCompleteSchema } from "@/lib/validation/register";
 import { isRateLimited } from "@/lib/rateLimit";
+import { sendEmail, emailTemplates, getAdminNotificationEmail } from "@/lib/email";
 
 /**
  * Persists the business/website/goals/plan data collected across the
@@ -139,6 +140,15 @@ export async function POST(req: NextRequest) {
     action: "registration_goals_captured",
     metadata: { goals, requestedPlanId: plan.planId, billingCycle: plan.billingCycle, addonPlanIds: plan.addonPlanIds },
   });
+
+  const adminEmail = getAdminNotificationEmail();
+  if (adminEmail) {
+    await sendEmail({
+      to: adminEmail,
+      subject: `New client signup: ${business.businessName}`,
+      html: emailTemplates.adminNewSignup(business.businessName),
+    });
+  }
 
   return NextResponse.json({ ok: true, organizationId: org.id, alreadyExisted: false });
 }
