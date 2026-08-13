@@ -87,7 +87,13 @@ export async function POST(req: NextRequest) {
   if (profileUpsertError) {
     console.error("Failed to upsert profile during registration completion", profileUpsertError);
     return NextResponse.json(
-      { ok: false, error: "Something went wrong finishing your account. Please try again." },
+      {
+        ok: false,
+        error: "Something went wrong finishing your account. Please try again.",
+        // TEMP DIAGNOSTIC — remove once root cause is found (no secrets, just
+        // the Postgres error code/message, to diagnose without log access).
+        debug: { message: profileUpsertError.message, code: profileUpsertError.code, details: profileUpsertError.details, hint: profileUpsertError.hint },
+      },
       { status: 500 }
     );
   }
