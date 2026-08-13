@@ -26,6 +26,13 @@
   --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.6);
   --glow-white: 0 0 60px rgba(255, 255, 255, 0.14);
 
+  /* Single-use accent for the homepage hero's $499 offer card only — not a
+     general brand color. Rest of the site stays black/white/gray. */
+  --accent: #5b50ff;
+  --accent-2: #755cff;
+  --accent-3: #8b5cf6;
+  --accent-glow: rgba(91, 80, 255, 0.45);
+
   --r-sm: 8px;
   --r-md: 14px;
   --r-lg: 24px;
@@ -102,4 +109,88 @@ body {
     linear-gradient(to right, var(--border-dim) 1px, transparent 1px),
     linear-gradient(to bottom, var(--border-dim) 1px, transparent 1px);
   background-size: 48px 48px;
+}
+
+/* ---------------------------------------------------------------------
+   Homepage hero $499 offer card — the only place the accent gradient is
+   used. GPU-friendly (transform/opacity/box-shadow only), no layout
+   shift. Split across two elements deliberately: the outer wrapper plays
+   a one-shot entrance, the inner card runs the infinite pulse/glow, so
+   the two `transform` animations never fight over the same element/
+   property. Fully neutralized by the existing global
+   prefers-reduced-motion rule above (forces 1-iteration/near-0-duration),
+   which is why no separate reduced-motion handling is needed here — each
+   keyframe's 100% frame is a valid, intentional static end state.
+--------------------------------------------------------------------- */
+@keyframes offer-entrance {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes offer-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.015);
+  }
+}
+
+@keyframes offer-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 36px 0 var(--accent-glow),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
+  }
+  50% {
+    box-shadow:
+      0 0 60px 4px var(--accent-glow),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.32);
+  }
+}
+
+@keyframes offer-shine {
+  0% {
+    transform: translateX(-130%) rotate(12deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.4;
+  }
+  20%,
+  100% {
+    transform: translateX(160%) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+.hero-offer-in {
+  animation: offer-entrance 650ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.hero-offer-live {
+  animation:
+    offer-pulse 4200ms ease-in-out 650ms infinite,
+    offer-glow 4200ms ease-in-out 650ms infinite;
+  will-change: transform, box-shadow;
+}
+
+.hero-offer-shine {
+  position: absolute;
+  inset: -20% -60%;
+  background: linear-gradient(75deg, transparent 42%, rgba(255, 255, 255, 0.4) 50%, transparent 58%);
+  animation: offer-shine 7000ms ease-in-out 1400ms infinite;
+  will-change: transform, opacity;
 }

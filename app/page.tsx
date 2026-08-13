@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Button from "@/components/Button";
 import Section, { Eyebrow } from "@/components/Section";
 import ServiceGrid from "@/components/ServiceGrid";
@@ -80,7 +81,15 @@ export default function HomePage() {
         <Section className="relative py-16 sm:py-24">
           <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
             <div>
-              <Eyebrow>AI-native digital growth agency · United States</Eyebrow>
+              <Image
+                src="/brand/acendia-logo.png"
+                alt="Acendia"
+                width={200}
+                height={113}
+                priority
+                className="mb-6 h-auto w-[140px] sm:w-[170px] lg:w-[190px]"
+              />
+              <Eyebrow>Digital growth agency · United States</Eyebrow>
               <h1 className="text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
                 Turn Search Visibility Into Real Business Growth
               </h1>

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import SiteSwitcher from "./SiteSwitcher";
@@ -15,19 +14,16 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border-dim)] bg-[var(--off-black)]/85 backdrop-blur">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
-        <Link href="/" className="focus-ring flex items-center gap-2" aria-label="Acendia home">
-          <Image
-            src="/brand/acendia-logo.png"
-            alt="Acendia"
-            width={120}
-            height={38}
-            className="h-7 w-auto"
-            priority
-          />
-        </Link>
-
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+      {/* No logo here by design — the brand mark now lives in the homepage
+          hero for a single, larger, more deliberate first impression. Nav
+          is absolutely centered so it isn't skewed by the right-aligned
+          actions block; this keeps the bar balanced without a left-side
+          placeholder. */}
+      <div className="relative mx-auto flex h-16 w-full max-w-7xl items-center px-5 sm:px-6 lg:px-8">
+        <nav
+          className="pointer-events-auto absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex"
+          aria-label="Primary"
+        >
           {NAV_LINKS.map((link) =>
             link.label === "Services" ? (
               <ServicesMenu key={link.href} />
@@ -43,7 +39,7 @@ export default function Header() {
           )}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="ml-auto hidden items-center gap-3 md:flex">
           <SiteSwitcher />
           <Link
             href="/login/"
@@ -61,7 +57,7 @@ export default function Header() {
         </div>
 
         <button
-          className="focus-ring flex h-10 w-10 items-center justify-center rounded-[var(--r-sm)] md:hidden"
+          className="focus-ring ml-auto flex h-10 w-10 items-center justify-center rounded-[var(--r-sm)] md:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-menu"

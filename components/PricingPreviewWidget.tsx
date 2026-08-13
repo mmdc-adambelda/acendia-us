@@ -1,18 +1,15 @@
-"use client";
-
-// Interactive plan-preview card for the homepage hero — inspired by the
-// "live checkout" pattern (pick a plan, see the total update, one CTA to
-// convert) but built entirely from the site's existing black/white/gray
-// token system (--card, --border, --border-hi, --r-*, --glow-white) with
-// zero new brand colors introduced. Real pricing only — mirrors
-// supabase/migrations/0003_seed_plans.sql exactly, so this card can never
-// drift out of sync with what /pricing and /register actually charge.
+// Single-offer promo card for the homepage hero. Server component — no
+// interactivity left here (the old plan-toggle was removed per the CRO
+// brief: one offer, one decision), so this ships zero extra client JS.
+//
+// Real pricing only — mirrors supabase/migrations/0003_seed_plans.sql
+// exactly, so this card can never drift out of sync with what /pricing
+// and /register actually charge.
 //
 // Real billing schedule (see lib/billing.ts): only the setup fee is due
 // today. The monthly plan doesn't start billing until 14 days after the
 // client's site goes live — never bundled into the same charge.
 
-import { useState } from "react";
 import Link from "next/link";
 import { POST_GOLIVE_BILLING_DELAY_DAYS } from "@/lib/billing";
 
@@ -25,16 +22,12 @@ const CORE_FEATURES = [
 
 const SETUP_FEE_CENTS = 19900;
 const CORE_MONTHLY_CENTS = 49900;
-const ADDON_MONTHLY_CENTS = 29900;
 
 function formatMoney(cents: number): string {
   return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
 }
 
 export default function PricingPreviewWidget() {
-  const [addonSelected, setAddonSelected] = useState(false);
-  const monthlyTotal = CORE_MONTHLY_CENTS + (addonSelected ? ADDON_MONTHLY_CENTS : 0);
-
   return (
     <div className="relative mx-auto w-full max-w-md">
       {/* Ambient glow behind the card, matching the hero's existing radial highlight */}
@@ -58,35 +51,28 @@ export default function PricingPreviewWidget() {
         </div>
 
         <div className="p-5">
-          <p className="text-xs font-medium tracking-wide text-white/40 uppercase">Choose your plan</p>
-
-          <div className="mt-3 space-y-2">
-            <button
-              type="button"
-              onClick={() => setAddonSelected(false)}
-              aria-pressed={!addonSelected}
-              className={`focus-ring flex w-full items-center justify-between rounded-[var(--r-sm)] border px-4 py-3 text-left text-sm transition-colors ${
-                !addonSelected
-                  ? "border-white bg-white/[0.06] text-white"
-                  : "border-[var(--border)] text-white/60 hover:border-[var(--border-hi)]"
-              }`}
+          {/* The offer — the visual focal point of the whole hero. Split
+              across two elements on purpose: the outer plays a one-shot
+              entrance, the inner runs the infinite pulse/glow, so the two
+              `transform` animations never contend for the same element —
+              see the comment above these keyframes in app/globals.css. */}
+          <div className="hero-offer-in">
+            <div
+              className="hero-offer-live relative overflow-hidden rounded-[var(--r-md)] px-5 py-6 text-center"
+              style={{ background: "linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 55%, var(--accent-3) 100%)" }}
             >
-              <span>SEO Package</span>
-              <span className="font-medium">{formatMoney(CORE_MONTHLY_CENTS)}/mo</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setAddonSelected(true)}
-              aria-pressed={addonSelected}
-              className={`focus-ring flex w-full items-center justify-between rounded-[var(--r-sm)] border px-4 py-3 text-left text-sm transition-colors ${
-                addonSelected
-                  ? "border-white bg-white/[0.06] text-white"
-                  : "border-[var(--border)] text-white/60 hover:border-[var(--border-hi)]"
-              }`}
-            >
-              <span>+ Social Media Add-On</span>
-              <span className="font-medium">+{formatMoney(ADDON_MONTHLY_CENTS)}/mo</span>
-            </button>
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_0%,rgba(255,255,255,0.35),transparent_55%)]"
+              />
+              <span aria-hidden="true" className="hero-offer-shine" />
+              <p className="relative text-xs font-semibold tracking-[0.2em] text-white/80 uppercase">SEO Package</p>
+              <p className="relative mt-2 text-sm font-medium text-white/90">SEO for</p>
+              <p className="relative mt-1 text-5xl font-bold tracking-tight text-white sm:text-6xl">
+                {formatMoney(CORE_MONTHLY_CENTS)}
+              </p>
+              <p className="relative mt-1 text-sm font-medium text-white/80">/month</p>
+            </div>
           </div>
 
           <div className="mt-5 space-y-2 border-t border-[var(--border-dim)] pt-4">
@@ -105,19 +91,18 @@ export default function PricingPreviewWidget() {
               <span>Due today (setup only)</span>
               <span>{formatMoney(SETUP_FEE_CENTS)}</span>
             </div>
-            <p className="text-[11px] text-white/35">
-              Then {formatMoney(monthlyTotal)}/month, starting {POST_GOLIVE_BILLING_DELAY_DAYS} days after your site
-              goes live — not before.
+            <p className="text-[11px] text-white/60">
+              Then {formatMoney(CORE_MONTHLY_CENTS)}/month, starting {POST_GOLIVE_BILLING_DELAY_DAYS} days after your
+              site goes live — not before.
             </p>
           </div>
 
           <Link
             href="/register/"
             data-event="hero_pricing_widget_cta_clicked"
-            className="focus-ring mt-5 flex w-full items-center justify-center gap-1.5 rounded-[var(--r-sm)] bg-white px-6 py-3 text-sm font-semibold text-black transition-all hover:shadow-[var(--glow-white)] hover:-translate-y-0.5"
+            className="focus-ring mt-5 flex w-full items-center justify-center gap-1.5 rounded-[var(--r-sm)] bg-white px-6 py-3.5 text-sm font-bold tracking-wide text-black uppercase transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[var(--glow-white)] active:scale-[0.99]"
           >
-            Start Growing
-            <span aria-hidden="true">→</span>
+            Join Now!
           </Link>
           <Link
             href="/pricing/"
