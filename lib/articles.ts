@@ -14,9 +14,9 @@ export const ARTICLES: Article[] = [
     slug: "local-seo-checklist-for-us-small-businesses",
     title: "The Local SEO Checklist Every US Small Business Should Run Quarterly",
     description:
-      "A practical, no-fluff checklist for reviewing your Google Business Profile, citations, and on-page local signals every quarter.",
+      "What is local SEO, and how do you check it's working? A practical local SEO checklist covering Google Business Profile, citations, and Map Pack rankings.",
     publishedAt: "2026-07-15",
-    readTime: "9 min read",
+    readTime: "11 min read",
     published: true,
   },
   {

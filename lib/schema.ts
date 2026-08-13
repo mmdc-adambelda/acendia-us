@@ -56,6 +56,20 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
   };
 }
 
+export function itemListSchema({ name, items }: { name: string; items: { name: string; description: string }[] }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      description: item.description,
+    })),
+  };
+}
+
 export function faqSchema(faqs: { question: string; answer: string }[]) {
   return {
     "@context": "https://schema.org",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
 import CTASection from "@/components/CTASection";
@@ -136,7 +137,12 @@ export default function ArticlePage() {
             <p className="mt-3 text-sm leading-relaxed">
               None of these require a big project — most take under an hour to fix once you know
               to look for them. The real fix is treating your profile as an ongoing asset that
-              needs regular attention, not a one-time setup task.
+              needs regular attention, not a one-time setup task. For a broader routine that
+              covers your whole local presence, not just your profile, see our{" "}
+              <Link href="/insights/local-seo-checklist-for-us-small-businesses/" className="text-white underline underline-offset-2 hover:text-white/80">
+                quarterly local SEO checklist
+              </Link>
+              .
             </p>
           </div>
         </article>
