@@ -23,7 +23,9 @@ grant select on public.plans to anon;
 -- on every single query, same as the anon role did on `plans`.
 grant usage on schema public to authenticated, anon;
 grant select, insert, update, delete on all tables in schema public to authenticated;
-grant select, insert, update, delete on all sequences in schema public to authenticated;
+-- Sequences only support usage/select/update — insert/delete aren't valid
+-- privilege types for a sequence (Postgres error 0LP01 if you try).
+grant usage, select, update on all sequences in schema public to authenticated;
 
 -- Applies the same grant automatically to any table added by a future
 -- migration, so this specific problem can't silently recur.
