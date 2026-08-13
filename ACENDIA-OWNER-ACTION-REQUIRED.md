@@ -24,7 +24,8 @@ All 5 phases (Foundation, Payments, Client Portal, Admin Portal, Comms/Testing) 
 
 ### 2. Run the database migrations, in order
 - **Where**: Supabase Dashboard → **SQL Editor**
-- **Run**: `0001_schema.sql` → `0002_rls_policies.sql` → `0003_seed_plans.sql` → `0004_seed_onboarding_items.sql` → `0006_add_went_live_at.sql` → `0007_rename_plans.sql` (skip 0007 if you're running everything fresh — 0003 already uses the new names). `0005_...` is a template, not a numbered step — see item 6 below.
+- **Run**: `0001_schema.sql` → `0002_rls_policies.sql` → `0003_seed_plans.sql` → `0004_seed_onboarding_items.sql` → `0006_add_went_live_at.sql` → `0007_rename_plans.sql` → **`0008_grants.sql`** (skip 0007 if you're running everything fresh — 0003 already uses the new names). `0005_...` is a template, not a numbered step — see item 6 below.
+- **If you already ran 0001-0007 before this note was added**: run `0008_grants.sql` now — without it, every table returns "permission denied" (Postgres error 42501) even though the schema and RLS policies are correct. This was found live: `/register/` showed "No active plan is configured yet" because the anonymous role had no base permission to read the `plans` table at all — RLS policies restrict access, they don't grant it.
 - **Test**: Table Editor shows a `plans` table with 2 rows named "SEO Package" and "Social Media Add-On".
 
 ### 3. Configure Supabase auth redirect URLs

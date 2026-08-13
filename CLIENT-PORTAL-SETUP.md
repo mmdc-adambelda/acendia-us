@@ -35,6 +35,7 @@ The database tables don't exist yet — you need to run 4 SQL files once.
 5. Repeat for `supabase/migrations/0003_seed_plans.sql` (this loads your real pricing: $199 setup + $499/mo Growth Package, $299/mo Social Media add-on).
 6. Repeat for `supabase/migrations/0004_seed_onboarding_items.sql` (this loads the default onboarding checklist).
 7. Repeat for `supabase/migrations/0006_add_went_live_at.sql` (adds the column staff uses to record a client's real go-live date — see "Real billing schedule" below) and `supabase/migrations/0007_rename_plans.sql` (renames the seeded plans to "SEO Package" / "Social Media Add-On", if you ran 0003 before this rename shipped — safe to skip if you're running everything fresh, since 0003 already uses the new names).
+8. Run `supabase/migrations/0008_grants.sql` — **required**, not optional. Supabase normally auto-configures base table permissions for new projects, but that didn't happen here; without this file, every table returns "permission denied for table X" even though the schema and RLS policies are otherwise correct. If you already registered a test account and got stuck on "No active plan is configured yet," this is why — run this file and it'll immediately resolve.
 
 **Note on `0005_payment_provider_ids_template.sql`**: this one is a template, not a numbered step to run as-is — see Part 2 below.
 
