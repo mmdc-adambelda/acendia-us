@@ -1,6 +1,6 @@
 # Image Inventory — What's Missing, Filenames, and ChatGPT Prompts
 
-Updated: 2026-08-11 (v3 — all 21 industry pages + 7 of 15 city pages now have real photos)
+Updated: 2026-08-13 (v4 — GBP mistakes article now has both its featured and inline images)
 
 ## What changed in this pass
 
@@ -125,12 +125,13 @@ These are more abstract/conceptual than industry or location pages — a literal
 
 All: append "no people's faces in extreme close-up, no visible screen text/UI detail, no logos" to the end of the prompt.
 
-## 4. Article featured images — 3 of 3 missing (1600×900)
+## 4. Article featured images — 2 of 3 missing (1600×900)
+
+`/insights/google-business-profile-optimization-mistakes/` is done: `gbp-mistakes-featured.png` (hero, 1672×941) + `gbp-mistakes-content.png` (inline, after mistake #3, 1092×593), both wired into `app/insights/google-business-profile-optimization-mistakes/page.tsx`.
 
 | Page | Filename | Prompt subject |
 |---|---|---|
 | `/insights/local-seo-checklist-for-us-small-businesses/` | `local-seo-checklist-featured.png` | a small business owner checking a local search results page on a tablet in their storefront, warm natural light |
-| `/insights/google-business-profile-optimization-mistakes/` | `gbp-mistakes-featured.png` | a close-up of a Google Business Profile-style listing card concept displayed on a laptop screen, blurred coffee shop background |
 | `/insights/technical-seo-audit-checklist/` | `technical-seo-checklist-featured.png` | a developer's dual-monitor setup showing website performance charts and code, dark-mode editor, focused workspace |
 
 ## 5. Case study covers — 6 of 7 missing (1200×800, abstract not photos)
@@ -156,9 +157,9 @@ Use the **abstract style prefix** from above, not the photo one.
 | City pages | 15 | 7 | 8 |
 | State pages | 20 | 0 | 20 |
 | Service pages | 11 | 0 | 11 |
-| Article pages | 3 | 0 | 3 |
+| Article pages | 3 | 1 | 2 |
 | Case study covers | 7 | 1 | 6 |
-| **Total** | **77** | **30** | **47** |
+| **Total** | **77** | **31** | **46** |
 
 ## Quality checklist
 

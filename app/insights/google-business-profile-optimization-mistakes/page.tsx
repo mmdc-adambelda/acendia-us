@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
 import CTASection from "@/components/CTASection";
@@ -42,7 +43,10 @@ export default function ArticlePage() {
           { name: "Insights", path: "/insights/" },
           { name: "GBP Mistakes", path },
         ]}
-        placeholderIcon="badge-check"
+        image={{
+          src: "/images/gbp-mistakes-featured.png",
+          alt: "A Google Business Profile-style listing displayed on a laptop screen",
+        }}
       />
       <Section>
         <article className="prose prose-invert max-w-3xl space-y-8 text-white/70">
@@ -79,6 +83,16 @@ export default function ArticlePage() {
               business to both customers and Google. A prompt, professional response to every
               review (positive or negative) is one of the easiest wins available.
             </p>
+          </div>
+
+          <div className="overflow-hidden rounded-[var(--r-lg)] border border-[var(--border)]">
+            <Image
+              src="/images/gbp-mistakes-content.png"
+              alt="A small business owner replying to a customer review on a smartphone in their storefront"
+              width={1200}
+              height={800}
+              className="h-auto w-full object-cover"
+            />
           </div>
 
           <div>
