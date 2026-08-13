@@ -30,6 +30,39 @@ function formatMoney(cents: number | null) {
   return `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: cents % 100 === 0 ? 0 : 2 })}`;
 }
 
+// Maps the server's dotted field paths (e.g. "website.websiteUrl") to the
+// step + label a person actually recognizes, so a validation failure on
+// the final submit says exactly what to fix instead of a generic "check
+// the form." Falls back to the raw path for anything not mapped here.
+const FIELD_LABELS: Record<string, string> = {
+  "account.firstName": "First name",
+  "account.lastName": "Last name",
+  "account.email": "Business email",
+  "account.phone": "Phone (must be a US number, e.g. (555) 123-4567)",
+  "business.businessName": "Business name",
+  "business.industry": "Industry",
+  "business.employeeCount": "Number of employees",
+  "business.city": "City",
+  "business.state": "State",
+  "business.zip": "ZIP code",
+  "business.address": "Business address",
+  "website.websiteUrl": "Website URL (must start with https://)",
+  "website.primaryService": "Primary service",
+  "goals.mainGoal": "Main business goal",
+  "plan.planId": "Plan selection",
+};
+
+function buildValidationErrorMessage(json: { error?: string; fieldIssues?: { path: string; message: string }[] }): string {
+  if (!json.fieldIssues || json.fieldIssues.length === 0) {
+    return json.error ?? "Something went wrong. Please try again.";
+  }
+  const lines = json.fieldIssues.map((issue) => {
+    const label = FIELD_LABELS[issue.path] ?? issue.path;
+    return `${label}: ${issue.message}`;
+  });
+  return `Please fix the following:\n${lines.join("\n")}`;
+}
+
 export default function RegisterWizard({ plans }: { plans: PlanOption[] }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
@@ -174,7 +207,7 @@ export default function RegisterWizard({ plans }: { plans: PlanOption[] }) {
       });
       const json = await res.json();
       if (!res.ok || !json.ok) {
-        setError(json.error ?? "Something went wrong. Please try again.");
+        setError(buildValidationErrorMessage(json));
         setSubmitting(false);
         return;
       }
@@ -213,7 +246,7 @@ export default function RegisterWizard({ plans }: { plans: PlanOption[] }) {
       </ol>
 
       {error && (
-        <p role="alert" className="mb-6 rounded-[var(--r-sm)] border border-red-900/50 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+        <p role="alert" className="mb-6 whitespace-pre-line rounded-[var(--r-sm)] border border-red-900/50 bg-red-950/30 px-4 py-3 text-sm text-red-300">
           {error}
         </p>
       )}

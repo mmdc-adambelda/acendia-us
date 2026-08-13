@@ -39,6 +39,12 @@ All 5 phases (Foundation, Payments, Client Portal, Admin Portal, Comms/Testing) 
 ### 5. Add all env vars to Vercel (Production + Preview)
 - The three Supabase vars above, plus `NEXT_PUBLIC_APP_URL`. See `.env.example` for the full documented list.
 
+### 6. Fix Supabase's auth email rate limit — found live, likely blocking real signups right now
+- **What's happening**: Supabase's *default* built-in email sender (used for signup confirmation and password-reset emails) has a very low rate limit — a handful of emails per hour. I hit it myself while testing and got `"email rate limit exceeded"` trying to register a second test account. If a real visitor tries to sign up while that limit is active, they get the same error with no way around it.
+- **Where**: Supabase Dashboard → **Authentication** → **Providers** (or **Emails**, depending on your dashboard version) → **SMTP Settings**
+- **Do**: enable **Custom SMTP** and point it at Resend (which you're already setting up for item 10 below — same account, no new signup needed) using Resend's SMTP credentials, or increase the rate limit if your dashboard offers that directly. Once custom SMTP is on, Supabase stops using its own heavily-throttled sender entirely.
+- **Test**: register two test accounts back-to-back within a few minutes — neither should hit a rate-limit error.
+
 ---
 
 ## 🟡 Required to accept real payments
@@ -48,7 +54,7 @@ Clients pay **only the one-time $199 setup fee at checkout**. Nothing recurring 
 
 Since the exact go-live date isn't known at checkout, the system starts with an estimate (19 days out) and **you correct it to the exact date** from `/admin/clients/[client]` → **"Mark Site Live"**, once a site is actually live. This is a step your team needs to do for every client — it's what turns the estimate into the real, contractual billing date (and for Stripe, it moves the charge date without asking the client to re-approve anything).
 
-### 6. Create your Stripe account and connect it
+### 7. Create your Stripe account and connect it
 - Create products/prices ($499/mo SEO Package, $299/mo Social Media Add-On) in **Test mode** first.
 - Copy the recurring Price IDs into `supabase/migrations/0005_payment_provider_ids_template.sql` (fill in, then run in SQL Editor) — **not** an env var, so pricing always comes from the database.
 - Add `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` to Vercel.
@@ -56,14 +62,14 @@ Since the exact go-live date isn't known at checkout, the system starts with an 
 - Configure the Stripe Customer Portal (branding) — this powers "Manage Billing" in `/portal/billing`.
 - Full detail: `CLIENT-PORTAL-SETUP.md` Part 2.
 
-### 7. Create your PayPal Business account and app
+### 8. Create your PayPal Business account and app
 - **Read the limitation note in `CLIENT-PORTAL-SETUP.md` Part 3 first** — PayPal can't collect a separate one-time setup fee the same way Stripe does, and once a subscription is approved, PayPal won't let us move its first-billing date afterward (Stripe's "Mark Site Live" correction doesn't work for PayPal). Two documented ways to structure your PayPal Plan to handle this are in Part 3.
 - Create a Product/Plan; copy the Plan ID into the same `0005_...sql` template file.
 - Add `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENVIRONMENT=sandbox` (then `live` when ready) to Vercel.
 - Add a webhook at `https://acendia.us/api/webhooks/paypal`; copy the Webhook ID into `PAYPAL_WEBHOOK_ID`.
 - Full detail: `CLIENT-PORTAL-SETUP.md` Part 3.
 
-### 8. Decide on Wise
+### 9. Decide on Wise
 - Wise payments are **manual by design** — your team confirms each transfer in `/admin/payments`, nothing auto-activates. This matches the brief's explicit requirement that Wise never be presented as equivalent to instant billing. Confirming the setup-fee payment does NOT start monthly billing; the monthly payment is a second, separate invoice your team creates from "Mark Site Live" once the site goes live.
 - If you want Wise offered at checkout at all, set `WISE_PAYMENT_LINK` (a real payment link, if your Wise account supports one) in Vercel. If you'd rather not offer Wise yet, skip this — it simply won't appear as a checkout option.
 - Full detail: `CLIENT-PORTAL-SETUP.md` Part 4.
@@ -72,28 +78,28 @@ Since the exact go-live date isn't known at checkout, the system starts with an 
 
 ## 🟢 Recommended, not blocking
 
-### 9. Connect the `acendia.us` domain to Vercel
+### 10. Connect the `acendia.us` domain to Vercel
 Vercel → project → **Settings** → **Domains** → add `acendia.us`, follow DNS instructions. Update `NEXT_PUBLIC_APP_URL` and Supabase redirect URLs to match once connected.
 
-### 10. Set up transactional email (Resend)
+### 11. Set up transactional email (Resend)
 Without this, payment confirmations, new-message, new-report, **and job applications from `/careers/`** all fail to send — the app still works, but applicants see an honest "please email us directly" message instead of a silent failure. Create a Resend account, verify your sending domain, add `RESEND_API_KEY`, `EMAIL_FROM`, and `ADMIN_NOTIFICATION_EMAIL` (the inbox that gets new-signup/new-message/new-ticket alerts) to Vercel. Full detail: `CLIENT-PORTAL-SETUP.md` Part 5.
 - Job applications (name, email, message, CV attachment) are always sent to `support@acendia.agency` regardless of `ADMIN_NOTIFICATION_EMAIL` — hardcoded in `app/api/careers/apply/route.ts` since it's a fixed, always-correct destination, not a configurable admin setting.
 
-### 11. Assign your first staff/admin users
+### 12. Assign your first staff/admin users
 New accounts default to the `client` role. To make someone `staff`/`admin`/`super_admin` (so they can reach `/admin`), update their `profiles.role` directly in Supabase's Table Editor — there's no self-service way to grant this, intentionally.
 
-### 12. Have a licensed attorney review Privacy Policy and Terms
+### 13. Have a licensed attorney review Privacy Policy and Terms
 `/privacy-policy/` and `/terms/` were updated for accounts/payments and are flagged in-page for your review — not a substitute for legal counsel, especially before real payments go live.
 
-### 13. Run the manual QA checklist once credentials exist
+### 14. Run the manual QA checklist once credentials exist
 `CLIENT-PORTAL-IMPLEMENTATION.md` §13 has an 8-step checklist (registration → verification → login, org isolation, Stripe/PayPal/Wise activation, failed payment, cancellation, admin access control) to run once Stripe/PayPal sandbox credentials are wired up — these flows can't be tested from this environment since no live provider credentials exist here.
 
 ---
 
-## What happens once you complete the 🔴 items (1-5)
-Registration, login, the full client portal, and the full admin portal are live and functional with real data — clients just can't pay online yet (checkout shows a "contact us" fallback if no payment provider is configured).
+## What happens once you complete the 🔴 items (1-6)
+Registration, login, the full client portal, and the full admin portal are live and functional with real data, and signups won't get randomly blocked by Supabase's default email rate limit — clients just can't pay online yet (checkout shows a "contact us" fallback if no payment provider is configured).
 
-## What happens once you also complete the 🟡 items (6-8)
+## What happens once you also complete the 🟡 items (7-9)
 Real online checkout works end-to-end: Stripe/PayPal activate automatically via verified webhooks, Wise activates when your team confirms a transfer in `/admin/payments`.
 
 ## What the 🟢 items add

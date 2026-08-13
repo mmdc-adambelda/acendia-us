@@ -40,8 +40,16 @@ export async function POST(req: NextRequest) {
 
   const result = registerCompleteSchema.safeParse(body);
   if (!result.success) {
+    // .flatten() only handles depth-1 paths well — this schema nests fields
+    // under account/business/website/goals/plan, so a flat "path: message"
+    // list (however deep) is what actually lets the client tell someone
+    // which specific field failed, instead of "please check the form."
+    const fieldIssues = result.error.issues.map((issue) => ({
+      path: issue.path.join("."),
+      message: issue.message,
+    }));
     return NextResponse.json(
-      { ok: false, error: "Please check the form for errors.", issues: result.error.flatten() },
+      { ok: false, error: "Please check the form for errors.", issues: result.error.flatten(), fieldIssues },
       { status: 422 }
     );
   }
