@@ -54,20 +54,41 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { userId, business, website, goals, plan } = result.data;
+  const { userId, account, business, website, goals, plan } = result.data;
   const admin = createAdminClient();
 
-  // 1. Confirm this user really exists (was created by signUp() moments ago).
-  const { data: profile, error: profileError } = await admin
-    .from("profiles")
-    .select("id")
-    .eq("id", userId)
-    .single();
-
-  if (profileError || !profile) {
+  // 1. Confirm this user really exists. We check auth.users directly (the
+  // real source of truth for "did signUp() succeed for this id") rather
+  // than the profiles table, because the on_auth_user_created trigger that
+  // is supposed to auto-create the matching profiles row can occasionally
+  // fire late (or not at all, if a project's trigger wasn't fully applied)
+  // — found live: signUp() succeeded and returned a real user, but the
+  // profiles row wasn't there yet by the time this endpoint ran, hard-
+  // blocking every registration with a false "account not found" error.
+  const { data: authUser, error: authUserError } = await admin.auth.admin.getUserById(userId);
+  if (authUserError || !authUser.user) {
     return NextResponse.json(
       { ok: false, error: "We couldn't find your account. Please restart registration." },
       { status: 404 }
+    );
+  }
+
+  // 2. Self-heal: if the trigger hasn't created the profile row yet, create
+  // it now from the data the client already collected in step 1. Safe to
+  // do unconditionally (upsert) since we've just proven userId is a real,
+  // already-authenticated Supabase user — this never creates a profile for
+  // an id that isn't a genuine account.
+  const { error: profileUpsertError } = await admin.from("profiles").upsert({
+    id: userId,
+    first_name: account.firstName,
+    last_name: account.lastName,
+    phone: account.phone,
+  });
+  if (profileUpsertError) {
+    console.error("Failed to upsert profile during registration completion", profileUpsertError);
+    return NextResponse.json(
+      { ok: false, error: "Something went wrong finishing your account. Please try again." },
+      { status: 500 }
     );
   }
 
