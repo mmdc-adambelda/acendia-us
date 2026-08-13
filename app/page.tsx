@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Button from "@/components/Button";
@@ -9,6 +10,7 @@ import CTASection from "@/components/CTASection";
 import FAQAccordion from "@/components/FAQAccordion";
 import Card from "@/components/Card";
 import PricingPreviewWidget from "@/components/PricingPreviewWidget";
+import HeroOrbitalBackground from "@/components/HeroOrbitalBackground";
 import JsonLd from "@/components/JsonLd";
 import { webPageSchema, faqSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
@@ -78,17 +80,32 @@ export default function HomePage() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_-10%,rgba(255,255,255,0.10),transparent_55%)]"
         />
+        <HeroOrbitalBackground />
         <Section className="relative py-16 sm:py-24">
           <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
             <div>
-              <Image
-                src="/brand/acendia-logo.png"
-                alt="Acendia"
-                width={200}
-                height={113}
-                priority
-                className="mb-6 h-auto w-[140px] sm:w-[170px] lg:w-[190px]"
-              />
+              <div className="relative mb-6 w-[140px] sm:w-[170px] lg:w-[190px]">
+                <Image
+                  src="/brand/acendia-logo-white.png"
+                  alt="Acendia"
+                  width={200}
+                  height={113}
+                  priority
+                  className="hero-logo-glow h-auto w-full"
+                />
+                {/* Decorative shimmer sweep, masked to the logo's own alpha
+                    shape so the highlight only ever plays across the actual
+                    letterforms/icon — never a rectangle. Falls back to fully
+                    invisible (not a solid block) on browsers without
+                    mask-image support, via the @supports gate in
+                    globals.css, so the real <Image> above is always what
+                    carries the logo either way. */}
+                <span
+                  aria-hidden="true"
+                  className="hero-logo-shine"
+                  style={{ "--hero-logo-mask": "url(/brand/acendia-logo-white.png)" } as CSSProperties}
+                />
+              </div>
               <Eyebrow>Digital growth agency · United States</Eyebrow>
               <h1 className="text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
                 Turn Search Visibility Into Real Business Growth

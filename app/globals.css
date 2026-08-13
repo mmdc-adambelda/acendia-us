@@ -194,3 +194,68 @@ body {
   animation: offer-shine 7000ms ease-in-out 1400ms infinite;
   will-change: transform, opacity;
 }
+
+/* ---------------------------------------------------------------------
+   Hero logo — breathing accent glow + a shimmer sweep masked to the
+   logo's own alpha shape. The glow is a plain filter animation (works
+   everywhere). The shimmer needs mask-image, which Safari still wants
+   -webkit- prefixed and a handful of older browsers lack outright — the
+   @supports gate means unsupported browsers simply render the plain
+   glowing logo from the <Image> itself, never a stray colored rectangle.
+--------------------------------------------------------------------- */
+@keyframes hero-logo-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(91, 80, 255, 0.35)) drop-shadow(0 0 26px rgba(91, 80, 255, 0.18));
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(91, 80, 255, 0.55)) drop-shadow(0 0 42px rgba(91, 80, 255, 0.3));
+  }
+}
+
+.hero-logo-glow {
+  animation: hero-logo-glow 4200ms ease-in-out infinite;
+}
+
+@keyframes hero-logo-sweep {
+  0%,
+  15% {
+    background-position: -60% 0;
+  }
+  55%,
+  100% {
+    background-position: 160% 0;
+  }
+}
+
+.hero-logo-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 32%,
+    rgba(91, 80, 255, 0.85) 47%,
+    rgba(139, 92, 246, 0.9) 53%,
+    transparent 68%
+  );
+  background-size: 250% 100%;
+  background-position: -60% 0;
+  mix-blend-mode: screen;
+  opacity: 0; /* stays invisible unless mask-image is actually supported (below) */
+}
+
+@supports ((mask-image: linear-gradient(#000, #000)) or (-webkit-mask-image: linear-gradient(#000, #000))) {
+  .hero-logo-shine {
+    opacity: 1;
+    -webkit-mask-image: var(--hero-logo-mask);
+    mask-image: var(--hero-logo-mask);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    animation: hero-logo-sweep 3600ms ease-in-out infinite;
+    will-change: background-position;
+  }
+}

@@ -15,15 +15,17 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border-dim)] bg-[var(--off-black)]/85 backdrop-blur">
       {/* No logo here by design — the brand mark now lives in the homepage
-          hero for a single, larger, more deliberate first impression. Nav
-          is absolutely centered so it isn't skewed by the right-aligned
-          actions block; this keeps the bar balanced without a left-side
-          placeholder. */}
-      <div className="relative mx-auto flex h-16 w-full max-w-7xl items-center px-5 sm:px-6 lg:px-8">
-        <nav
-          className="pointer-events-auto absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex"
-          aria-label="Primary"
-        >
+          hero for a single, larger, more deliberate first impression.
+          Nav + actions are plain flex siblings (nav left, actions right) —
+          an earlier version absolutely-centered the nav, which looked good
+          at very wide widths but overlapped the actions block below
+          ~1280px since a truly centered 7-item nav plus the full actions
+          row don't both fit in that space. Gated to lg: (1024px) so nav +
+          actions only ever render together once there's room; below that,
+          everything (all nav links, Client Login, the CTA) is still fully
+          reachable via the mobile menu. */}
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-5 sm:px-6 lg:px-8">
+        <nav className="hidden items-center gap-5 xl:gap-7 lg:flex" aria-label="Primary">
           {NAV_LINKS.map((link) =>
             link.label === "Services" ? (
               <ServicesMenu key={link.href} />
@@ -31,7 +33,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="focus-ring text-sm font-medium text-white/75 transition-colors hover:text-white"
+                className="focus-ring text-sm font-medium whitespace-nowrap text-white/75 transition-colors hover:text-white"
               >
                 {link.label}
               </Link>
@@ -39,25 +41,25 @@ export default function Header() {
           )}
         </nav>
 
-        <div className="ml-auto hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <SiteSwitcher />
           <Link
             href="/login/"
-            className="focus-ring text-sm font-medium text-white/70 hover:text-white"
+            className="focus-ring text-sm font-medium whitespace-nowrap text-white/70 hover:text-white"
           >
             Client Login
           </Link>
           <Link
             href="/free-seo-audit/"
             data-event="audit_cta_clicked"
-            className="focus-ring inline-flex items-center rounded-[var(--r-sm)] bg-white px-5 py-2.5 text-sm font-semibold text-black transition-all hover:shadow-[var(--glow-white)]"
+            className="focus-ring inline-flex items-center whitespace-nowrap rounded-[var(--r-sm)] bg-white px-5 py-2.5 text-sm font-semibold text-black transition-all hover:shadow-[var(--glow-white)]"
           >
             Get Your Free SEO Audit
           </Link>
         </div>
 
         <button
-          className="focus-ring ml-auto flex h-10 w-10 items-center justify-center rounded-[var(--r-sm)] md:hidden"
+          className="focus-ring ml-auto flex h-10 w-10 items-center justify-center rounded-[var(--r-sm)] lg:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-menu"
@@ -81,7 +83,7 @@ export default function Header() {
         <nav
           id="mobile-menu"
           aria-label="Mobile"
-          className="border-t border-[var(--border-dim)] px-5 py-4 md:hidden"
+          className="border-t border-[var(--border-dim)] px-5 py-4 lg:hidden"
         >
           <ul className="flex flex-col gap-1">
             {NAV_LINKS.map((link) =>
