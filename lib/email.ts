@@ -17,7 +17,13 @@ function getResendClient(): Resend | null {
  * always finish successfully even if the "nice to have" email doesn't go
  * out). Same resilience pattern as lib/plans.ts / lib/payments/*.
  */
-export async function sendEmail(params: { to: string; subject: string; html: string }): Promise<boolean> {
+export async function sendEmail(params: {
+  to: string;
+  subject: string;
+  html: string;
+  replyTo?: string;
+  attachments?: { filename: string; content: Buffer }[];
+}): Promise<boolean> {
   const client = getResendClient();
   const from = process.env.EMAIL_FROM;
   if (!client || !from) {
@@ -25,7 +31,14 @@ export async function sendEmail(params: { to: string; subject: string; html: str
     return false;
   }
   try {
-    const result = await client.emails.send({ from, to: params.to, subject: params.subject, html: params.html });
+    const result = await client.emails.send({
+      from,
+      to: params.to,
+      subject: params.subject,
+      html: params.html,
+      ...(params.replyTo ? { replyTo: params.replyTo } : {}),
+      ...(params.attachments ? { attachments: params.attachments } : {}),
+    });
     if (result.error) {
       console.error("Resend send failed", result.error);
       return false;
@@ -39,6 +52,16 @@ export async function sendEmail(params: { to: string; subject: string; html: str
 
 export function getAdminNotificationEmail(): string | null {
   return process.env.ADMIN_NOTIFICATION_EMAIL ?? null;
+}
+
+/** Escapes user-supplied text before it's interpolated into an HTML email body. */
+function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function wrapEmailHtml(title: string, bodyHtml: string): string {
@@ -96,4 +119,26 @@ export const emailTemplates = {
     wrapEmailHtml("New support ticket", `<p>${orgName} submitted a new support ticket: "${subject}".</p>`),
   adminNewSignup: (orgName: string) =>
     wrapEmailHtml("New client signup", `<p>${orgName} just completed registration on acendia.us.</p>`),
+  jobApplication: (params: {
+    jobTitle: string;
+    fullName: string;
+    email: string;
+    phone: string;
+    linkedInOrPortfolio: string;
+    message: string;
+  }) => {
+    const jobTitle = escapeHtml(params.jobTitle);
+    const fullName = escapeHtml(params.fullName);
+    const email = escapeHtml(params.email);
+    const phone = escapeHtml(params.phone);
+    const link = escapeHtml(params.linkedInOrPortfolio);
+    const message = escapeHtml(params.message);
+    return wrapEmailHtml(
+      `New application: ${jobTitle}`,
+      `<p><strong>${fullName}</strong> applied for <strong>${jobTitle}</strong> via acendia.us/careers.</p>
+       <p>Email: ${email}${phone ? `<br/>Phone: ${phone}` : ""}${link ? `<br/>LinkedIn/Portfolio: ${link}` : ""}</p>
+       <p style="white-space:pre-wrap;">${message}</p>
+       <p style="color:#888;">CV attached to this email, if provided.</p>`,
+    );
+  },
 };

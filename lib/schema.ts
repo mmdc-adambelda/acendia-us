@@ -56,6 +56,58 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
   };
 }
 
+/**
+ * JobPosting schema — only pass a real, currently-open role here (Google's
+ * guidelines require datePosted/validThrough to reflect an actual live
+ * posting). Never used for "coming soon" roles, since there's nothing real
+ * to mark up yet. No baseSalary field — this role is commission-based with
+ * no fixed salary, and inventing a number would violate the same
+ * never-fabricate-numbers rule that applies to pricing/results elsewhere
+ * on the site.
+ */
+export function jobPostingSchema({
+  title,
+  description,
+  datePosted,
+  validThrough,
+  employmentType,
+  path,
+}: {
+  title: string;
+  description: string;
+  datePosted: string; // ISO date
+  validThrough: string; // ISO date
+  employmentType: string;
+  path: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title,
+    description,
+    identifier: {
+      "@type": "PropertyValue",
+      name: SITE_NAME,
+      value: `${SITE_URL}${path}`,
+    },
+    datePosted,
+    validThrough,
+    employmentType,
+    hiringOrganization: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      sameAs: SITE_URL,
+      logo: `${SITE_URL}/brand/acendia-logo.png`,
+    },
+    jobLocationType: "TELECOMMUTE",
+    applicantLocationRequirements: {
+      "@type": "Country",
+      name: "United States",
+    },
+    directApply: true,
+  };
+}
+
 export function itemListSchema({ name, items }: { name: string; items: { name: string; description: string }[] }) {
   return {
     "@context": "https://schema.org",

@@ -79,6 +79,7 @@ export const FOOTER_LINK_COLUMNS = [
       { label: "Case Studies", href: "/case-studies/" },
       { label: "Insights", href: "/insights/" },
       { label: "Free SEO Audit", href: "/free-seo-audit/" },
+      { label: "Careers", href: "/careers/" },
       { label: "Contact", href: "/contact/" },
       { label: "Client Login", href: "/login/" },
       { label: "Privacy Policy", href: "/privacy-policy/" },

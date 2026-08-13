@@ -3,6 +3,7 @@ import { SITE_URL, SERVICES } from "@/lib/site";
 import { STATE_CONTENT, CITY_CONTENT } from "@/lib/locationContent";
 import { INDUSTRY_CONTENT } from "@/lib/industryContent";
 import { ARTICLES } from "@/lib/articles";
+import { JOBS } from "@/lib/careers";
 
 const STATIC_PATHS = [
   "/",
@@ -15,6 +16,7 @@ const STATIC_PATHS = [
   "/locations/",
   "/industries/",
   "/free-seo-audit/",
+  "/careers/",
   "/privacy-policy/",
   "/terms/",
 ];
@@ -70,6 +72,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }));
 
+  const careerEntries = JOBS.map((j) => ({
+    url: `${SITE_URL}/careers/${j.slug}/`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.5,
+  }));
+
   return [
     ...staticEntries,
     ...serviceEntries,
@@ -77,5 +86,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...cityEntries,
     ...industryEntries,
     ...articleEntries,
+    ...careerEntries,
   ];
 }

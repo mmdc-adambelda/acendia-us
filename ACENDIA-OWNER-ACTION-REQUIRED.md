@@ -75,7 +75,8 @@ Since the exact go-live date isn't known at checkout, the system starts with an 
 Vercel → project → **Settings** → **Domains** → add `acendia.us`, follow DNS instructions. Update `NEXT_PUBLIC_APP_URL` and Supabase redirect URLs to match once connected.
 
 ### 10. Set up transactional email (Resend)
-Without this, payment confirmations, new-message, and new-report emails are silently skipped (logged only) — the app still works, clients just won't get emailed. Create a Resend account, verify your sending domain, add `RESEND_API_KEY`, `EMAIL_FROM`, and `ADMIN_NOTIFICATION_EMAIL` (the inbox that gets new-signup/new-message/new-ticket alerts) to Vercel. Full detail: `CLIENT-PORTAL-SETUP.md` Part 5.
+Without this, payment confirmations, new-message, new-report, **and job applications from `/careers/`** all fail to send — the app still works, but applicants see an honest "please email us directly" message instead of a silent failure. Create a Resend account, verify your sending domain, add `RESEND_API_KEY`, `EMAIL_FROM`, and `ADMIN_NOTIFICATION_EMAIL` (the inbox that gets new-signup/new-message/new-ticket alerts) to Vercel. Full detail: `CLIENT-PORTAL-SETUP.md` Part 5.
+- Job applications (name, email, message, CV attachment) are always sent to `support@acendia.agency` regardless of `ADMIN_NOTIFICATION_EMAIL` — hardcoded in `app/api/careers/apply/route.ts` since it's a fixed, always-correct destination, not a configurable admin setting.
 
 ### 11. Assign your first staff/admin users
 New accounts default to the `client` role. To make someone `staff`/`admin`/`super_admin` (so they can reach `/admin`), update their `profiles.role` directly in Supabase's Table Editor — there's no self-service way to grant this, intentionally.
