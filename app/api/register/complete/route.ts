@@ -67,16 +67,8 @@ export async function POST(req: NextRequest) {
   // blocking every registration with a false "account not found" error.
   const { data: authUser, error: authUserError } = await admin.auth.admin.getUserById(userId);
   if (authUserError || !authUser.user) {
-    console.error("getUserById failed during registration completion", { userId, authUserError });
     return NextResponse.json(
-      {
-        ok: false,
-        error: "We couldn't find your account. Please restart registration.",
-        // TEMP DIAGNOSTIC — remove once root cause is found.
-        debug: authUserError
-          ? { message: authUserError.message, status: authUserError.status, code: authUserError.code }
-          : { message: "getUserById returned no error but no user either", userId },
-      },
+      { ok: false, error: "We couldn't find your account. Please restart registration." },
       { status: 404 }
     );
   }

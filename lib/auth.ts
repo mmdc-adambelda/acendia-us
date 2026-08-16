@@ -14,23 +14,41 @@ import type { UserRole } from "./supabase/database.types";
  * pages degrade to "not signed in" instead of 500ing.
  */
 export async function getCurrentUser() {
+  let user;
   try {
     const supabase = await createClient();
     const {
-      data: { user },
+      data: { user: sessionUser },
     } = await supabase.auth.getUser();
-    if (!user) return null;
+    if (!sessionUser) return null;
+    user = sessionUser;
 
-    const { data: profile } = await supabase
+    // Profile lookup is deliberately outside the "is there a session at
+    // all" question above: a transient/failed profile read must never be
+    // treated as "not logged in" — that's a real, valid session getting
+    // silently bounced to /login (found live: clicking a link from an
+    // already-authenticated /portal page briefly looked like a full
+    // sign-out, purely because this single query hiccuped once). Callers
+    // that truly need the profile row already handle `profile: null`
+    // (e.g. `ctx.profile?.first_name ?? "there"`).
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", user.id)
       .single();
+    if (profileError) {
+      console.error("getCurrentUser: profile fetch failed for a signed-in user", { userId: user.id, profileError });
+    }
 
-    return { user, profile };
+    return { user, profile: profile ?? null };
   } catch (err) {
-    console.error("getCurrentUser failed (Supabase may not be configured yet):", err);
-    return null;
+    // A thrown error this far in only happens if `supabase.auth.getUser()`
+    // itself failed (config/network) — profile-fetch errors are handled
+    // above and never reach here. If somehow `user` was already resolved,
+    // still return a valid session rather than treating a downstream
+    // hiccup as a sign-out.
+    console.error("getCurrentUser failed (Supabase may not be configured yet, or a transient error occurred):", err);
+    return user ? { user, profile: null } : null;
   }
 }
 
