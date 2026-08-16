@@ -66,7 +66,13 @@ export default async function PortalPage() {
         <Card className="mt-6 border-amber-400/30 bg-amber-400/5">
           <p className="text-sm text-amber-200">
             Your subscription isn't active yet.{" "}
-            <Link href="/checkout/" className="underline">
+            {/* prefetch=false: this link's target re-checks the session
+                server-side (requireAuth in app/checkout/page.tsx) — letting
+                Next.js prefetch it in the background risks a second,
+                concurrent Supabase token refresh alongside the real
+                navigation, which can invalidate the session outright (see
+                proxy.ts's isPrefetchRequest for the full explanation). */}
+            <Link href="/checkout/" prefetch={false} className="underline">
               Complete checkout
             </Link>{" "}
             to get your campaign started.

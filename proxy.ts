@@ -33,6 +33,26 @@ const NOINDEX_PREFIXES = [
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+// Next.js Link prefetches every link that scrolls into view by default —
+// including "Complete checkout" on the portal dashboard — which silently
+// runs this proxy in the background before a user ever clicks. If that
+// background prefetch and a genuine navigation both call
+// supabase.auth.getUser() (which refreshes the session token) close
+// together, Supabase's refresh-token rotation treats the second refresh as
+// reuse and invalidates the WHOLE session — a real sign-out, not a UI
+// glitch. Found live: clicking "Complete checkout" from an already-signed-
+// in /portal genuinely logged the user out. Next.js marks prefetch
+// requests with this header, so skip the refresh (and the redirect check
+// that depends on it) for those — an actual click always fires a real,
+// non-prefetch request that still gets checked normally.
+function isPrefetchRequest(request: NextRequest): boolean {
+  return (
+    request.headers.get("next-router-prefetch") === "1" ||
+    request.headers.get("purpose") === "prefetch" ||
+    request.headers.get("sec-purpose") === "prefetch"
+  );
+}
+
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
   const path = request.nextUrl.pathname;
@@ -44,7 +64,7 @@ export async function proxy(request: NextRequest) {
   // Vercel). If the env vars are missing, skip auth entirely rather than
   // calling createServerClient with empty strings (which throws). The
   // noindex header below doesn't depend on Supabase, so it still applies.
-  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+  if (SUPABASE_URL && SUPABASE_ANON_KEY && !isPrefetchRequest(request)) {
     const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       cookies: {
         getAll() {
