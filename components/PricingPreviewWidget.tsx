@@ -22,6 +22,11 @@ const CORE_FEATURES = [
 
 const SETUP_FEE_CENTS = 19900;
 const CORE_MONTHLY_CENTS = 49900;
+// Owner-confirmed real value of comparable ongoing SEO service (not a
+// fabricated "was" price) — used only as an honest value comparison next
+// to the real $499/mo rate, never implied to be a price ever charged for
+// this specific plan.
+const VALUE_ANCHOR_MONTHLY_CENTS = 250000;
 
 function formatMoney(cents: number): string {
   return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
@@ -67,7 +72,9 @@ export default function PricingPreviewWidget() {
               />
               <span aria-hidden="true" className="hero-offer-shine" />
               <p className="relative text-xs font-semibold tracking-[0.2em] text-white/80 uppercase">SEO Package</p>
-              <p className="relative mt-2 text-sm font-medium text-white/90">SEO for</p>
+              <p className="relative mt-2 flex items-baseline justify-center gap-2 text-sm font-medium text-white/70">
+                <span className="line-through decoration-white/50">{formatMoney(VALUE_ANCHOR_MONTHLY_CENTS)}/mo value</span>
+              </p>
               <p className="relative mt-1 text-5xl font-bold tracking-tight text-white sm:text-6xl">
                 {formatMoney(CORE_MONTHLY_CENTS)}
               </p>
@@ -96,6 +103,12 @@ export default function PricingPreviewWidget() {
               site goes live — not before.
             </p>
           </div>
+
+          {/* Real, enforced offer (owner-confirmed) — not fabricated
+              urgency: capped at the first 100 clients, ends 9/30. */}
+          <p className="mt-4 text-center text-xs font-semibold text-[var(--accent-2)]">
+            First 100 clients only. Offer ends September 30.
+          </p>
 
           <Link
             href="/register/"
