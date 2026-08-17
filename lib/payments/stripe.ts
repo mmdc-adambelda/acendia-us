@@ -43,7 +43,7 @@ export type CreateStripeSetupFeeCheckoutParams = {
  */
 export async function createStripeSetupFeeCheckoutSession(
   params: CreateStripeSetupFeeCheckoutParams,
-): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+): Promise<{ ok: true; url: string } | { ok: false; error: string; debug?: string }> {
   const stripe = getStripeClient();
   if (!stripe) {
     return { ok: false, error: "Stripe is not configured yet. Please contact us to complete signup." };
@@ -88,7 +88,10 @@ export async function createStripeSetupFeeCheckoutSession(
     return { ok: true, url: session.url };
   } catch (err) {
     console.error("createStripeSetupFeeCheckoutSession failed", err);
-    return { ok: false, error: "Could not start Stripe checkout. Please try again." };
+    // TEMP DIAGNOSTIC: include the raw Stripe error message so this can be
+    // read from the API response without log access. Remove once resolved.
+    const debug = err instanceof Stripe.errors.StripeError ? `${err.type}: ${err.message}` : err instanceof Error ? err.message : String(err);
+    return { ok: false, error: "Could not start Stripe checkout. Please try again.", debug };
   }
 }
 

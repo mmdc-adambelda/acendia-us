@@ -161,7 +161,7 @@ export async function POST(req: NextRequest) {
       successUrl: `${appUrl}/checkout/success/`,
       cancelUrl: `${appUrl}/checkout/cancel/`,
     });
-    if (!result.ok) return NextResponse.json({ ok: false, error: result.error }, { status: 502 });
+    if (!result.ok) return NextResponse.json({ ok: false, error: result.error, debug: result.debug }, { status: 502 });
     return NextResponse.json({ ok: true, redirectUrl: result.url });
   }
 
