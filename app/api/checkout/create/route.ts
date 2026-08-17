@@ -47,26 +47,9 @@ export async function POST(req: NextRequest) {
 
   const {
     data: { user },
-    error: userError,
   } = await supabase.auth.getUser();
   if (!user) {
-    // TEMP DIAGNOSTIC — remove once root cause is found. The checkout
-    // PAGE (a Server Component) sees the session fine right before this;
-    // this route (a Route Handler) using the same createClient() doesn't,
-    // which shouldn't be possible without a real reason.
-    const cookieNames = req.cookies.getAll().map((c) => c.name);
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Please log in first.",
-        debug: {
-          authError: userError ? { message: userError.message, status: userError.status, code: userError.code } : null,
-          cookieNames,
-          hasAuthCookie: cookieNames.some((n) => n.includes("auth-token") && !n.includes("code-verifier")),
-        },
-      },
-      { status: 401 }
-    );
+    return NextResponse.json({ ok: false, error: "Please log in first." }, { status: 401 });
   }
 
   const { data: membership } = await supabase
