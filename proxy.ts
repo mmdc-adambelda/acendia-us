@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getCookieDomain } from "@/lib/supabase/cookieDomain";
 
 // NOTE: Next.js 16 renamed the `middleware.ts` file convention to
 // `proxy.ts` (exported function renamed `middleware` -> `proxy`) —
@@ -65,7 +66,13 @@ export async function proxy(request: NextRequest) {
   // calling createServerClient with empty strings (which throws). The
   // noindex header below doesn't depend on Supabase, so it still applies.
   if (SUPABASE_URL && SUPABASE_ANON_KEY && !isPrefetchRequest(request)) {
+    // Same host-scoping fix as the browser/server clients — see
+    // lib/supabase/cookieDomain.ts. This is the client that actually
+    // refreshes and (re)writes the session cookie on most requests, so
+    // getting the domain right here is what actually closes the gap.
+    const cookieDomain = getCookieDomain(request.headers.get("host"));
     const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      cookieOptions: { domain: cookieDomain },
       cookies: {
         getAll() {
           return request.cookies.getAll();

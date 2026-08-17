@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { cookies } from "next/headers";
 import Container from "@/components/Container";
 import Card from "@/components/Card";
 import CheckoutClient from "@/components/checkout/CheckoutClient";
 import { buildMetadata } from "@/lib/seo";
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isProviderConfigured, type PaymentProvider } from "@/lib/payments/types";
 
@@ -26,33 +25,7 @@ const PROVIDER_META: Record<PaymentProvider, { label: string; description: strin
 };
 
 export default async function CheckoutPage() {
-  // TEMP DIAGNOSTIC: calling getCurrentUser() directly instead of
-  // requireAuth() so a failed session check renders visible debug info
-  // here instead of silently redirecting to /login — needed to catch the
-  // exact cause of a reported "checkout logs me out" bug that couldn't be
-  // reproduced in testing. Revert to `const { user, profile } = await
-  // requireAuth();` once resolved.
-  const current = await getCurrentUser();
-  if (!current) {
-    const cookieStore = await cookies();
-    const cookieNames = cookieStore.getAll().map((c) => c.name);
-    const hasAuthCookie = cookieNames.some((n) => n.includes("auth-token") && !n.includes("code-verifier"));
-    return (
-      <div className="flex min-h-screen items-center justify-center py-20">
-        <Container className="max-w-lg">
-          <Card className="text-center">
-            <h1 className="text-lg font-semibold text-white">Checkout diagnostic — no session found here</h1>
-            <p className="mt-3 text-left text-xs text-white/60">Has an auth cookie: {String(hasAuthCookie)}</p>
-            <p className="mt-1 text-left text-xs text-white/60 break-all">Cookie names: {cookieNames.join(", ") || "(none)"}</p>
-            <Link href="/login/?next=/checkout/" className="focus-ring mt-6 inline-flex items-center rounded-[var(--r-sm)] bg-white px-6 py-3 text-sm font-semibold text-black">
-              Log in again
-            </Link>
-          </Card>
-        </Container>
-      </div>
-    );
-  }
-  const { user, profile } = current;
+  const { user, profile } = await requireAuth();
 
   let planSummary: { name: string; setupFeeCents: number; monthlyPriceCents: number }[] = [];
   let hasPlanSelection = false;
