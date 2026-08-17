@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createStripeSetupFeeCheckoutSession } from "@/lib/payments/stripe";
 import { createPaypalSubscription } from "@/lib/payments/paypal";
-import { generateWiseReference, getWisePaymentLink, isWiseAvailable } from "@/lib/payments/wise";
+import { generateWiseReference, isWiseAvailable } from "@/lib/payments/wise";
 import { isRateLimited } from "@/lib/rateLimit";
 
 const bodySchema = z.object({
@@ -19,22 +19,42 @@ const bodySchema = z.object({
  * for Wise, generates a pending manual-payment record). Real activation only
  * happens from a verified webhook (Stripe/PayPal) or an admin confirmation
  * (Wise) — see app/api/webhooks/*.
+ *
+ * Deliberately a plain HTML form target (parses req.formData(), always
+ * responds with a real redirect — 303, never JSON) instead of a fetch()-
+ * driven JSON API. Found live: the previous fetch()-based version
+ * intermittently failed to send the session cookie at all in one user's
+ * real browser (reproducibly "Auth session missing!", empty cookie jar on
+ * that specific request) despite the exact same session working correctly
+ * for every normal page navigation, including the checkout page itself
+ * loaded moments earlier — never reproduced in automated testing, most
+ * likely a browser extension or privacy feature intercepting the fetch/XHR
+ * specifically. A genuine top-level form submission is the one request
+ * shape browsers and extensions essentially never withhold cookies from
+ * without breaking the web generally, so this closes that entire class of
+ * failure regardless of the exact mechanism on any given visitor's end.
  */
 export async function POST(req: NextRequest) {
+  const redirectToCheckoutWithError = (message: string) => {
+    const url = new URL("/checkout/", req.url);
+    url.searchParams.set("error", message);
+    return NextResponse.redirect(url, 303);
+  };
+
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (isRateLimited(`checkout-create:${ip}`)) {
-    return NextResponse.json({ ok: false, error: "Too many requests. Try again shortly." }, { status: 429 });
+    return redirectToCheckoutWithError("Too many requests. Try again shortly.");
   }
 
-  let body: unknown;
+  let formData: FormData;
   try {
-    body = await req.json();
+    formData = await req.formData();
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid request body." }, { status: 400 });
+    return redirectToCheckoutWithError("Invalid request. Please try again.");
   }
-  const parsed = bodySchema.safeParse(body);
+  const parsed = bodySchema.safeParse({ provider: formData.get("provider") });
   if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: "Invalid checkout request." }, { status: 422 });
+    return redirectToCheckoutWithError("Please choose a payment method.");
   }
   const { provider } = parsed.data;
 
@@ -42,14 +62,14 @@ export async function POST(req: NextRequest) {
   try {
     supabase = await createClient();
   } catch {
-    return NextResponse.json({ ok: false, error: "Service unavailable. Please try again shortly." }, { status: 503 });
+    return redirectToCheckoutWithError("Service unavailable. Please try again shortly.");
   }
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ ok: false, error: "Please log in first." }, { status: 401 });
+    return redirectToCheckoutWithError("Please log in first.");
   }
 
   const { data: membership } = await supabase
@@ -59,7 +79,7 @@ export async function POST(req: NextRequest) {
     .maybeSingle();
 
   if (!membership) {
-    return NextResponse.json({ ok: false, error: "No business account found for your login." }, { status: 404 });
+    return redirectToCheckoutWithError("No business account found for your login.");
   }
   const organizationId = membership.organization_id;
 
@@ -83,10 +103,7 @@ export async function POST(req: NextRequest) {
     ((goalsLog?.metadata as Record<string, unknown> | undefined)?.addonPlanIds as string[] | undefined) ?? [];
 
   if (!requestedPlanId) {
-    return NextResponse.json(
-      { ok: false, error: "No plan selection found. Please contact us to complete signup." },
-      { status: 422 },
-    );
+    return redirectToCheckoutWithError("No plan selection found. Please contact us to complete signup.");
   }
 
   const planIds = [requestedPlanId, ...addonPlanIds];
@@ -99,7 +116,7 @@ export async function POST(req: NextRequest) {
     .eq("is_active", true);
 
   if (plansError || !plans || plans.length === 0) {
-    return NextResponse.json({ ok: false, error: "Selected plan is no longer available." }, { status: 422 });
+    return redirectToCheckoutWithError("Selected plan is no longer available.");
   }
 
   const setupFeeCents = plans.reduce((sum, p) => sum + (p.setup_fee_cents ?? 0), 0);
@@ -132,7 +149,7 @@ export async function POST(req: NextRequest) {
       .single();
     if (subError || !newSub) {
       console.error("Failed to create pending subscription", subError);
-      return NextResponse.json({ ok: false, error: "Could not start checkout. Please try again." }, { status: 500 });
+      return redirectToCheckoutWithError("Could not start checkout. Please try again.");
     }
     subscriptionId = newSub.id;
   } else {
@@ -142,9 +159,8 @@ export async function POST(req: NextRequest) {
   if (provider === "stripe") {
     const priceIds = plans.map((p) => p.stripe_price_id_monthly).filter((id): id is string => Boolean(id));
     if (priceIds.length !== plans.length) {
-      return NextResponse.json(
-        { ok: false, error: "Card payment isn't fully configured for your plan yet. Please try PayPal or Wise, or contact us." },
-        { status: 422 },
+      return redirectToCheckoutWithError(
+        "Card payment isn't fully configured for your plan yet. Please try PayPal or Wise, or contact us.",
       );
     }
     // Only the setup fee is charged today — the recurring monthly
@@ -161,15 +177,14 @@ export async function POST(req: NextRequest) {
       successUrl: `${appUrl}/checkout/success/`,
       cancelUrl: `${appUrl}/checkout/cancel/`,
     });
-    if (!result.ok) return NextResponse.json({ ok: false, error: result.error }, { status: 502 });
-    return NextResponse.json({ ok: true, redirectUrl: result.url });
+    if (!result.ok) return redirectToCheckoutWithError(result.error);
+    return NextResponse.redirect(result.url, 303);
   }
 
   if (provider === "paypal") {
     if (!corePlan.paypal_plan_id_monthly) {
-      return NextResponse.json(
-        { ok: false, error: "PayPal isn't fully configured for your plan yet. Please try card payment or Wise, or contact us." },
-        { status: 422 },
+      return redirectToCheckoutWithError(
+        "PayPal isn't fully configured for your plan yet. Please try card payment or Wise, or contact us.",
       );
     }
     const result = await createPaypalSubscription({
@@ -179,8 +194,8 @@ export async function POST(req: NextRequest) {
       returnUrl: `${appUrl}/checkout/success/`,
       cancelUrl: `${appUrl}/checkout/cancel/`,
     });
-    if (!result.ok) return NextResponse.json({ ok: false, error: result.error }, { status: 502 });
-    return NextResponse.json({ ok: true, redirectUrl: result.approvalUrl });
+    if (!result.ok) return redirectToCheckoutWithError(result.error);
+    return NextResponse.redirect(result.approvalUrl, 303);
   }
 
   // wise — manual pending-payment flow, never auto-activates. Only the
@@ -189,7 +204,7 @@ export async function POST(req: NextRequest) {
   // /admin/clients once the site's real go-live date is recorded (see
   // app/api/admin/subscriptions/mark-live), never bundled with setup.
   if (!isWiseAvailable()) {
-    return NextResponse.json({ ok: false, error: "Wise payment isn't configured yet. Please contact us." }, { status: 422 });
+    return redirectToCheckoutWithError("Wise payment isn't configured yet. Please contact us.");
   }
   const reference = generateWiseReference(organizationId);
   await admin.from("subscriptions").update({ wise_reference: reference }).eq("id", subscriptionId);
@@ -210,11 +225,8 @@ export async function POST(req: NextRequest) {
     metadata: { reference, amountCents: setupFeeCents },
   });
 
-  return NextResponse.json({
-    ok: true,
-    provider: "wise",
-    reference,
-    paymentLink: getWisePaymentLink(),
-    amountCents: setupFeeCents,
-  });
+  // Wise has no external checkout page to redirect to — /checkout/wise/
+  // re-reads the just-written pending payment row server-side and renders
+  // the reference/payment-link confirmation there.
+  return NextResponse.redirect(new URL("/checkout/wise/", req.url), 303);
 }

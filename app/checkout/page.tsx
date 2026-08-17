@@ -24,8 +24,13 @@ const PROVIDER_META: Record<PaymentProvider, { label: string; description: strin
   },
 };
 
-export default async function CheckoutPage() {
+export default async function CheckoutPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const { user, profile } = await requireAuth();
+  const { error: errorMessage } = await searchParams;
 
   let planSummary: { name: string; setupFeeCents: number; monthlyPriceCents: number }[] = [];
   let hasPlanSelection = false;
@@ -107,7 +112,11 @@ export default async function CheckoutPage() {
           </Card>
         ) : (
           <div className="mt-6">
-            <CheckoutClient availableProviders={availableProviders} planSummary={planSummary} />
+            <CheckoutClient
+              availableProviders={availableProviders}
+              planSummary={planSummary}
+              errorMessage={errorMessage ?? null}
+            />
           </div>
         )}
       </Container>
