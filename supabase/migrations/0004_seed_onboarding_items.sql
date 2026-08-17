@@ -1,6 +1,12 @@
 -- Acendia Client Portal — default onboarding checklist template
 -- Run after 0001-0003. Per-organization completion state lives in
 -- onboarding_responses (see 0001_schema.sql), not here.
+--
+-- Run this exactly once. There was no unique constraint on `label` to stop
+-- a second run from silently duplicating all 11 rows — that happened live
+-- (see 0010_dedupe_onboarding_items.sql, which cleans it up and adds the
+-- constraint). After 0010 has run, re-running this file will correctly
+-- fail with a duplicate-key error instead of duplicating rows again.
 
 insert into onboarding_items (label, description, display_order) values
   ('Business information', 'Confirm your business details are accurate.', 1),
