@@ -8,22 +8,37 @@ import { createClient } from "@/lib/supabase/server";
  * org member write their own org's rows, so there's no need to widen
  * access via a service-role bypass here.
  *
+ * Deliberately a plain HTML form target (parses req.formData(), always
+ * responds with a real redirect back to /onboarding/) instead of a
+ * fetch()-driven JSON API — same reasoning as
+ * app/api/checkout/create/route.ts: a real top-level form submission is
+ * far more resistant to a browser/extension silently withholding the
+ * session cookie than a JS fetch() call is, which is exactly the failure
+ * mode this app hit live.
+ *
  * No rate limiting: this is an authenticated, RLS-scoped, idempotent
  * toggle on an 11-item checklist, not a public form — the shared
  * isRateLimited() helper's fixed 5-requests/60s window would otherwise
  * block someone checking off more than 5 items in a minute.
  */
 export async function POST(req: NextRequest) {
-  let body: unknown;
+  const redirectToOnboarding = (error?: string) => {
+    const url = new URL("/onboarding/", req.url);
+    if (error) url.searchParams.set("error", error);
+    return NextResponse.redirect(url, 303);
+  };
+
+  let formData: FormData;
   try {
-    body = await req.json();
+    formData = await req.formData();
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 });
+    return redirectToOnboarding("Invalid request.");
   }
 
-  const { itemId, completed } = (body ?? {}) as { itemId?: unknown; completed?: unknown };
-  if (typeof itemId !== "string" || typeof completed !== "boolean") {
-    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 422 });
+  const itemId = formData.get("itemId");
+  const completed = formData.get("completed");
+  if (typeof itemId !== "string" || (completed !== "true" && completed !== "false")) {
+    return redirectToOnboarding("Invalid request.");
   }
 
   const supabase = await createClient();
@@ -31,7 +46,7 @@ export async function POST(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ ok: false, error: "Please log in." }, { status: 401 });
+    return redirectToOnboarding("Please log in.");
   }
 
   const { data: membership } = await supabase
@@ -42,23 +57,24 @@ export async function POST(req: NextRequest) {
     .maybeSingle();
 
   if (!membership) {
-    return NextResponse.json({ ok: false, error: "No business account found for your login." }, { status: 404 });
+    return redirectToOnboarding("No business account found for your login.");
   }
 
+  const isCompleted = completed === "true";
   const { error } = await supabase.from("onboarding_responses").upsert(
     {
       organization_id: membership.organization_id,
       onboarding_item_id: itemId,
-      completed,
-      completed_at: completed ? new Date().toISOString() : null,
+      completed: isCompleted,
+      completed_at: isCompleted ? new Date().toISOString() : null,
     },
     { onConflict: "organization_id,onboarding_item_id" }
   );
 
   if (error) {
     console.error("Failed to toggle onboarding item", error);
-    return NextResponse.json({ ok: false, error: "Could not save. Please try again." }, { status: 500 });
+    return redirectToOnboarding("Could not save. Please try again.");
   }
 
-  return NextResponse.json({ ok: true });
+  return redirectToOnboarding();
 }

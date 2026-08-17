@@ -13,8 +13,13 @@ export const metadata: Metadata = buildMetadata({
   noIndex: true,
 });
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   await requireAuth();
+  const { error: errorMessage } = await searchParams;
   const supabase = await createClient();
 
   const { data: membership } = await supabase
@@ -63,7 +68,8 @@ export default async function OnboardingPage() {
         <div className="mt-8">
           <OnboardingChecklist
             items={(items ?? []).map((i) => ({ id: i.id, label: i.label, description: i.description }))}
-            initialCompletedIds={Array.from(completedIds)}
+            completedIds={Array.from(completedIds)}
+            errorMessage={errorMessage ?? null}
           />
         </div>
 

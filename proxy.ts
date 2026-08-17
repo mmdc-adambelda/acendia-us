@@ -33,38 +33,6 @@ const NOINDEX_PREFIXES = [
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Next.js Link prefetches every link that scrolls into view by default —
-// including "Complete checkout" on the portal dashboard — which silently
-// runs this proxy in the background before a user ever clicks. If that
-// background prefetch and a genuine navigation both call
-// supabase.auth.getUser() (which refreshes the session token) close
-// together, Supabase's refresh-token rotation treats the second refresh as
-// reuse and invalidates the WHOLE session — a real sign-out, not a UI
-// glitch. Found live: clicking "Complete checkout" from an already-signed-
-// in /portal genuinely logged the user out. Next.js marks prefetch
-// requests with this header, so skip the refresh (and the redirect check
-// that depends on it) for those — an actual click always fires a real,
-// non-prefetch request that still gets checked normally.
-//
-// A second, separate source of the exact same collision: Chrome/Edge's
-// native prerendering (enabled by default under "Preload pages" —
-// chrome://settings/performance) speculatively renders a likely-next page
-// in the background before any click, sending `Sec-Purpose:
-// prefetch;prerender` — a COMPOUND value, not the bare "prefetch" this
-// check originally matched with `===`. That exact-match missed it
-// entirely, so a real Chrome/Edge user (not reproducible in automated
-// testing, which doesn't prerender) could still hit the same session-
-// invalidating collision this function exists to prevent. `.includes()`
-// catches every documented Sec-Purpose/Purpose variant regardless of what
-// else is appended to it.
-function isPrefetchRequest(request: NextRequest): boolean {
-  return (
-    request.headers.get("next-router-prefetch") === "1" ||
-    (request.headers.get("purpose") ?? "").includes("prefetch") ||
-    (request.headers.get("sec-purpose") ?? "").includes("prefetch")
-  );
-}
-
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
@@ -84,7 +52,7 @@ export async function proxy(request: NextRequest) {
   // Vercel). If the env vars are missing, skip auth entirely rather than
   // calling createServerClient with empty strings (which throws). The
   // noindex header below doesn't depend on Supabase, so it still applies.
-  if (SUPABASE_URL && SUPABASE_ANON_KEY && !isPrefetchRequest(request)) {
+  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     // Same host-scoping fix as the browser/server clients — see
     // lib/supabase/cookieDomain.ts. This is the client that actually
     // refreshes and (re)writes the session cookie on most requests, so
@@ -108,6 +76,22 @@ export async function proxy(request: NextRequest) {
 
     // Refreshes the session cookie if needed — must be called on every
     // request that touches an authenticated route, per Supabase's SSR docs.
+    //
+    // A previous version of this file tried to SKIP this call for requests
+    // it detected as browser/Next.js prefetch (via next-router-prefetch /
+    // purpose / sec-purpose headers), reasoning that a background prefetch
+    // racing a real navigation's own refresh could trigger Supabase's
+    // refresh-token-rotation reuse detection and invalidate the session.
+    // That reasoning was never confirmed against hard evidence (the actual
+    // proven fix for the original "click Complete checkout, get logged
+    // out" bug was cookie domain scoping — see cookieDomain.ts) and it
+    // introduced real risk: any real click a browser also happens to tag
+    // with a matching header would have its refresh silently skipped too,
+    // letting the token go stale for real. Found live: broadening that
+    // header match made logouts happen on EVERY interaction, including
+    // plain link clicks that never touch prefetch logic at all. Removed
+    // entirely — always refresh, exactly as Supabase's own docs specify,
+    // with no cleverness layered on top.
     const {
       data: { user },
     } = await supabase.auth.getUser();
