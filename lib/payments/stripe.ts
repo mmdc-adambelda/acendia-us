@@ -43,14 +43,26 @@ export type CreateStripeSetupFeeCheckoutParams = {
  */
 export async function createStripeSetupFeeCheckoutSession(
   params: CreateStripeSetupFeeCheckoutParams,
-): Promise<{ ok: true; url: string } | { ok: false; error: string; debug?: string }> {
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
   const stripe = getStripeClient();
   if (!stripe) {
     return { ok: false, error: "Stripe is not configured yet. Please contact us to complete signup." };
   }
 
   try {
-    const session = await stripe.checkout.sessions.create({
+    // Stripe's newer "Managed Payments" feature (default-on for accounts
+    // created after it launched — found live, not documented in the SDK's
+    // TypeScript types as of "stripe" 22.5.0 yet) is incompatible with
+    // payment_intent_data.setup_future_usage: Stripe rejects the request
+    // outright with a 400 if both are present. We need setup_future_usage
+    // ("off_session") specifically so the card used for the setup fee can
+    // be reused, without asking the client to pay again, for the delayed
+    // monthly subscription — see createStripeDelayedSubscription below. So
+    // this request explicitly opts OUT of Managed Payments rather than
+    // dropping setup_future_usage, per Stripe's own error message. Cast is
+    // narrow (just this one field) because the installed SDK's types don't
+    // know about `managed_payments` yet, not a blanket type-check bypass.
+    const sessionParams: Stripe.Checkout.SessionCreateParams & { managed_payments: { enabled: false } } = {
       mode: "payment",
       line_items: [
         {
@@ -80,7 +92,9 @@ export async function createStripeSetupFeeCheckoutSession(
       },
       success_url: params.successUrl,
       cancel_url: params.cancelUrl,
-    });
+      managed_payments: { enabled: false },
+    };
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     if (!session.url) {
       return { ok: false, error: "Stripe did not return a checkout URL." };
@@ -88,10 +102,7 @@ export async function createStripeSetupFeeCheckoutSession(
     return { ok: true, url: session.url };
   } catch (err) {
     console.error("createStripeSetupFeeCheckoutSession failed", err);
-    // TEMP DIAGNOSTIC: include the raw Stripe error message so this can be
-    // read from the API response without log access. Remove once resolved.
-    const debug = err instanceof Stripe.errors.StripeError ? `${err.type}: ${err.message}` : err instanceof Error ? err.message : String(err);
-    return { ok: false, error: "Could not start Stripe checkout. Please try again.", debug };
+    return { ok: false, error: "Could not start Stripe checkout. Please try again." };
   }
 }
 
