@@ -45,11 +45,23 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 // requests with this header, so skip the refresh (and the redirect check
 // that depends on it) for those — an actual click always fires a real,
 // non-prefetch request that still gets checked normally.
+//
+// A second, separate source of the exact same collision: Chrome/Edge's
+// native prerendering (enabled by default under "Preload pages" —
+// chrome://settings/performance) speculatively renders a likely-next page
+// in the background before any click, sending `Sec-Purpose:
+// prefetch;prerender` — a COMPOUND value, not the bare "prefetch" this
+// check originally matched with `===`. That exact-match missed it
+// entirely, so a real Chrome/Edge user (not reproducible in automated
+// testing, which doesn't prerender) could still hit the same session-
+// invalidating collision this function exists to prevent. `.includes()`
+// catches every documented Sec-Purpose/Purpose variant regardless of what
+// else is appended to it.
 function isPrefetchRequest(request: NextRequest): boolean {
   return (
     request.headers.get("next-router-prefetch") === "1" ||
-    request.headers.get("purpose") === "prefetch" ||
-    request.headers.get("sec-purpose") === "prefetch"
+    (request.headers.get("purpose") ?? "").includes("prefetch") ||
+    (request.headers.get("sec-purpose") ?? "").includes("prefetch")
   );
 }
 
