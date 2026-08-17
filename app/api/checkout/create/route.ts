@@ -54,11 +54,16 @@ export async function POST(req: NextRequest) {
     // PAGE (a Server Component) sees the session fine right before this;
     // this route (a Route Handler) using the same createClient() doesn't,
     // which shouldn't be possible without a real reason.
+    const cookieNames = req.cookies.getAll().map((c) => c.name);
     return NextResponse.json(
       {
         ok: false,
         error: "Please log in first.",
-        debug: userError ? { message: userError.message, status: userError.status, code: userError.code } : "no error object, user just null",
+        debug: {
+          authError: userError ? { message: userError.message, status: userError.status, code: userError.code } : null,
+          cookieNames,
+          hasAuthCookie: cookieNames.some((n) => n.includes("auth-token") && !n.includes("code-verifier")),
+        },
       },
       { status: 401 }
     );
