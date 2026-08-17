@@ -22,6 +22,9 @@ import { createClient } from "@/lib/supabase/server";
  * block someone checking off more than 5 items in a minute.
  */
 export async function POST(req: NextRequest) {
+  // Deliberately stays on whatever host this request actually arrived on
+  // (req.url) — see the note in app/api/checkout/create/route.ts for why
+  // this isn't forced through NEXT_PUBLIC_APP_URL.
   const redirectToOnboarding = (error?: string) => {
     const url = new URL("/onboarding/", req.url);
     if (error) url.searchParams.set("error", error);

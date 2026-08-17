@@ -76,7 +76,7 @@ The keys you added to `.env.local` only work on your own computer. For the live 
 1. Go to [vercel.com](https://vercel.com), open the `acendia-us` project.
 2. Click **Settings** → **Environment Variables**.
 3. Add each of these for **both Production and Preview** environments:
-   - `NEXT_PUBLIC_APP_URL` = `https://acendia.us` (or your current Vercel URL)
+   - `NEXT_PUBLIC_APP_URL` = `https://www.acendia.us` (use the `www` version, not the bare apex — Stripe/PayPal return URLs are built from this value, and `www` is the domain confirmed reliable in live testing; or your current Vercel URL if the custom domain isn't connected yet)
    - `NEXT_PUBLIC_SUPABASE_URL` = `https://eqedvioirmitcwtobjzk.supabase.co`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = (the anon key from step 1.1)
    - `SUPABASE_SERVICE_ROLE_KEY` = (the service_role key from step 1.1 — mark this one **Sensitive** in Vercel's UI if offered, so it's hidden from the dashboard after saving)
@@ -156,5 +156,5 @@ Emails (payment confirmations, new messages, new reports, admin alerts) are sile
 ## Part 6: Domain & Vercel
 
 1. The site currently lives at `https://acendia-us.vercel.app`. To connect `acendia.us`: in Vercel, go to the project → **Settings** → **Domains** → add `acendia.us`, then follow Vercel's DNS instructions (usually an `A` record or `CNAME` at your domain registrar).
-2. Once connected, update `NEXT_PUBLIC_APP_URL` in Vercel's environment variables to `https://acendia.us`, and update the Supabase Redirect URLs (step 1.4) and Site URL to match.
+2. Once connected, update `NEXT_PUBLIC_APP_URL` in Vercel's environment variables to `https://www.acendia.us` (the `www` version — see the note in Part 1.7), and update the Supabase Redirect URLs (step 1.4) and Site URL to match.
 3. Any webhook URLs (Stripe/PayPal/Wise, once built) must point at the final production domain, not the `.vercel.app` one, before going live with real payments.

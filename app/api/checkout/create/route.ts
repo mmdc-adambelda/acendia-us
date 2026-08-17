@@ -35,6 +35,14 @@ const bodySchema = z.object({
  * failure regardless of the exact mechanism on any given visitor's end.
  */
 export async function POST(req: NextRequest) {
+  // Error/Wise redirects deliberately stay on whatever host THIS request
+  // actually arrived on (req.url), not a separately-configured canonical
+  // URL — see the note further down by `appUrl` for why: this project's
+  // own setup docs have NEXT_PUBLIC_APP_URL pointing at the bare apex
+  // domain (acendia.us, no www), and forcing every redirect through that
+  // is a real, live-unverified risk, not a proven fix. Staying on the
+  // request's own host is what's actually been confirmed working in
+  // repeated live testing.
   const redirectToCheckoutWithError = (message: string) => {
     const url = new URL("/checkout/", req.url);
     url.searchParams.set("error", message);
@@ -122,6 +130,12 @@ export async function POST(req: NextRequest) {
   const setupFeeCents = plans.reduce((sum, p) => sum + (p.setup_fee_cents ?? 0), 0);
   const corePlan = plans.find((p) => p.id === requestedPlanId) ?? plans[0];
 
+  // Only needed for Stripe/PayPal's success/cancel URLs below — those go
+  // to external providers and must be absolute, so NEXT_PUBLIC_APP_URL is
+  // the right source there (Stripe/PayPal don't care which of our own
+  // domains it is). Everything that redirects back to OUR OWN pages in
+  // this route (errors, Wise) deliberately uses req.url instead — see the
+  // note on redirectToCheckoutWithError above.
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? new URL(req.url).origin;
 
   // Create (or reuse) a pending subscription row so there's always a real
