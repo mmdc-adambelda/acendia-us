@@ -21,7 +21,11 @@ declare
   keep record;
 begin
   for keep in
-    select label, min(id) as keep_id
+    -- min(uuid) doesn't exist in Postgres (no default ordering operator
+    -- class for the type) -- cast through text to pick a deterministic
+    -- "keeper" instead. Which specific duplicate survives doesn't matter,
+    -- only that exactly one does.
+    select label, min(id::text)::uuid as keep_id
     from onboarding_items
     group by label
     having count(*) > 1
