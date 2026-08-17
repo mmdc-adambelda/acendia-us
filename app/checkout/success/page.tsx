@@ -75,8 +75,16 @@ export default async function CheckoutSuccessPage() {
               </p>
             </>
           )}
-          <Button href="/onboarding/" className="mt-6">
-            Continue to Onboarding
+          {/* Deliberately signs out and sends the person to a fresh login
+              instead of continuing the registration session straight into
+              onboarding — a clean re-auth boundary between "just paid" and
+              "doing onboarding" rather than relying on one long-lived
+              session surviving the whole signup→checkout→onboarding
+              chain. /logout/'s ?next= carries the destination through to
+              /login/'s own ?next=, so logging back in lands directly on
+              /onboarding/. */}
+          <Button href="/logout/?next=/onboarding/" className="mt-6">
+            Log In to Continue Onboarding
           </Button>
         </Card>
       </Container>

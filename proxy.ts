@@ -27,7 +27,6 @@ const NOINDEX_PREFIXES = [
   "/register",
   "/forgot-password",
   "/reset-password",
-  "/verify-email",
   "/get-started",
 ];
 

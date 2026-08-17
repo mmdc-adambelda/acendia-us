@@ -7,16 +7,14 @@ import { sendEmail, emailTemplates, getAdminNotificationEmail } from "@/lib/emai
 /**
  * Persists the business/website/goals/plan data collected across the
  * registration wizard, once Supabase Auth has already created the user
- * (client-side, via supabase.auth.signUp() in step 1).
- *
- * Why this uses the admin (service role) client instead of the caller's
- * session: Supabase projects with "Confirm email" enabled (the default,
- * and what this project uses per the brief's "require email verification"
- * instruction) issue no session until the user clicks the confirmation
- * link — so there's no cookie session yet to authorize this write against
- * RLS. Instead, this endpoint:
- *   1. Verifies `userId` actually corresponds to a real, just-created
- *      profile (proving signUp() succeeded for this exact account).
+ * (client-side, via supabase.auth.signUp() in step 1). Email confirmation
+ * is off for this project, so signUp() already returns a live session by
+ * the time this runs — but this endpoint still uses the admin (service
+ * role) client rather than the caller's cookie session, deliberately:
+ *   1. Verifies `userId` actually corresponds to a real, just-created auth
+ *      user (proving signUp() succeeded for this exact account) rather
+ *      than trusting a cookie that could theoretically lag the browser's
+ *      just-written one by a request or two.
  *   2. Only ever INSERTs a brand-new organization for that user — it never
  *      updates or reads another organization's data, so there's no path
  *      for this to leak or corrupt existing client data even without a

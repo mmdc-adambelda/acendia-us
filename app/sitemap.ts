@@ -24,7 +24,7 @@ const STATIC_PATHS = [
 // Never add anything under these prefixes here — they're authenticated app
 // routes (client portal, admin, checkout, auth) and must stay out of the
 // sitemap. See middleware.ts + robots.ts for the enforcement layers.
-// /login/ /register/ /forgot-password/ /reset-password/ /verify-email/
+// /login/ /register/ /forgot-password/ /reset-password/
 // /get-started/ /checkout/* /onboarding/ /portal/* /admin/*
 
 export default function sitemap(): MetadataRoute.Sitemap {

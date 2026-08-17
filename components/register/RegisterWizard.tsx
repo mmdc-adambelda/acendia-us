@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
   MAIN_GOAL_OPTIONS,
@@ -64,7 +63,6 @@ function buildValidationErrorMessage(json: { error?: string; fieldIssues?: { pat
 }
 
 export default function RegisterWizard({ plans }: { plans: PlanOption[] }) {
-  const router = useRouter();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -107,7 +105,6 @@ export default function RegisterWizard({ plans }: { plans: PlanOption[] }) {
         password: values.password,
         options: {
           data: { first_name: values.firstName, last_name: values.lastName, phone: values.phone },
-          emailRedirectTo: `${window.location.origin}/verify-email/`,
         },
       });
 
@@ -211,7 +208,14 @@ export default function RegisterWizard({ plans }: { plans: PlanOption[] }) {
         setSubmitting(false);
         return;
       }
-      router.push("/verify-email/");
+      // Hard navigation into checkout (an auth-gated page), not
+      // router.push() — same reasoning as LoginForm's post-login redirect:
+      // avoids Next's client router cache serving a stale response for a
+      // page that could conceivably have been rendered signed-out earlier.
+      // No email confirmation step anymore (Supabase's "Confirm email" is
+      // off for this project) — signUp() in the Account step already
+      // established a real session, so checkout is reachable immediately.
+      window.location.assign("/checkout/");
     } catch {
       setError("Something went wrong. Please try again.");
       setSubmitting(false);

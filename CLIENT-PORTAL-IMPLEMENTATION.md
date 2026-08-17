@@ -136,7 +136,6 @@ This is the real pricing the owner provided — it's seeded directly into the `p
 | `/login/` | ✅ Built |
 | `/forgot-password/` | ✅ Built |
 | `/reset-password/` | ✅ Built |
-| `/verify-email/` | ✅ Built |
 | `/get-started/` | ✅ Built — redirects into `/register/` (kept as a separate marketing-friendly URL per the brief's route list) |
 | `/checkout/` | 🚧 Stub — "payment setup in progress" placeholder so the registration flow doesn't dead-end; real checkout is Phase 2 |
 | `/checkout/success/`, `/checkout/cancel/` | 🚧 Stub, same reason |
@@ -243,7 +242,7 @@ Shared shell: `app/admin/layout.tsx` + `lib/admin.ts`'s `getAdminContext()` (rol
 
 ## 13. Manual QA Checklist (run once real credentials exist)
 
-1. **Registration → verification → login**: `/register/` through all 5 steps → confirmation email arrives → click link → `/login/` → land on `/portal/`.
+1. **Registration → checkout → login**: `/register/` through all 5 steps → straight to `/checkout/` (no email verification step — removed; see ACENDIA-OWNER-ACTION-REQUIRED.md item 2 for the required "Confirm email" off setting this depends on) → complete payment → `/checkout/success/` → "Log In to Continue Onboarding" signs out and lands on `/login/?next=/onboarding/` → log in → `/onboarding/`.
 2. **Org isolation**: create two client accounts (A and B). Confirm A cannot see B's tasks/files/messages/reports by trying `/portal/...` URLs directly — RLS should return empty results, not an error leaking existence.
 3. **Stripe setup fee → delayed subscription scheduled**: complete checkout with a Stripe test card → only the $199 setup fee is charged (verify in Stripe test-mode payments) → `/checkout/success` shows "confirming" → `checkout.session.completed` fires → subscription flips to `trialing` in `/portal/billing` and `/admin/subscriptions`, with `current_period_end` set ~19 days out; email + notification confirm "we're building your site."
 4. **Mark Site Live → billing date corrected**: in `/admin/clients/[id]`, click **Mark Site Live** with a real date → `current_period_end` updates to exactly 14 days after that date → verify in the Stripe Dashboard that the subscription's `trial_end` moved to match (no re-charge, no client action needed).

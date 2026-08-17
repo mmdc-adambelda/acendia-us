@@ -54,9 +54,14 @@ Supabase needs to know which URLs are allowed to receive password-reset and emai
    - `https://acendia-us.vercel.app/**` (current live URL)
    - `https://acendia.us/**` (once the custom domain is connected)
 
-### 1.5 Email confirmation is on by default
+### 1.5 Turn off email confirmation — required
 
-Supabase requires email verification before an account can log in, out of the box — no action needed. If you want to customize the confirmation email's look (currently Supabase's generic template), go to **Authentication** → **Email Templates** and edit the "Confirm signup" template. This is optional and can be done anytime.
+The registration flow is sign up → select plan → checkout → payment confirmed → log in → onboarding, all in one continuous session up through checkout. That requires `signUp()` to return an active session immediately, which Supabase won't do while "Confirm email" is on (it withholds the session until the confirmation link is clicked).
+
+1. In the Supabase Dashboard, go to **Authentication** → **Sign In / Providers** (or **Providers** → **Email**, depending on your dashboard version).
+2. Turn **off** "Confirm email" for the Email provider.
+
+Password reset (`/forgot-password/`) still uses Supabase's email links and is unaffected by this setting.
 
 ### 1.6 Create the private file storage bucket (needed for `/portal/files`)
 
@@ -77,7 +82,7 @@ The keys you added to `.env.local` only work on your own computer. For the live 
    - `SUPABASE_SERVICE_ROLE_KEY` = (the service_role key from step 1.1 — mark this one **Sensitive** in Vercel's UI if offered, so it's hidden from the dashboard after saving)
 4. Redeploy (Vercel usually does this automatically after saving env vars, or trigger one manually from the Deployments tab).
 
-**How to test it works:** visit `/register/` on the live site and go through the first step (Account). You should get a confirmation email. If you don't, double check the anon key was copied correctly (no extra spaces) and that the Site URL/Redirect URLs in step 1.4 are correct.
+**How to test it works:** visit `/register/` on the live site and go through all 5 steps. You should land directly on the checkout page's payment options with no "check your inbox" step. If step 1 (Account) instead shows a stuck or errored submit, double check the anon key was copied correctly (no extra spaces) and that the Site URL/Redirect URLs in step 1.4 are correct.
 
 ---
 
