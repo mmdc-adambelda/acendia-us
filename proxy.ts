@@ -33,6 +33,28 @@ const NOINDEX_PREFIXES = [
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+// Builds the "continue to the destination" response, always deriving
+// headers FRESH from the request's CURRENT state (never a snapshot taken
+// earlier) — critical because request.cookies.set() (called below, inside
+// Supabase's setAll, whenever a session refresh happens) mutates
+// `request` in place. A Headers object captured before that mutation and
+// reused afterward silently hands the route handler the STALE, already-
+// rotated-out refresh token instead of the new one. Found live: exactly
+// this bug, introduced when x-pathname forwarding was added — a Headers
+// snapshot was captured once at the top and reused verbatim inside
+// setAll, so any request landing during an actual token refresh sent the
+// downstream Route Handler a refresh token Supabase had already
+// invalidated by rotating it moments earlier in this same request,
+// producing an intermittent "Auth session missing!" tied to how old the
+// session happened to be — not reproducible with a fresh session (no
+// refresh needed yet), which is exactly why this passed every fresh-
+// session test but kept failing for real, longer-lived usage.
+function buildResponse(request: NextRequest, path: string): NextResponse {
+  const headers = new Headers(request.headers);
+  headers.set("x-pathname", path);
+  return NextResponse.next({ request: { headers } });
+}
+
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
@@ -41,9 +63,7 @@ export async function proxy(request: NextRequest) {
   // this to redirect back to where someone actually was after logging in,
   // instead of always dropping them on /portal/ regardless of where the
   // auth check that sent them to /login/ actually happened.
-  const forwardedHeaders = new Headers(request.headers);
-  forwardedHeaders.set("x-pathname", path);
-  let response = NextResponse.next({ request: { headers: forwardedHeaders } });
+  let response = buildResponse(request, path);
 
   // Proxy runs on almost every request in this app, including every
   // existing public marketing page — it must NEVER throw or 500 the whole
@@ -66,7 +86,10 @@ export async function proxy(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request: { headers: forwardedHeaders } });
+          // Re-derive from `request` NOW, after the mutation above — see
+          // buildResponse()'s comment for why this can't reuse an earlier
+          // snapshot.
+          response = buildResponse(request, path);
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           );
