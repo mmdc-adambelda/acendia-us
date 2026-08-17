@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Container from "@/components/Container";
+import VerifyEmailHandler from "@/components/auth/VerifyEmailHandler";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -31,6 +32,7 @@ export default function VerifyEmailPage() {
             </Link>{" "}
             if it's been more than a few minutes.
           </p>
+          <VerifyEmailHandler />
         </div>
         <p className="mt-8 text-sm text-white/40">
           Already verified?{" "}

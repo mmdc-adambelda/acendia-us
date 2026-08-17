@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Container from "@/components/Container";
 import LoginForm from "@/components/auth/LoginForm";
 import { buildMetadata } from "@/lib/seo";
+import { getCurrentUser } from "@/lib/auth";
 
 export const metadata: Metadata = buildMetadata({
   title: "Log In to Your Acendia Account",
@@ -13,7 +15,23 @@ export const metadata: Metadata = buildMetadata({
   noIndex: true,
 });
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  // Skip the form entirely for someone who's already signed in — matches
+  // LoginForm's own post-login redirect target (?next=, defaulting to
+  // /portal/) so this behaves like a no-op instead of asking for
+  // credentials again. Found live: visiting /login/ with a valid session
+  // (e.g. from a marketing-page link, since the shared Header doesn't yet
+  // know who's logged in) forced a real second login before continuing.
+  const current = await getCurrentUser();
+  if (current) {
+    const { next } = await searchParams;
+    redirect(next || "/portal/");
+  }
+
   return (
     <div className="bg-grid flex min-h-screen items-center border-b border-[var(--border-dim)] py-14">
       <Container className="max-w-md">

@@ -7,6 +7,7 @@ import Analytics from "@/components/Analytics";
 import JsonLd from "@/components/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
 import { SITE_NAME, SITE_URL, TAGLINE } from "@/lib/site";
+import { getCurrentUser } from "@/lib/auth";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,7 +31,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Every page uses this one root layout (marketing pages, /checkout,
+  // /onboarding — everywhere except /portal and /admin, which have their
+  // own layout with their own session-aware nav). Without this, the
+  // shared Header always showed a static "Client Login" link regardless
+  // of session state — found live: a client who'd just paid landed back
+  // on /onboarding with no way to tell they were still logged in, or to
+  // get back to their portal, other than re-entering credentials.
+  const current = await getCurrentUser();
+
   return (
     <html lang="en-US" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
@@ -42,7 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <Header />
+        <Header isAuthenticated={Boolean(current)} />
         <main id="main-content" className="flex-1">
           {children}
         </main>

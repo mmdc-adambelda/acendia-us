@@ -8,7 +8,7 @@ import ServicesMenu from "./ServicesMenu";
 import { ServiceIcon } from "./icons";
 import { NAV_LINKS, CORE_SERVICES_MENU } from "@/lib/site";
 
-export default function Header() {
+export default function Header({ isAuthenticated }: { isAuthenticated: boolean }) {
   const [open, setOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
@@ -43,12 +43,29 @@ export default function Header() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <SiteSwitcher />
-          <Link
-            href="/login/"
-            className="focus-ring text-sm font-medium whitespace-nowrap text-white/70 hover:text-white"
-          >
-            Client Login
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                href="/portal/"
+                className="focus-ring text-sm font-medium whitespace-nowrap text-white/70 hover:text-white"
+              >
+                My Portal
+              </Link>
+              <Link
+                href="/logout/"
+                className="focus-ring text-sm font-medium whitespace-nowrap text-white/70 hover:text-white"
+              >
+                Sign Out
+              </Link>
+            </>
+          ) : (
+            <Link
+              href="/login/"
+              className="focus-ring text-sm font-medium whitespace-nowrap text-white/70 hover:text-white"
+            >
+              Client Login
+            </Link>
+          )}
           <Link
             href="/free-seo-audit/"
             data-event="audit_cta_clicked"
@@ -151,15 +168,38 @@ export default function Header() {
                 Get Your Free SEO Audit
               </Link>
             </li>
-            <li>
-              <Link
-                href="/login/"
-                onClick={() => setOpen(false)}
-                className="focus-ring block rounded-[var(--r-sm)] border border-[var(--border)] px-3 py-3 text-center text-base font-medium text-white/80"
-              >
-                Client Login
-              </Link>
-            </li>
+            {isAuthenticated ? (
+              <>
+                <li>
+                  <Link
+                    href="/portal/"
+                    onClick={() => setOpen(false)}
+                    className="focus-ring block rounded-[var(--r-sm)] border border-[var(--border)] px-3 py-3 text-center text-base font-medium text-white/80"
+                  >
+                    My Portal
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/logout/"
+                    onClick={() => setOpen(false)}
+                    className="focus-ring block px-3 py-2.5 text-center text-sm text-white/50 hover:text-white"
+                  >
+                    Sign Out
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <li>
+                <Link
+                  href="/login/"
+                  onClick={() => setOpen(false)}
+                  className="focus-ring block rounded-[var(--r-sm)] border border-[var(--border)] px-3 py-3 text-center text-base font-medium text-white/80"
+                >
+                  Client Login
+                </Link>
+              </li>
+            )}
           </ul>
           <div className="mt-4 border-t border-[var(--border-dim)] pt-4">
             <p className="px-3 text-xs font-semibold uppercase tracking-wide text-white/40">
