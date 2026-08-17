@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,8 +33,16 @@ export default function LoginForm() {
       }
 
       const next = searchParams.get("next") || "/portal/";
-      router.push(next);
-      router.refresh();
+      // Hard navigation, not router.push() — a soft client-side navigation
+      // can serve a page from Next.js's client router cache, which may
+      // still hold an unauthenticated-redirect response from before this
+      // sign-in if that page was ever visited/rendered while signed out.
+      // Found live: this caused "log in, click Complete checkout, get
+      // asked to log in again" loops that only resolved after enough
+      // repeated attempts happened to invalidate the stale cache entry.
+      // A full navigation guarantees a fresh server request that reads
+      // the just-set session cookie, with no cache in the way.
+      window.location.assign(next);
     } catch (err) {
       console.error("signIn failed", err);
       setError("We couldn't reach our servers. Please check your connection and try again.");

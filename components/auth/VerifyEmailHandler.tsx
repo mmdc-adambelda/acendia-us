@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 /**
@@ -29,7 +28,6 @@ function hasAuthParamsInUrl(): boolean {
 }
 
 export default function VerifyEmailHandler() {
-  const router = useRouter();
   // Lazy initializer reads the URL once, synchronously, before the first
   // render — no effect needed just to decide "checking" vs "idle", which
   // avoids calling setState from inside an effect body for that branch.
@@ -43,11 +41,16 @@ export default function VerifyEmailHandler() {
     const supabase = createClient();
     let redirected = false;
 
+    // Hard navigation (window.location, not router.replace()) — same
+    // reasoning as LoginForm's post-login redirect: a soft client-side
+    // navigation risks serving /portal/ from Next's client router cache
+    // instead of making a fresh request that actually reads the session
+    // cookie this exchange just set.
     const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
       if (!redirected && event === "SIGNED_IN" && session) {
         redirected = true;
         setStatus("success");
-        router.replace("/portal/");
+        window.location.assign("/portal/");
       }
     });
 
@@ -57,7 +60,7 @@ export default function VerifyEmailHandler() {
       if (!redirected && data.session) {
         redirected = true;
         setStatus("success");
-        router.replace("/portal/");
+        window.location.assign("/portal/");
       }
     });
 
@@ -73,7 +76,7 @@ export default function VerifyEmailHandler() {
       subscription.subscription.unsubscribe();
       clearTimeout(timeout);
     };
-  }, [router, status]);
+  }, [status]);
 
   if (status === "idle") return null;
 

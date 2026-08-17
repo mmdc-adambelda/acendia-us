@@ -55,8 +55,16 @@ function isPrefetchRequest(request: NextRequest): boolean {
 }
 
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({ request });
   const path = request.nextUrl.pathname;
+
+  // Forwarded as a request header so any Server Component (not just this
+  // proxy) can know the current path — requireAuth() in lib/auth.ts reads
+  // this to redirect back to where someone actually was after logging in,
+  // instead of always dropping them on /portal/ regardless of where the
+  // auth check that sent them to /login/ actually happened.
+  const forwardedHeaders = new Headers(request.headers);
+  forwardedHeaders.set("x-pathname", path);
+  let response = NextResponse.next({ request: { headers: forwardedHeaders } });
 
   // Proxy runs on almost every request in this app, including every
   // existing public marketing page — it must NEVER throw or 500 the whole
@@ -79,7 +87,7 @@ export async function proxy(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request });
+          response = NextResponse.next({ request: { headers: forwardedHeaders } });
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           );

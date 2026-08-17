@@ -1,5 +1,6 @@
 import "server-only";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "./supabase/server";
 import type { UserRole } from "./supabase/database.types";
 
@@ -59,7 +60,16 @@ export async function getCurrentUser() {
  */
 export async function requireAuth() {
   const current = await getCurrentUser();
-  if (!current) redirect("/login/");
+  if (!current) {
+    // Found live: this used to redirect to a bare /login/ with no ?next=,
+    // so logging in always dropped someone back on /portal/ regardless of
+    // where they actually were — e.g. clicking "Complete checkout" then
+    // having to click it AGAIN after logging in, instead of landing
+    // straight back on /checkout/. x-pathname is set by proxy.ts on every
+    // request specifically so this can recover the real destination.
+    const path = (await headers()).get("x-pathname") ?? "/portal/";
+    redirect(`/login/?next=${encodeURIComponent(path)}`);
+  }
   return current;
 }
 
