@@ -11,6 +11,7 @@ import FAQAccordion from "@/components/FAQAccordion";
 import Card from "@/components/Card";
 import PricingPreviewWidget from "@/components/PricingPreviewWidget";
 import HeroOrbitalBackground from "@/components/HeroOrbitalBackground";
+import HomepageVideoPopup from "@/components/HomepageVideoPopup";
 import JsonLd from "@/components/JsonLd";
 import { webPageSchema, faqSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
@@ -73,6 +74,8 @@ export default function HomePage() {
           faqSchema(homeFaqs),
         ]}
       />
+
+      <HomepageVideoPopup />
 
       {/* Hero */}
       <div className="bg-grid relative overflow-hidden border-b border-[var(--border-dim)]">
