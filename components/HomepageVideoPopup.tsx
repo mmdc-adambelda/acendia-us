@@ -19,9 +19,14 @@ const DISMISSED_KEY = "acendia_video_popup_dismissed";
  * control bar, including the fullscreen/YouTube-logo watermark that only
  * appears on hover of the native controls.
  *
- * Autoplay only works muted (browser policy, not a choice here) — a
- * custom unmute button talks to the embed via the YouTube postMessage
- * API (`enablejsapi=1` on the iframe src is what enables this channel).
+ * Autoplay only works muted (browser policy, not a choice here). To get
+ * sound on as fast as possible without violating that policy, the very
+ * first click/tap anywhere on the page (while still muted) auto-unmutes
+ * the video — that counts as a genuine user gesture, so browsers allow
+ * it. A dedicated unmute button is also available for anyone who doesn't
+ * click elsewhere first. Both paths talk to the embed via the YouTube
+ * postMessage API (`enablejsapi=1` on the iframe src enables this
+ * channel).
  *
  * Close is intentionally unavailable for the first 10 seconds, per the
  * request — the button doesn't render at all until then, with a visible
@@ -68,6 +73,29 @@ export default function HomepageVideoPopup() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, secondsLeft]);
 
+  // Browsers only allow autoplay-with-sound in response to a real user
+  // gesture. Rather than wait for someone to find the unmute button, the
+  // first click/tap anywhere on the page while still muted unmutes the
+  // video for them. This effect cleans itself up the moment `muted`
+  // flips to false (via this listener or the manual button), so it only
+  // ever fires once.
+  useEffect(() => {
+    if (!open || !muted) return;
+    function onFirstInteraction() {
+      unmute();
+    }
+    window.addEventListener("click", onFirstInteraction, { capture: true, once: true });
+    return () => window.removeEventListener("click", onFirstInteraction, { capture: true });
+  }, [open, muted]);
+
+  function unmute() {
+    setMuted(false);
+    iframeRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: "command", func: "unMute", args: [] }),
+      "*",
+    );
+  }
+
   function close() {
     setOpen(false);
     try {
@@ -79,11 +107,13 @@ export default function HomepageVideoPopup() {
   }
 
   function toggleMute() {
-    const iframe = iframeRef.current;
-    const next = !muted;
-    setMuted(next);
-    iframe?.contentWindow?.postMessage(
-      JSON.stringify({ event: "command", func: next ? "mute" : "unMute", args: [] }),
+    if (muted) {
+      unmute();
+      return;
+    }
+    setMuted(true);
+    iframeRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: "command", func: "mute", args: [] }),
       "*",
     );
   }
