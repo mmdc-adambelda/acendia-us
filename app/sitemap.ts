@@ -79,6 +79,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }));
 
+  // The one job with a real, published commission structure gets its own
+  // deep-linked breakdown page (linked from the job listing itself).
+  const commissionPlanEntry = {
+    url: `${SITE_URL}/careers/full-cycle-sales-closer/commission-plan/`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.4,
+  };
+
   return [
     ...staticEntries,
     ...serviceEntries,
@@ -87,5 +96,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...industryEntries,
     ...articleEntries,
     ...careerEntries,
+    commissionPlanEntry,
   ];
 }

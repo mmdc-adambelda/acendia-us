@@ -61,15 +61,15 @@ export const JOBS: Job[] = [
       compensation: {
         intro: "This is a commission-based position with no fixed salary. Successful candidates will receive:",
         bullets: [
-          "A fee for every qualified appointment booked and attended.",
-          "A competitive commission for every successfully closed client.",
-          "A higher earning potential than a traditional appointment-setting structure.",
+          "$200 base commission on every closed SEO Package sale.",
+          "$100 stacked bonus on every Social Media Add-On you attach to a deal.",
+          "$300 total on every confirmed SEO Package + Social Add-On combo — our most common deal structure.",
           "Warm leads from Acendia's advertising campaigns.",
           "The opportunity to generate and close your own outbound prospects.",
           "Ongoing sales support, product training, scripts, systems, and marketing resources.",
         ],
         closing:
-          "The appointment fee provides regular earnings while you build your pipeline, but the majority of your earning potential will come from successfully closing deals.",
+          "Commission is released once the client's first monthly payment clears — typically about 14 days after their site goes live.",
       },
       whyJoin: [
         "Work remotely from anywhere.",

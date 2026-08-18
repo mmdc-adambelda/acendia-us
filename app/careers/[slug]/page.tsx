@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
@@ -113,6 +114,14 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
                   <p className="mt-3 text-sm leading-relaxed text-white/70">{job.content.compensation.intro}</p>
                   <List items={job.content.compensation.bullets} />
                   <p className="mt-3 text-sm leading-relaxed text-white/55">{job.content.compensation.closing}</p>
+                  {job.slug === "full-cycle-sales-closer" && (
+                    <Link
+                      href="/careers/full-cycle-sales-closer/commission-plan/"
+                      className="focus-ring mt-4 inline-flex items-center text-sm font-medium text-white underline underline-offset-4 hover:text-white/80"
+                    >
+                      See the full commission plan and payout examples →
+                    </Link>
+                  )}
                 </div>
 
                 <div>
