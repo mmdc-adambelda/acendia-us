@@ -11,7 +11,6 @@
 // client's site goes live — never bundled into the same charge.
 
 import { Yeseva_One } from "next/font/google";
-import Link from "next/link";
 import { POST_GOLIVE_BILLING_DELAY_DAYS } from "@/lib/billing";
 
 const yesevaOne = Yeseva_One({ weight: "400", subsets: ["latin"], display: "swap" });
@@ -85,13 +84,19 @@ export default function PricingPreviewWidget() {
             ))}
           </div>
 
-          <Link
-            href="/register/"
-            data-event="hero_pricing_widget_cta_clicked"
-            className="focus-ring mt-5 flex w-full items-center justify-center gap-1.5 rounded-[var(--r-sm)] bg-white px-6 py-3.5 text-sm font-bold tracking-wide text-black uppercase transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[var(--glow-white)] active:scale-[0.99]"
-          >
-            Join Now!
-          </Link>
+          {/* Real HTML form POST straight to Stripe checkout — no account
+              needed first. Deliberately not a <Link> to /register/: the
+              new flow is pay now, tell us who you are after (see
+              app/api/get-started/checkout/route.ts). */}
+          <form method="POST" action="/api/get-started/checkout">
+            <button
+              type="submit"
+              data-event="hero_pricing_widget_cta_clicked"
+              className="focus-ring mt-5 flex w-full items-center justify-center gap-1.5 rounded-[var(--r-sm)] bg-white px-6 py-3.5 text-sm font-bold tracking-wide text-black uppercase transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[var(--glow-white)] active:scale-[0.99]"
+            >
+              Join Now!
+            </button>
+          </form>
         </div>
       </div>
     </div>

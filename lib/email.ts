@@ -89,6 +89,11 @@ export const emailTemplates = {
       "You're all set!",
       `<p>Hi ${orgName},</p><p>Your Acendia subscription is now active. Log in to your portal to continue onboarding and track your campaign.</p>`,
     ),
+  welcomeSetPassword: (orgName: string, setPasswordUrl: string) =>
+    wrapEmailHtml(
+      "Payment received — set your password to get started",
+      `<p>Hi ${orgName},</p><p>We've received your one-time setup payment and created your Acendia client portal account. Click below to set your password and log in:</p><p><a href="${escapeHtml(setPasswordUrl)}" style="color:#8b5cf6;">Set your password</a></p><p>Your site typically goes live within 2-3 business days, and your first monthly payment isn't due until 14 days after that — nothing else is charged today.</p>`,
+    ),
   setupFeePaid: (orgName: string) =>
     wrapEmailHtml(
       "Payment received — we're building your site",

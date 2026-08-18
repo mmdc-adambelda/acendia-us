@@ -106,6 +106,92 @@ export async function createStripeSetupFeeCheckoutSession(
   }
 }
 
+export type CreateAnonymousStripeSetupFeeCheckoutParams = {
+  planId: string; // core plan id, stored in metadata so the return page knows what was purchased
+  setupFeeCents: number;
+  successUrl: string; // must include Stripe's {CHECKOUT_SESSION_ID} placeholder — see app/api/get-started/checkout/route.ts
+  cancelUrl: string;
+};
+
+/**
+ * Same real billing schedule as createStripeSetupFeeCheckoutSession (only
+ * the one-time setup fee is charged today) but for the "pay first, tell us
+ * who you are after" flow: no Acendia account exists yet at the moment
+ * someone clicks "Join Now" on the homepage, so there's no
+ * organizationId/userId to attach. The Stripe Checkout Session itself is
+ * the only record of this purchase until the onboarding form (reached via
+ * successUrl, which carries Stripe's own session ID) is submitted and
+ * verified server-side — see app/api/get-started/complete/route.ts, which
+ * re-retrieves this exact session from Stripe before creating anything,
+ * never trusting a client-submitted "I paid" claim.
+ */
+export async function createAnonymousStripeSetupFeeCheckoutSession(
+  params: CreateAnonymousStripeSetupFeeCheckoutParams,
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  const stripe = getStripeClient();
+  if (!stripe) {
+    return { ok: false, error: "Stripe is not configured yet. Please contact us to get started." };
+  }
+
+  try {
+    // See the long comment on createStripeSetupFeeCheckoutSession above for
+    // why Managed Payments must be explicitly disabled here too.
+    const sessionParams: Stripe.Checkout.SessionCreateParams & { managed_payments: { enabled: false } } = {
+      mode: "payment",
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            unit_amount: params.setupFeeCents,
+            product_data: {
+              name: "Acendia one-time setup fee",
+              description: "Monthly billing starts separately, ~14 days after your site goes live.",
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      payment_intent_data: {
+        setup_future_usage: "off_session",
+        metadata: { planId: params.planId, anonymousSignup: "true" },
+      },
+      customer_creation: "always",
+      metadata: { planId: params.planId, anonymousSignup: "true" },
+      success_url: params.successUrl,
+      cancel_url: params.cancelUrl,
+      managed_payments: { enabled: false },
+    };
+    const session = await stripe.checkout.sessions.create(sessionParams);
+
+    if (!session.url) {
+      return { ok: false, error: "Stripe did not return a checkout URL." };
+    }
+    return { ok: true, url: session.url };
+  } catch (err) {
+    console.error("createAnonymousStripeSetupFeeCheckoutSession failed", err);
+    return { ok: false, error: "Could not start Stripe checkout. Please try again." };
+  }
+}
+
+/**
+ * Re-fetches a Checkout Session from Stripe directly by ID — the ONLY
+ * trustworthy way to know a payment actually succeeded for the anonymous
+ * flow (there's no session/cookie/webhook-matched org to check against
+ * yet). Returns null on any failure (not configured, bad ID, network
+ * error) so callers degrade to an honest "we couldn't verify this" state
+ * rather than ever assuming success.
+ */
+export async function retrieveStripeCheckoutSession(sessionId: string): Promise<Stripe.Checkout.Session | null> {
+  const stripe = getStripeClient();
+  if (!stripe) return null;
+  try {
+    return await stripe.checkout.sessions.retrieve(sessionId, { expand: ["payment_intent"] });
+  } catch (err) {
+    console.error("retrieveStripeCheckoutSession failed", err);
+    return null;
+  }
+}
+
 export type CreateStripeDelayedSubscriptionParams = {
   stripeCustomerId: string;
   stripePaymentMethodId: string;

@@ -15,13 +15,13 @@ export const metadata: Metadata = buildMetadata({
   noIndex: true,
 });
 
-const PROVIDER_META: Record<PaymentProvider, { label: string; description: string }> = {
+// PayPal and Wise removed from the checkout UI for now, per owner
+// request — Stripe only. The underlying integrations (lib/payments/
+// paypal.ts, lib/payments/wise.ts) and /api/checkout/create's handling
+// for those providers are untouched, so re-adding them later is just
+// adding their entries back here.
+const PROVIDER_META: Partial<Record<PaymentProvider, { label: string; description: string }>> = {
   stripe: { label: "Card (Stripe)", description: "Instant activation. Visa, Mastercard, Amex, and more." },
-  paypal: { label: "PayPal", description: "Pay with your PayPal balance, bank, or card via PayPal." },
-  wise: {
-    label: "Wise Transfer",
-    description: "Manual bank transfer. Activation confirmed by our team, typically within 1 business day.",
-  },
 };
 
 export default async function CheckoutPage({
@@ -76,20 +76,12 @@ export default async function CheckoutPage({
     console.error("Checkout page: failed to load plan summary", err);
   }
 
-  // SHOW_ALL_PAYMENT_METHODS: temporary display override so Stripe/PayPal/
-  // Wise all appear as selectable options before any of them are actually
-  // wired up (owner is demoing to a client and needs the real intended
-  // options visible today). This never fakes a successful payment — if
-  // someone actually submits an unconfigured provider, /api/checkout/create
-  // still checks isProviderConfigured()/isWiseAvailable() server-side and
-  // returns an honest "isn't configured yet, please contact us" error
-  // instead of processing anything. Remove this override (revert to
-  // filtering by isProviderConfigured()) once all three are genuinely
-  // connected, so real customers only ever see options that actually work.
-  const SHOW_ALL_PAYMENT_METHODS = true;
+  // Only ever lists providers actually present in PROVIDER_META above
+  // (Stripe only, for now) AND actually configured — never offers a
+  // payment method that would just fail.
   const availableProviders = (Object.keys(PROVIDER_META) as PaymentProvider[])
-    .filter((p) => SHOW_ALL_PAYMENT_METHODS || isProviderConfigured(p))
-    .map((provider) => ({ provider, ...PROVIDER_META[provider] }));
+    .filter((p) => isProviderConfigured(p))
+    .map((provider) => ({ provider, ...PROVIDER_META[provider]! }));
 
   return (
     <div className="flex min-h-screen items-center justify-center py-20">
