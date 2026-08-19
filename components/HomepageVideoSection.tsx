@@ -27,7 +27,7 @@ export default function HomepageVideoSection() {
       <div className="relative mx-auto mt-10 aspect-video w-full max-w-4xl overflow-hidden rounded-[var(--r-lg)] border border-[var(--border-hi)] shadow-[var(--shadow-dark)]">
         {playing ? (
           <iframe
-            src={`https://www.youtube-nocookie.com/embed/${YT_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`}
+            src={`https://www.youtube-nocookie.com/embed/${YT_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1&cc_load_policy=0`}
             title="Acendia intro video"
             className="h-full w-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
