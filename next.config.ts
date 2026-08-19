@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   // which would put every canonical out of sync with the URL that actually
   // serves — a redirect-chain and trailing-slash-inconsistency bug.
   trailingSlash: true,
+  images: {
+    remotePatterns: [
+      // YouTube thumbnail used by the homepage's click-to-play video embed.
+      { protocol: "https", hostname: "img.youtube.com" },
+    ],
+  },
 };
 
 export default nextConfig;
