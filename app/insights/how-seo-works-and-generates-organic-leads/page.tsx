@@ -62,7 +62,10 @@ export default function ArticlePage() {
           { name: "Insights", path: "/insights/" },
           { name: "How SEO Works and Generates Organic Leads", path },
         ]}
-        placeholderIcon="search"
+        image={{
+          src: "/images/how-seo-works-organic-leads-featured.png",
+          alt: "A diagram showing the SEO pipeline from search and rankings through to a website visit, trust signals, a captured lead, and a closed customer",
+        }}
       />
       <Section>
         <article className="prose prose-invert max-w-3xl space-y-8 text-white/70">
