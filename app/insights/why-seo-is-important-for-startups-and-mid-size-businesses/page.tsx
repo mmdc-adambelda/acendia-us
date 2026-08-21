@@ -64,7 +64,10 @@ export default function ArticlePage() {
           { name: "Insights", path: "/insights/" },
           { name: "Why SEO Matters for Startups and Mid-Size Businesses", path },
         ]}
-        placeholderIcon="target"
+        image={{
+          src: "/images/why-seo-important-startups-mid-size-featured.png",
+          alt: "A business owner reviewing a Google search results page ranking above a competitor, alongside dashboards showing organic traffic and lead growth",
+        }}
       />
       <Section>
         <article className="prose prose-invert max-w-3xl space-y-8 text-white/70">
