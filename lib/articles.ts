@@ -35,4 +35,22 @@ export const ARTICLES: Article[] = [
     readTime: "10 min read",
     published: true,
   },
+  {
+    slug: "how-seo-works-and-generates-organic-leads",
+    title: "How SEO Works — and How It Actually Turns Into Organic Leads",
+    description:
+      "Rankings aren't the goal — leads are. A clear breakdown of how SEO actually moves a business from invisible to found, and found into booked.",
+    publishedAt: "2026-08-22",
+    readTime: "12 min read",
+    published: true,
+  },
+  {
+    slug: "why-seo-is-important-for-startups-and-mid-size-businesses",
+    title: "Why SEO Is Important for Startups and Mid-Size Businesses",
+    description:
+      "Why SEO is the one growth channel that gets cheaper over time instead of more expensive — and why waiting until you need leads is too late.",
+    publishedAt: "2026-08-22",
+    readTime: "10 min read",
+    published: true,
+  },
 ];
