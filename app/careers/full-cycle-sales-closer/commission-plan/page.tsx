@@ -12,22 +12,22 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const BREAKDOWN = [
-  { label: "Per confirmed sale", amount: "$200", note: "Base commission on every closed SEO Package sale ($499/mo)." },
-  { label: "Per Social Add-On", amount: "$100", note: "Stacked on top. Attach it to every deal ($299/mo add-on)." },
-  { label: "Total per deal", amount: "$300", highlight: true, note: "Core sale + Social Add-On sold together." },
+  { label: "Per confirmed sale", amount: "$350", note: "Flat commission on every closed website + SEO + social media package ($999/mo)." },
+  { label: "Payout schedule", amount: "Weekly", note: "Paid every Wednesday, in arrears, once the client's first payment clears." },
+  { label: "Earning ceiling", amount: "None", highlight: true, note: "Fully performance-based — the more you close, the more you earn." },
 ];
 
 const MATH_EXAMPLES = [
-  { label: "1 sale + add-on", amount: "$300" },
-  { label: "5 sales + add-on", amount: "$1,500" },
-  { label: "10 sales + add-on", amount: "$3,000" },
+  { label: "2 sales / week", amount: "$700" },
+  { label: "4-5 sales / week", amount: "$1,500+" },
+  { label: "Top performers", amount: "$2,000+/week" },
 ];
 
 const PAYOUT_STEPS = [
-  { step: "1", title: "Setup Fee Paid", body: "Client signs on and pays the setup fee." },
-  { step: "2", title: "Site Goes Live", body: "Website launches for the client." },
-  { step: "3", title: "First Month Paid", body: "Client pays their first monthly payment." },
-  { step: "4", title: "You Get Paid", body: "Commission released — approx. 14 days after go-live." },
+  { step: "1", title: "Client Signs On", body: "Business owner agrees to the $999/month website + SEO + social media package." },
+  { step: "2", title: "First Payment Clears", body: "The client's first monthly payment is successfully processed." },
+  { step: "3", title: "Commission Confirmed", body: "Your $350 commission for that sale is confirmed and queued for payout." },
+  { step: "4", title: "Paid Every Wednesday", body: "Commission is paid out weekly, in arrears, with no cap on how much you can earn." },
 ];
 
 export default function SalesCommissionPlanPage() {
@@ -35,8 +35,8 @@ export default function SalesCommissionPlanPage() {
     <>
       <PageHero
         eyebrow="Full-Cycle Sales Closer · Commission Plan"
-        title="Close the deal. Earn $300."
-        description="Every confirmed SEO Package + Social Add-On combo pays out $300 straight to you — base commission on the $499 SEO Package, plus a stacked bonus on every $299 Social Add-On you attach. All figures in USD."
+        title="Close the deal. Earn $350."
+        description="Every confirmed sale pays $350 straight to you, paid weekly, with no cap on how much you can earn. All figures in USD."
         breadcrumbs={[
           { name: "Careers", path: "/careers/" },
           { name: "Full-Cycle Sales Closer", path: "/careers/full-cycle-sales-closer/" },
@@ -87,7 +87,7 @@ export default function SalesCommissionPlanPage() {
             ))}
           </div>
           <p className="mt-8 text-xs text-white/40">
-            No commission is earned if a client cancels, never goes live, or does not pay the first monthly payment.
+            No commission is earned if a client cancels before their first payment clears, or if that payment fails.
           </p>
         </div>
 

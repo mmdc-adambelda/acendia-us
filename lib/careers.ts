@@ -26,14 +26,14 @@ export const JOBS: Job[] = [
     slug: "full-cycle-sales-closer",
     title: "Full-Cycle Sales Closer",
     status: "hiring",
-    location: "Remote (Anywhere) — US Shift Schedule",
+    location: "Remote (Anywhere) — USA, UK, Australia, New Zealand",
     type: "Commission-based",
     oneLiner:
-      "Own the full sales cycle for the US market — from your own prospecting through to a closed, signed client.",
+      "Own the full sales cycle across the US, UK, Australia, and New Zealand — from your own prospecting through to a closed, signed client.",
     datePosted: "2026-08-14",
     content: {
       intro:
-        "Acendia is expanding its sales team and is looking for confident, motivated, and results-driven Full-Cycle Sales Closers for the US market who can generate opportunities, speak directly with business owners, present solutions, and close deals. This is not a traditional appointment-setting role. We need sales professionals with a closer's mentality — people who can build rapport with decision-makers, identify business challenges, communicate value clearly, and confidently guide prospects toward a decision for the US market.",
+        "Acendia is expanding its sales team and is looking for confident, motivated, and results-driven Full-Cycle Sales Closers who can generate opportunities, speak directly with business owners, present our offer, and close deals. The pitch is straightforward: a professionally built website, ongoing SEO, and social media management for $999 a month — a fraction of the $2,500-$5,000 many businesses are already paying elsewhere for the same services. Your job is showing business owners the better deal and closing it. This is not a traditional appointment-setting role. We need sales professionals with a closer's mentality — people who can build rapport with decision-makers, identify business challenges, communicate value clearly, and confidently guide prospects toward a decision.",
       responsibilities: [
         "Conduct outbound calls and engage directly with business owners.",
         "Follow up with warm leads generated through Facebook advertising and other marketing channels.",
@@ -54,22 +54,22 @@ export const JOBS: Job[] = [
         "Strong objection-handling, negotiation, and closing skills.",
         "Self-motivated and comfortable working in a performance-based environment.",
         "Reliable computer, internet connection, headset, and quiet working environment.",
-        "Amenable to US Shift Schedule (EST/PST/MST/CST).",
+        "Willing to work hours that overlap with the US, UK, Australian, or New Zealand market you're calling into.",
         "Experience selling SEO, web development, digital marketing, SaaS, or professional services is highly desirable.",
         "Excellent spoken and written English.",
       ],
       compensation: {
         intro: "This is a commission-based position with no fixed salary. Successful candidates will receive:",
         bullets: [
-          "$200 base commission on every closed SEO Package sale.",
-          "$100 stacked bonus on every Social Media Add-On you attach to a deal.",
-          "$300 total on every confirmed SEO Package + Social Add-On combo — our most common deal structure.",
+          "$350 flat commission on every closed sale.",
+          "Paid weekly, every Wednesday, in arrears.",
           "Warm leads from Acendia's advertising campaigns.",
           "The opportunity to generate and close your own outbound prospects.",
           "Ongoing sales support, product training, scripts, systems, and marketing resources.",
+          "No cap on earnings — this is fully performance-based, so the more you close, the more you make.",
         ],
         closing:
-          "Commission is released once the client's first monthly payment clears — typically about 14 days after their site goes live.",
+          "Commission is released weekly once a client's first monthly payment clears — there's no ceiling on how much you can earn.",
       },
       whyJoin: [
         "Work remotely from anywhere.",
