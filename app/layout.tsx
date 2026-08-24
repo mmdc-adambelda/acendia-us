@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { headers } from "next/headers";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
 import JsonLd from "@/components/JsonLd";
-import PromoStripBanner from "@/components/PromoStripBanner";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
 import { SITE_NAME, SITE_URL, TAGLINE } from "@/lib/site";
 import { getCurrentUser } from "@/lib/auth";
@@ -42,12 +40,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   // on /onboarding with no way to tell they were still logged in, or to
   // get back to their portal, other than re-entering credentials.
   const current = await getCurrentUser();
-  // x-pathname is forwarded by proxy.ts on every request specifically so
-  // Server Components can know the current route — used here to keep the
-  // promo strip homepage-only, matching where it was requested, without
-  // needing a separate route-group layout just for one banner.
-  const pathname = (await headers()).get("x-pathname");
-  const isHomepage = pathname === "/";
 
   return (
     <html lang="en-US" className={`${inter.variable} h-full antialiased`}>
@@ -60,7 +52,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        {isHomepage && <PromoStripBanner />}
         <Header isAuthenticated={Boolean(current)} />
         <main id="main-content" className="flex-1">
           {children}

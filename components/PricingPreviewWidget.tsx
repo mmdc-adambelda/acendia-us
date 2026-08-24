@@ -2,27 +2,24 @@
 // interactivity left here (the old plan-toggle was removed per the CRO
 // brief: one offer, one decision), so this ships zero extra client JS.
 //
-// Real pricing only — mirrors supabase/migrations/0003_seed_plans.sql
-// exactly, so this card can never drift out of sync with what /pricing
-// and /register actually charge.
-//
-// Real billing schedule (see lib/billing.ts): only the setup fee is due
-// today. The monthly plan doesn't start billing until 14 days after the
-// client's site goes live — never bundled into the same charge.
+// Real pricing only — mirrors the `growth-package` plan row, so this card
+// can never drift out of sync with what the "Join Now" checkout actually
+// charges. Single all-in monthly price, no separate setup fee — see the
+// "Join Now" homepage flow rewrite (app/api/get-started/checkout/route.ts)
+// for why: the Stripe subscription starts billing immediately at
+// checkout, not delayed like the older /register flow.
 
 import { Yeseva_One } from "next/font/google";
-import { POST_GOLIVE_BILLING_DELAY_DAYS } from "@/lib/billing";
 
 const yesevaOne = Yeseva_One({ weight: "400", subsets: ["latin"], display: "swap" });
 
 const CORE_FEATURES = [
-  "SEO, website, and Google Business Profile setup",
+  "SEO, NEW OPTIMIZED website, and Google Business Profile setup",
   "Ongoing strategy and execution",
   "Monthly progress reporting",
 ];
 
-const SETUP_FEE_CENTS = 19900;
-const CORE_MONTHLY_CENTS = 49900;
+const CORE_MONTHLY_CENTS = 99900;
 
 function formatMoney(cents: number): string {
   return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
@@ -63,20 +60,15 @@ export default function PricingPreviewWidget() {
               />
               <span aria-hidden="true" className="hero-offer-shine" />
               <p className={`${yesevaOne.className} relative text-6xl text-white sm:text-7xl`}>
-                {formatMoney(SETUP_FEE_CENTS)}
+                {formatMoney(CORE_MONTHLY_CENTS)}
               </p>
             </div>
           </div>
 
-          <p className="mt-4 text-center text-sm text-white/60">
-            Then {formatMoney(CORE_MONTHLY_CENTS)}/month, starting {POST_GOLIVE_BILLING_DELAY_DAYS} days after your
-            site goes live.
-          </p>
-
           <div className="mt-5 space-y-2 border-t border-[var(--border-dim)] pt-4">
             {CORE_FEATURES.map((f) => (
-              <div key={f} className="flex items-start gap-2 text-sm text-white/70">
-                <span aria-hidden="true" className="mt-0.5 text-white/70">
+              <div key={f} className="flex items-start gap-2 text-sm font-bold text-white">
+                <span aria-hidden="true" className="mt-0.5 text-white">
                   ✓
                 </span>
                 {f}

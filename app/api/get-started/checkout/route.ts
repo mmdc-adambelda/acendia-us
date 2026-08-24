@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getActivePlans } from "@/lib/plans";
-import { createAnonymousStripeSetupFeeCheckoutSession } from "@/lib/payments/stripe";
+import { createAnonymousStripeSubscriptionCheckoutSession } from "@/lib/payments/stripe";
 import { isRateLimited } from "@/lib/rateLimit";
 
 /**
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
   const plans = await getActivePlans();
   const corePlan = plans.find((p) => p.plan_type === "core");
-  if (!corePlan || corePlan.setup_fee_cents == null) {
+  if (!corePlan || !corePlan.stripe_price_id_monthly) {
     return redirectHome("Signup isn't available right now. Please contact us to get started.");
   }
 
@@ -39,9 +39,9 @@ export async function POST(req: NextRequest) {
   // The thank-you page re-verifies that session directly against Stripe's
   // API before showing the onboarding form; nothing here is trusted on
   // the client's say-so.
-  const result = await createAnonymousStripeSetupFeeCheckoutSession({
+  const result = await createAnonymousStripeSubscriptionCheckoutSession({
     planId: corePlan.id,
-    setupFeeCents: corePlan.setup_fee_cents,
+    priceId: corePlan.stripe_price_id_monthly,
     successUrl: `${appUrl}/get-started/thank-you/?session_id={CHECKOUT_SESSION_ID}`,
     cancelUrl: `${appUrl}/`,
   });

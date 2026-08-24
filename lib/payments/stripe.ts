@@ -173,19 +173,69 @@ export async function createAnonymousStripeSetupFeeCheckoutSession(
   }
 }
 
+export type CreateAnonymousStripeSubscriptionCheckoutParams = {
+  planId: string; // core plan id, stored in metadata so the return page knows what was purchased
+  priceId: string; // recurring monthly Stripe Price ID — the ONLY thing charged, starting today
+  successUrl: string; // must include Stripe's {CHECKOUT_SESSION_ID} placeholder — see app/api/get-started/checkout/route.ts
+  cancelUrl: string;
+};
+
+/**
+ * The "Join Now" homepage flow's actual charge: a single subscription
+ * starting immediately, billed at the plan's monthly price — no separate
+ * one-time setup fee. Stripe's subscription-mode Checkout Session creates
+ * the customer and the subscription in one step once payment succeeds, so
+ * (unlike the older setup-fee flow) there's no follow-up
+ * createStripeDelayedSubscription call needed here — that function still
+ * exists solely for the authenticated /checkout path, which is untouched.
+ */
+export async function createAnonymousStripeSubscriptionCheckoutSession(
+  params: CreateAnonymousStripeSubscriptionCheckoutParams,
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  const stripe = getStripeClient();
+  if (!stripe) {
+    return { ok: false, error: "Stripe is not configured yet. Please contact us to get started." };
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      line_items: [{ price: params.priceId, quantity: 1 }],
+      metadata: { planId: params.planId, anonymousSignup: "true" },
+      subscription_data: {
+        metadata: { planId: params.planId, anonymousSignup: "true" },
+      },
+      success_url: params.successUrl,
+      cancel_url: params.cancelUrl,
+    });
+
+    if (!session.url) {
+      return { ok: false, error: "Stripe did not return a checkout URL." };
+    }
+    return { ok: true, url: session.url };
+  } catch (err) {
+    console.error("createAnonymousStripeSubscriptionCheckoutSession failed", err);
+    return { ok: false, error: "Could not start Stripe checkout. Please try again." };
+  }
+}
+
 /**
  * Re-fetches a Checkout Session from Stripe directly by ID — the ONLY
  * trustworthy way to know a payment actually succeeded for the anonymous
  * flow (there's no session/cookie/webhook-matched org to check against
  * yet). Returns null on any failure (not configured, bad ID, network
  * error) so callers degrade to an honest "we couldn't verify this" state
- * rather than ever assuming success.
+ * rather than ever assuming success. Expands the subscription (and its
+ * first invoice) since this is only ever called for the anonymous
+ * subscription-mode "Join Now" flow.
  */
 export async function retrieveStripeCheckoutSession(sessionId: string): Promise<Stripe.Checkout.Session | null> {
   const stripe = getStripeClient();
   if (!stripe) return null;
   try {
-    return await stripe.checkout.sessions.retrieve(sessionId, { expand: ["payment_intent"] });
+    return await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["subscription", "subscription.latest_invoice"],
+    });
   } catch (err) {
     console.error("retrieveStripeCheckoutSession failed", err);
     return null;

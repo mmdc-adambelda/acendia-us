@@ -9,6 +9,7 @@ export type ActivePlan = {
   plan_type: string;
   setup_fee_cents: number | null;
   monthly_price_cents: number | null;
+  stripe_price_id_monthly: string | null;
   features: string[];
 };
 
@@ -24,7 +25,9 @@ export async function getActivePlans(): Promise<ActivePlan[]> {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("plans")
-      .select("id, name, slug, description, plan_type, setup_fee_cents, monthly_price_cents, features")
+      .select(
+        "id, name, slug, description, plan_type, setup_fee_cents, monthly_price_cents, stripe_price_id_monthly, features",
+      )
       .eq("is_active", true)
       .order("display_order", { ascending: true });
 

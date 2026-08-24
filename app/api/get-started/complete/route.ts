@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getStartedCompleteSchema } from "@/lib/validation/getStarted";
 import { isRateLimited } from "@/lib/rateLimit";
 import { sendEmail, emailTemplates, getAdminNotificationEmail } from "@/lib/email";
-import { retrieveStripeCheckoutSession, createStripeDelayedSubscription } from "@/lib/payments/stripe";
+import { retrieveStripeCheckoutSession } from "@/lib/payments/stripe";
 import type Stripe from "stripe";
 
 /**
@@ -50,27 +50,30 @@ export async function POST(req: NextRequest) {
 
   // Re-verify the payment directly against Stripe — never trust the form.
   const session = await retrieveStripeCheckoutSession(data.sessionId);
-  if (!session || session.payment_status !== "paid" || session.mode !== "payment") {
+  if (!session || session.payment_status !== "paid" || session.mode !== "subscription") {
     return redirectToForm("We couldn't verify your payment. Please contact us and we'll sort it out directly.", data.sessionId);
   }
 
   const admin = createAdminClient();
 
-  const paymentIntent = session.payment_intent as Stripe.PaymentIntent | string | null;
-  const paymentIntentId = typeof paymentIntent === "string" ? paymentIntent : (paymentIntent?.id ?? null);
-  const paymentMethodId =
-    paymentIntent && typeof paymentIntent !== "string" ? (paymentIntent.payment_method as string | null) : null;
+  // subscription (and its latest_invoice) are expanded by
+  // retrieveStripeCheckoutSession — this is the subscription Stripe
+  // created (and already started billing) the moment checkout succeeded.
+  const subscription = session.subscription as Stripe.Subscription | null;
+  const latestInvoice = subscription?.latest_invoice as Stripe.Invoice | null;
   const stripeCustomerId = typeof session.customer === "string" ? session.customer : null;
 
   // Idempotency: a page refresh or double-submit on this same paid
-  // session must not create a second account/org.
-  if (paymentIntentId) {
-    const { data: existingPayment } = await admin
-      .from("payments")
+  // session must not create a second account/org. The subscription ID is
+  // a simpler, more robust key here than digging through the newer
+  // Invoice API's nested payments list for a payment_intent ID.
+  if (subscription) {
+    const { data: existingSub } = await admin
+      .from("subscriptions")
       .select("organization_id")
-      .eq("stripe_payment_intent_id", paymentIntentId)
+      .eq("stripe_subscription_id", subscription.id)
       .maybeSingle();
-    if (existingPayment) {
+    if (existingSub) {
       return NextResponse.redirect(new URL("/get-started/success/", req.url), 303);
     }
   }
@@ -142,66 +145,41 @@ export async function POST(req: NextRequest) {
     metadata: { keywords: data.keywords, notes: data.notes, planId },
   });
 
-  // 3. Record the setup-fee payment (already succeeded via Stripe).
+  // 3. Record the first month's payment (already succeeded via Stripe —
+  // the subscription-mode Checkout Session charged it immediately, no
+  // separate setup fee).
   await admin.from("payments").insert({
     organization_id: org.id,
     payment_provider: "stripe",
     status: "paid",
     amount_cents: session.amount_total ?? 0,
     currency: session.currency ?? "usd",
-    stripe_payment_intent_id: paymentIntentId,
-    description: "One-time setup fee",
+    stripe_invoice_id: latestInvoice?.id ?? null,
+    description: "First month — SEO, website, and Google Business Profile setup",
     paid_at: new Date().toISOString(),
   });
 
-  // 4. Create the pending subscription row, then — same as the logged-in
-  // checkout flow's webhook — schedule the real recurring subscription
-  // immediately, with billing delayed to ~14 days after go-live. Reuses
-  // the same off-session payment method Stripe saved during the setup-fee
-  // payment (setup_future_usage: "off_session"), so the client is never
-  // asked to pay again for this.
-  let newSub: { id: string } | null = null;
-  if (planId) {
-    const { data } = await admin
-      .from("subscriptions")
-      .insert({ organization_id: org.id, plan_id: planId, billing_cycle: "monthly", payment_provider: "stripe", status: "pending" })
-      .select("id")
-      .single();
-    newSub = data;
+  // 4. Record the subscription Stripe already created and started billing
+  // as part of checkout — unlike the older setup-fee flow, there's no
+  // separate "schedule it later" step here.
+  if (planId && subscription) {
+    const currentPeriodStart = subscription.items.data[0]?.current_period_start;
+    const currentPeriodEnd = subscription.items.data[0]?.current_period_end;
+    await admin.from("subscriptions").insert({
+      organization_id: org.id,
+      plan_id: planId,
+      billing_cycle: "monthly",
+      payment_provider: "stripe",
+      status: subscription.status === "active" ? "active" : "pending",
+      stripe_customer_id: stripeCustomerId,
+      stripe_subscription_id: subscription.id,
+      current_period_start: currentPeriodStart ? new Date(currentPeriodStart * 1000).toISOString() : null,
+      current_period_end: currentPeriodEnd ? new Date(currentPeriodEnd * 1000).toISOString() : null,
+    });
   } else {
-    console.error("get-started/complete: Stripe session had no planId in metadata — no subscription row created", {
+    console.error("get-started/complete: Stripe session had no planId/subscription — no subscription row created", {
       organizationId: org.id,
     });
-  }
-
-  if (newSub && planId && stripeCustomerId && paymentMethodId) {
-    const { data: plan } = await admin.from("plans").select("stripe_price_id_monthly").eq("id", planId).maybeSingle();
-    if (plan?.stripe_price_id_monthly) {
-      const subResult = await createStripeDelayedSubscription({
-        stripeCustomerId,
-        stripePaymentMethodId: paymentMethodId,
-        priceIds: [plan.stripe_price_id_monthly],
-        organizationId: org.id,
-        userId,
-      });
-      if (subResult.ok) {
-        const trialEndIso = subResult.subscription.trial_end
-          ? new Date(subResult.subscription.trial_end * 1000).toISOString()
-          : null;
-        await admin
-          .from("subscriptions")
-          .update({
-            status: "trialing",
-            stripe_customer_id: stripeCustomerId,
-            stripe_subscription_id: subResult.subscription.id,
-            current_period_start: new Date().toISOString(),
-            current_period_end: trialEndIso,
-          })
-          .eq("id", newSub.id);
-      } else {
-        console.error("get-started/complete: failed to schedule delayed subscription", subResult.error);
-      }
-    }
   }
 
   // 5. Email the customer a link to set their own password, and notify staff.

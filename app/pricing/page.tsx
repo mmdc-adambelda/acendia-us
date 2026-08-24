@@ -38,6 +38,7 @@ const FALLBACK_PLANS: ActivePlan[] = [
     plan_type: "core",
     setup_fee_cents: 19900,
     monthly_price_cents: 49900,
+    stripe_price_id_monthly: null,
     features: [
       "One-time setup and onboarding",
       "Ongoing SEO strategy and execution",
@@ -54,6 +55,7 @@ const FALLBACK_PLANS: ActivePlan[] = [
     plan_type: "addon",
     setup_fee_cents: null,
     monthly_price_cents: 29900,
+    stripe_price_id_monthly: null,
     features: ["Ongoing social media content and posting", "Managed as an add-on to an active Acendia plan"],
   },
 ];

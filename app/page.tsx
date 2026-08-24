@@ -11,7 +11,6 @@ import FAQAccordion from "@/components/FAQAccordion";
 import Card from "@/components/Card";
 import PricingPreviewWidget from "@/components/PricingPreviewWidget";
 import HeroOrbitalBackground from "@/components/HeroOrbitalBackground";
-import HomepageVideoSection from "@/components/HomepageVideoSection";
 import JsonLd from "@/components/JsonLd";
 import { webPageSchema, faqSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
@@ -130,8 +129,6 @@ export default function HomePage() {
           </div>
         </Section>
       </div>
-
-      <HomepageVideoSection />
 
       {/* Problem */}
       <Section>

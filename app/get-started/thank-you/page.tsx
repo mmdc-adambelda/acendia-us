@@ -29,7 +29,7 @@ export default async function GetStartedThankYouPage({
   const { session_id: sessionId, error: errorMessage } = await searchParams;
 
   const session = sessionId ? await retrieveStripeCheckoutSession(sessionId) : null;
-  const isPaid = session?.payment_status === "paid" && session?.mode === "payment";
+  const isPaid = session?.payment_status === "paid" && session?.mode === "subscription";
   const email = session?.customer_details?.email ?? "";
 
   if (!isPaid) {
