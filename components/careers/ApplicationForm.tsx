@@ -17,6 +17,11 @@ export default function ApplicationForm({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
 
+  // The "best sales result" question and the upsell-pitch video link only
+  // make sense for the sales closer role — every other role reuses this
+  // same form and would get a nonsensical prompt otherwise.
+  const isSalesCloser = jobSlug === "full-cycle-sales-closer";
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
@@ -112,6 +117,62 @@ export default function ApplicationForm({
           className={inputClass}
         />
       </div>
+
+      {isSalesCloser && (
+        <div>
+          <label htmlFor="bestSalesWeek" className="mb-1.5 block text-sm font-medium text-white/80">
+            What was your best sales result in a single week, and how did you achieve it?{" "}
+            <span aria-hidden="true">*</span>
+          </label>
+          <textarea
+            id="bestSalesWeek"
+            name="bestSalesWeek"
+            required
+            rows={5}
+            placeholder="The number, the offer you were selling, and what you did to hit it."
+            className={inputClass}
+          />
+        </div>
+      )}
+
+      {isSalesCloser && (
+        <div>
+          <label htmlFor="videoLink" className="mb-1.5 block text-sm font-medium text-white/80">
+            Loom or recorded video link — pitch us the offer (optional but recommended)
+          </label>
+          <p className="mb-2 text-xs leading-relaxed text-white/45">
+            Record yourself delivering the pitch below as if we&apos;re the prospect, then paste the
+            share link. It&apos;s the fastest way to show us how you&apos;d actually sound on a real call.
+          </p>
+          <div className="mb-3 rounded-[var(--r-sm)] border border-[var(--border-hi)] bg-white/[0.03] p-4 text-xs leading-relaxed text-white/60">
+            <p>Hi there! This is &lt;Your Name&gt; calling.</p>
+            <p className="mt-3">
+              Is your business busy right now… or can you handle us sending you a lot more leads?
+            </p>
+            <p className="mt-3">
+              Great — let me ask you straight up: How would you like to get your business onto
+              PAGE ONE of Google… and bring in a lot more paying clients. You could see the benefit
+              of having more clients couldn&apos;t you?
+            </p>
+            <p className="mt-3">So here is what it costs YOU:</p>
+            <p className="mt-3">
+              Just $999 to get started — and we build you an AI and Google-optimised website, set up
+              your business profile, and start moving you straight to Page One.
+            </p>
+            <p className="mt-3">
+              And that includes EVERYTHING. No hidden fees. No surprise bills. Just more visibility,
+              more leads, more paying clients.
+            </p>
+          </div>
+          <input
+            id="videoLink"
+            name="videoLink"
+            type="url"
+            placeholder="https://www.loom.com/share/..."
+            className={inputClass}
+          />
+        </div>
+      )}
 
       <div>
         <label htmlFor="cv" className="mb-1.5 block text-sm font-medium text-white/80">

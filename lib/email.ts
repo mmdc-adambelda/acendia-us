@@ -131,6 +131,8 @@ export const emailTemplates = {
     phone: string;
     linkedInOrPortfolio: string;
     message: string;
+    bestSalesWeek?: string;
+    videoLink?: string;
   }) => {
     const jobTitle = escapeHtml(params.jobTitle);
     const fullName = escapeHtml(params.fullName);
@@ -138,11 +140,19 @@ export const emailTemplates = {
     const phone = escapeHtml(params.phone);
     const link = escapeHtml(params.linkedInOrPortfolio);
     const message = escapeHtml(params.message);
+    const bestSalesWeek = escapeHtml(params.bestSalesWeek ?? "");
+    const rawVideoLink = params.videoLink ?? "";
+    // Only render as a clickable link if it's actually http(s) — a pasted
+    // "javascript:" or similar scheme becomes plain escaped text instead.
+    const isSafeVideoLink = /^https?:\/\//i.test(rawVideoLink);
+    const videoLink = escapeHtml(rawVideoLink);
     return wrapEmailHtml(
       `New application: ${jobTitle}`,
       `<p><strong>${fullName}</strong> applied for <strong>${jobTitle}</strong> via acendia.us/careers.</p>
        <p>Email: ${email}${phone ? `<br/>Phone: ${phone}` : ""}${link ? `<br/>LinkedIn/Portfolio: ${link}` : ""}</p>
        <p style="white-space:pre-wrap;">${message}</p>
+       ${bestSalesWeek ? `<p><strong>Best single-week sales result:</strong></p><p style="white-space:pre-wrap;">${bestSalesWeek}</p>` : ""}
+       ${videoLink ? `<p><strong>Pitch video:</strong> ${isSafeVideoLink ? `<a href="${videoLink}">${videoLink}</a>` : videoLink}</p>` : ""}
        <p style="color:#888;">CV attached to this email, if provided.</p>`,
     );
   },

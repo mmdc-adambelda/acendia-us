@@ -6,6 +6,11 @@ export const applicationFieldsSchema = z.object({
   phone: z.string().trim().max(40).optional().or(z.literal("")),
   linkedInOrPortfolio: z.string().trim().max(300).optional().or(z.literal("")),
   message: z.string().trim().min(1, "Tell us a bit about yourself").max(5000),
+  // Only meaningful for the sales closer role's form (see ApplicationForm's
+  // isSalesCloser gate) — optional here so every other role's submission,
+  // which never sends these fields, still validates.
+  bestSalesWeek: z.string().trim().max(3000).optional().or(z.literal("")),
+  videoLink: z.string().trim().max(500).optional().or(z.literal("")),
   jobSlug: z.string().trim().min(1),
   jobTitle: z.string().trim().min(1),
   // Honeypot — real users never fill this in.
