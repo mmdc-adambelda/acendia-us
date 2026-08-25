@@ -62,7 +62,7 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
         <h2 className="text-2xl font-semibold text-white">
           What makes {content.name} different
         </h2>
-        <p className="mt-4 max-w-3xl text-white/60">{content.marketContext}</p>
+        <p className="mt-4 max-w-3xl whitespace-pre-line text-white/60">{content.marketContext}</p>
       </Section>
 
       <Section className="border-t border-[var(--border-dim)]">
