@@ -14,9 +14,11 @@ import { Yeseva_One } from "next/font/google";
 const yesevaOne = Yeseva_One({ weight: "400", subsets: ["latin"], display: "swap" });
 
 const CORE_FEATURES = [
-  "SEO, NEW OPTIMIZED website, and Google Business Profile setup",
+  "NEW optimized website and Google Business Profile setup",
   "Ongoing strategy and execution",
-  "Monthly progress reporting",
+  "Social media management",
+  "Relevant keyword ranking",
+  "Competitor gap analysis",
 ];
 
 const CORE_MONTHLY_CENTS = 99900;

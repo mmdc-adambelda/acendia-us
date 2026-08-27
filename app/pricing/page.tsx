@@ -8,11 +8,10 @@ import JsonLd from "@/components/JsonLd";
 import { webPageSchema, faqSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
 import { getActivePlans, type ActivePlan } from "@/lib/plans";
-import { POST_GOLIVE_BILLING_DELAY_DAYS } from "@/lib/billing";
 
 export const metadata: Metadata = buildMetadata({
   title: "Pricing",
-  description: "Transparent pricing for Acendia's SEO and digital growth services — a straightforward setup fee and monthly plan, no hidden costs.",
+  description: "Transparent pricing for Acendia's SEO and digital growth services — one all-in monthly price, no setup fee, no hidden costs.",
   path: "/pricing/",
 });
 
@@ -25,57 +24,41 @@ function formatMoney(cents: number | null) {
 // must never differ from what checkout actually charges. It normally
 // pulls live from the `plans` table, but a database hiccup should never
 // leave a visitor looking at an empty "pricing is being finalized" page
-// when we know exactly what the real prices are. These mirror
-// supabase/migrations/0003_seed_plans.sql exactly and only ever render
-// when the live fetch comes back empty.
+// when we know exactly what the real prices are. This mirrors the
+// current $999/mo, no-setup-fee model and only ever renders when the
+// live fetch comes back empty.
 const FALLBACK_PLANS: ActivePlan[] = [
   {
     id: "fallback-seo-package",
     name: "SEO Package",
     slug: "growth-package",
-    description:
-      "Acendia's core SEO and digital growth engagement — a one-time setup followed by ongoing monthly work.",
+    description: "Acendia's all-in SEO, website, and digital growth engagement — one monthly price, everything included.",
     plan_type: "core",
-    setup_fee_cents: 19900,
-    monthly_price_cents: 49900,
+    setup_fee_cents: null,
+    monthly_price_cents: 99900,
     stripe_price_id_monthly: null,
     features: [
-      "One-time setup and onboarding",
-      "Ongoing SEO strategy and execution",
-      "Local search and Google Business Profile optimization",
-      "Monthly progress reporting",
-      "Direct access to your account team via the client portal",
+      "NEW optimized website and Google Business Profile setup",
+      "Ongoing strategy and execution",
+      "Social media management",
+      "Relevant keyword ranking",
+      "Competitor gap analysis",
     ],
-  },
-  {
-    id: "fallback-social-addon",
-    name: "Social Media Add-On",
-    slug: "social-media-addon",
-    description: "Optional add-on for clients on the SEO Package who want ongoing social media management alongside their SEO work.",
-    plan_type: "addon",
-    setup_fee_cents: null,
-    monthly_price_cents: 29900,
-    stripe_price_id_monthly: null,
-    features: ["Ongoing social media content and posting", "Managed as an add-on to an active Acendia plan"],
   },
 ];
 
 const pricingFaqs = [
   {
-    question: "Do I pay the full monthly plan today?",
-    answer: `No. You pay only the one-time setup fee today. Your site typically goes live within 2-3 business days, and your first monthly payment isn't charged until ${POST_GOLIVE_BILLING_DELAY_DAYS} days after that — not before, and never bundled with the setup fee.`,
+    question: "Do I pay the full amount today?",
+    answer: "Yes — your first month is billed today when you sign up, and it renews automatically at the same price every month after. There's no separate setup fee.",
   },
   {
     question: "Is there a contract or minimum commitment?",
     answer: "Specific contract terms are covered in your Acendia Service Agreement, provided before you sign up. SEO is a compounding investment, so we recommend planning for at least a few months to see meaningful results, but ask your account team for the exact terms that apply to your plan.",
   },
   {
-    question: "What's included in the setup fee?",
-    answer: "The setup fee covers onboarding — technical audit, account access setup, initial keyword and competitor research, and getting your campaign properly configured before ongoing monthly work begins.",
-  },
-  {
-    question: "Can I add the Social Media Add-On later?",
-    answer: "Yes — it's optional and can be added once you're an active client, from your billing settings in the client portal.",
+    question: "What's included in the $999/month?",
+    answer: "Everything: a newly optimized website build, Google Business Profile setup, ongoing SEO strategy and execution, social media management, keyword ranking tracking, and a competitor gap analysis — one price, with nothing held back as a paid upsell.",
   },
   {
     question: "Do you offer custom pricing for multi-location or larger businesses?",
@@ -83,16 +66,14 @@ const pricingFaqs = [
   },
   {
     question: "What payment methods do you accept?",
-    answer: "We support major credit/debit cards via Stripe, PayPal, and Wise bank transfer. Full payment options are presented at checkout.",
+    answer: "We support major credit/debit cards via Stripe. If you need another payment arrangement for a custom or multi-location plan, contact our team.",
   },
 ];
 
 export default async function PricingPage() {
   const livePlans = await getActivePlans();
   const plans = livePlans.length > 0 ? livePlans : FALLBACK_PLANS;
-
   const corePlans = plans.filter((p) => p.plan_type !== "addon");
-  const addonPlans = plans.filter((p) => p.plan_type === "addon");
 
   return (
     <>
@@ -109,7 +90,7 @@ export default async function PricingPage() {
       <PageHero
         eyebrow="Pricing"
         title="Straightforward pricing, no hidden costs"
-        description="One clear setup fee, one monthly plan, and an optional add-on if you want it — not a maze of tiers designed to make comparison shopping difficult."
+        description="One simple monthly price that includes everything — no separate setup fee, and nothing held back as a paid upsell."
         breadcrumbs={[{ name: "Pricing", path: "/pricing/" }]}
       />
 
@@ -128,23 +109,36 @@ export default async function PricingPage() {
                   </>
                 )}
               </div>
-              {plan.setup_fee_cents !== null && (
-                <p className="mt-1 text-sm text-white/50">+ {formatMoney(plan.setup_fee_cents)} one-time setup, due today</p>
+              {plan.setup_fee_cents === null && plan.monthly_price_cents !== null && (
+                <p className="mt-1 text-sm text-white/50">Due today, then {formatMoney(plan.monthly_price_cents)}/month — no separate setup fee.</p>
               )}
 
               <ul className="mt-6 space-y-3">
                 {plan.features?.map((f: string) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-white/65">
-                    <span aria-hidden="true" className="mt-1 text-white/40">—</span>
+                  <li key={f} className="flex items-start gap-2 text-sm font-bold text-white">
+                    <span aria-hidden="true" className="mt-0.5 text-white">✓</span>
                     {f}
                   </li>
                 ))}
               </ul>
 
               <div className="mt-8 flex flex-col gap-3">
-                <Button href="/register/" dataEvent="select_plan">
-                  Start Growing
-                </Button>
+                {/* Real HTML form POST straight to Stripe checkout — same
+                    "pay now, tell us who you are after" flow as the
+                    homepage's "Join Now" button (see
+                    app/api/get-started/checkout/route.ts). Not a Link to
+                    /register/: that older flow still uses the separate
+                    setup-fee-then-delayed-subscription billing model,
+                    which no longer matches this page's advertised price. */}
+                <form method="POST" action="/api/get-started/checkout" className="w-full">
+                  <button
+                    type="submit"
+                    data-event="select_plan"
+                    className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-[var(--r-sm)] bg-white px-6 py-3 text-sm font-semibold text-black transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--glow-white)]"
+                  >
+                    Start Growing
+                  </button>
+                </form>
                 <Button href="/contact/" variant="secondary">
                   Talk to Our Team
                 </Button>
@@ -152,23 +146,6 @@ export default async function PricingPage() {
             </Card>
           ))}
         </div>
-
-        {addonPlans.length > 0 && (
-          <div className="mx-auto mt-8 max-w-md">
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-white/40">Optional add-on</h3>
-            {addonPlans.map((addon) => (
-              <Card key={addon.id}>
-                <div className="flex items-center justify-between">
-                  <h4 className="text-base font-semibold text-white">{addon.name}</h4>
-                  {addon.monthly_price_cents !== null && (
-                    <span className="text-sm text-white/60">{formatMoney(addon.monthly_price_cents)}/mo</span>
-                  )}
-                </div>
-                {addon.description && <p className="mt-2 text-sm text-white/55">{addon.description}</p>}
-              </Card>
-            ))}
-          </div>
-        )}
       </Section>
 
       {/* How billing actually works — the piece visitors most often ask about */}
@@ -176,24 +153,24 @@ export default async function PricingPage() {
         <div className="mx-auto max-w-3xl">
           <Eyebrow>How billing works</Eyebrow>
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            You don&apos;t pay for a live site before it&apos;s live
+            One price, billed today, renewing automatically
           </h2>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {[
               {
                 step: "Today",
-                title: "Pay the setup fee",
-                body: "That's the only charge at signup — your monthly plan is not billed yet.",
+                title: "Your first month is billed",
+                body: "That's the only charge at signup — no separate setup fee on top of it.",
               },
               {
                 step: "~2-3 business days",
                 title: "Your site goes live",
-                body: "Typical turnaround from the day you pay setup — timing can vary by project scope.",
+                body: "Typical build turnaround from the day you sign up — timing can vary by project scope.",
               },
               {
-                step: `${POST_GOLIVE_BILLING_DELAY_DAYS} days after go-live`,
-                title: "Monthly billing starts",
-                body: "Your first monthly charge lands exactly 14 days after your site is actually live, confirmed in your client portal.",
+                step: "Every month after",
+                title: "Billing renews automatically",
+                body: "The same amount, on the same date each month — no proration surprises, no separate setup charge, ever.",
               },
             ].map((item) => (
               <Card key={item.title}>
