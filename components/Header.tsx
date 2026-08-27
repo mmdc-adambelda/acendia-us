@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import SiteSwitcher from "./SiteSwitcher";
 import ServicesMenu from "./ServicesMenu";
 import { ServiceIcon } from "./icons";
-import { NAV_LINKS, CORE_SERVICES_MENU } from "@/lib/site";
+import { NAV_LINKS, CORE_SERVICES_MENU, SITE_NAME } from "@/lib/site";
 
 export default function Header({ isAuthenticated }: { isAuthenticated: boolean }) {
   const [open, setOpen] = useState(false);
@@ -14,17 +15,26 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border-dim)] bg-[var(--off-black)]/85 backdrop-blur">
-      {/* No logo here by design — the brand mark now lives in the homepage
-          hero for a single, larger, more deliberate first impression.
-          Nav + actions are plain flex siblings (nav left, actions right) —
-          an earlier version absolutely-centered the nav, which looked good
-          at very wide widths but overlapped the actions block below
-          ~1280px since a truly centered 7-item nav plus the full actions
-          row don't both fit in that space. Gated to lg: (1024px) so nav +
-          actions only ever render together once there's room; below that,
-          everything (all nav links, Client Login, the CTA) is still fully
-          reachable via the mobile menu. */}
+      {/* A compact logo/wordmark lives here on every page, linking back to
+          "/" — the homepage hero still carries the single, larger,
+          deliberate first impression, but every other page needs its own
+          reliable way back to the homepage (previously there was none:
+          no logo in the header, and pages without breadcrumbs had no
+          home link at all). Nav + actions are plain flex siblings (nav
+          left, actions right) — an earlier version absolutely-centered
+          the nav, which looked good at very wide widths but overlapped
+          the actions block below ~1280px since a truly centered 7-item
+          nav plus the full actions row don't both fit in that space.
+          Gated to lg: (1024px) so nav + actions only ever render together
+          once there's room; below that, everything (all nav links,
+          Client Login, the CTA) is still fully reachable via the mobile
+          menu. */}
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-5 sm:px-6 lg:px-8">
+        <Link href="/" className="focus-ring flex shrink-0 items-center gap-2">
+          <Image src="/brand/acendia-logo-white.png" alt={SITE_NAME} width={50} height={28} className="h-7 w-auto" priority />
+          <span className="hidden text-sm font-semibold text-white sm:inline">{SITE_NAME}</span>
+        </Link>
+
         <nav className="hidden items-center gap-5 xl:gap-7 lg:flex" aria-label="Primary">
           {NAV_LINKS.map((link) =>
             link.label === "Services" ? (
@@ -76,7 +86,7 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
         </div>
 
         <button
-          className="focus-ring ml-auto flex h-10 w-10 items-center justify-center rounded-[var(--r-sm)] lg:hidden"
+          className="focus-ring flex h-10 w-10 items-center justify-center rounded-[var(--r-sm)] lg:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-menu"
