@@ -131,6 +131,8 @@ export default function HomePage() {
         </Section>
       </div>
 
+      <EbookHomepageSection />
+
       {/* Problem */}
       <Section>
         <div className="mx-auto max-w-3xl text-center">
@@ -336,8 +338,6 @@ export default function HomePage() {
           ))}
         </div>
       </Section>
-
-      <EbookHomepageSection />
 
       {/* FAQ */}
       <Section className="border-t border-[var(--border-dim)]">
