@@ -12,7 +12,14 @@ export type ConversionEvent =
   | "consultation_cta_clicked"
   | "service_page_cta_clicked"
   | "location_cta_clicked"
-  | "industry_page_cta_clicked";
+  | "industry_page_cta_clicked"
+  | "ebook_homepage_cta_click"
+  | "ebook_cta_click"
+  | "ebook_form_start"
+  | "ebook_form_submit"
+  | "ebook_download"
+  | "seo_audit_cta_click"
+  | "booking_click";
 
 declare global {
   interface Window {

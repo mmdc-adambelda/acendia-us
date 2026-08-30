@@ -156,4 +156,40 @@ export const emailTemplates = {
        <p style="color:#888;">CV attached to this email, if provided.</p>`,
     );
   },
+  leadMagnetNotification: (params: {
+    magnetName: string;
+    fullName: string;
+    businessName: string;
+    email: string;
+    phone: string;
+    websiteUrl: string;
+    challenge: string;
+    landingPage: string;
+  }) => {
+    const fullName = escapeHtml(params.fullName);
+    const businessName = escapeHtml(params.businessName);
+    const email = escapeHtml(params.email);
+    const phone = escapeHtml(params.phone);
+    const websiteUrl = escapeHtml(params.websiteUrl);
+    const challenge = escapeHtml(params.challenge);
+    const landingPage = escapeHtml(params.landingPage);
+    const magnetName = escapeHtml(params.magnetName);
+    const dateLabel = new Date().toLocaleString("en-US", {
+      timeZone: "America/New_York",
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+    return wrapEmailHtml(
+      `New SEO Ebook Lead — ${businessName}`,
+      `<p><strong>Full Name:</strong> ${fullName}</p>
+       <p><strong>Company:</strong> ${businessName}</p>
+       <p><strong>Email:</strong> ${email}</p>
+       <p><strong>Phone:</strong> ${phone}</p>
+       <p><strong>Website:</strong> ${websiteUrl}</p>
+       ${challenge ? `<p><strong>SEO Challenge:</strong></p><p style="white-space:pre-wrap;">${challenge}</p>` : ""}
+       <p><strong>Date/Time:</strong> ${dateLabel} ET</p>
+       <p><strong>Source:</strong> ${magnetName}</p>
+       <p><strong>Landing Page:</strong> ${landingPage}</p>`,
+    );
+  },
 };

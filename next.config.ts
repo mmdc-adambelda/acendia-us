@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "img.youtube.com" },
     ],
   },
+  // The lead-magnet PDFs under private-assets/ are read from disk at
+  // request time (app/api/lead-magnets/[slug]/download/route.ts) via a
+  // plain string path, not a static import — Next's automatic file
+  // tracing for serverless functions doesn't reliably pick that up, so
+  // it's included explicitly here. Without this, the download route
+  // would 500 in production (file not found) despite working in local
+  // dev, where the whole repo is on disk regardless.
+  outputFileTracingIncludes: {
+    "/api/lead-magnets/[slug]/download": ["./private-assets/lead-magnets/**/*"],
+  },
 };
 
 export default nextConfig;

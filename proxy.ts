@@ -28,6 +28,7 @@ const NOINDEX_PREFIXES = [
   "/forgot-password",
   "/reset-password",
   "/get-started",
+  "/free-seo-ebook/thank-you",
 ];
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;

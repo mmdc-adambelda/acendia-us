@@ -18,6 +18,7 @@ export default function robots(): MetadataRoute.Robots {
         "/reset-password/",
         "/get-started/",
         "/logout/",
+        "/free-seo-ebook/thank-you/",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

@@ -16,6 +16,7 @@ const STATIC_PATHS = [
   "/locations/",
   "/industries/",
   "/free-seo-audit/",
+  "/free-seo-ebook/",
   "/careers/",
   "/privacy-policy/",
   "/terms/",
