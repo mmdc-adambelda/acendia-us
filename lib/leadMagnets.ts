@@ -12,6 +12,7 @@ export type LeadMagnet = {
   name: string; // human name, used in emails/schema — not shown as page copy verbatim
   fileName: string; // filename the visitor's browser saves the download as
   filePath: string; // path to the PDF relative to the repo root, OUTSIDE public/
+  coverImage?: { src: string; alt: string }; // real cover art, if one exists — see components/leadMagnets/EbookMockup.tsx
   metaTitle: string;
   metaDescription: string;
   keywords: string[];
@@ -49,6 +50,10 @@ export const LEAD_MAGNETS: Record<string, LeadMagnet> = {
     name: "The Business Owner's Guide to Improving Your Google Rankings",
     fileName: "Acendia-Business-Owners-Guide-to-On-Page-SEO.pdf",
     filePath: "private-assets/lead-magnets/free-seo-ebook.pdf",
+    coverImage: {
+      src: "/images/onpage-seo-guide-cover.png",
+      alt: "The Business Owner's Guide to On-Page SEO — Acendia free SEO guide cover",
+    },
     metaTitle: "Free SEO Ebook — The Business Owner's Guide to Improving Your Google Rankings",
     metaDescription:
       "Download our free SEO guide for business owners — a practical on-page SEO checklist covering search intent, keyword targeting, page structure, and local SEO fundamentals.",

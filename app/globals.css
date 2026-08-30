@@ -259,3 +259,61 @@ body {
     will-change: background-position;
   }
 }
+
+/* ---------------------------------------------------------------------
+   Ebook cover — gentle ambient float (so it reads as "alive" even before
+   anyone touches it), a looping glossy sweep (mix-blend-mode: overlay so
+   it reads as a light reflection across the cover photo rather than a
+   flat white bar washing it out), and a hover lift/tilt for the
+   interactive feel. Same discipline as the hero offer card above: every
+   keyframe's 100% frame is a valid static end state, so the global
+   prefers-reduced-motion rule (top of this file) neutralizing all
+   animation-duration to ~0 with 1 iteration is sufficient on its own —
+   no separate reduced-motion override needed here either.
+--------------------------------------------------------------------- */
+@keyframes ebook-cover-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes ebook-cover-sweep {
+  0% {
+    transform: translateX(-130%) rotate(12deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.5;
+  }
+  22%,
+  100% {
+    transform: translateX(160%) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+.ebook-cover-tilt {
+  animation: ebook-cover-float 5200ms ease-in-out infinite;
+  transition:
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 400ms ease;
+  will-change: transform;
+}
+
+.ebook-cover-tilt:hover {
+  transform: translateY(-6px) scale(1.035) rotate(-1deg);
+  filter: drop-shadow(0 22px 34px rgba(91, 80, 255, 0.35));
+}
+
+.ebook-cover-shine {
+  position: absolute;
+  inset: -20% -60%;
+  background: linear-gradient(75deg, transparent 42%, rgba(255, 255, 255, 0.55) 50%, transparent 58%);
+  mix-blend-mode: overlay;
+  animation: ebook-cover-sweep 6000ms ease-in-out 900ms infinite;
+  will-change: transform, opacity;
+}

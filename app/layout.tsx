@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
+import ChatWidget from "@/components/ChatWidget";
 import JsonLd from "@/components/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
 import { SITE_NAME, SITE_URL, TAGLINE } from "@/lib/site";
@@ -45,6 +46,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en-US" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Analytics />
+        <ChatWidget />
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
         <a
           href="#main-content"

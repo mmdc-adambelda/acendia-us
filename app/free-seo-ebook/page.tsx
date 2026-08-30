@@ -106,7 +106,7 @@ export default async function FreeSeoEbookPage({
           </div>
 
           <div className="mx-auto hidden w-full max-w-[260px] lg:col-span-2 lg:block">
-            <EbookMockup title={magnet.hero.title} className="sticky top-24" />
+            <EbookMockup title={magnet.hero.title} coverImage={magnet.coverImage} className="sticky top-24" />
           </div>
         </div>
       </Section>

@@ -1,13 +1,42 @@
+import Image from "next/image";
 import { BookOpen } from "lucide-react";
 
 /**
- * Code-generated ebook cover mockup — no AI-generated cover art asset
- * exists (or was requested), so this renders instantly from the site's
- * existing brand tokens (--accent gradient, --card, --border-hi) rather
- * than shipping a placeholder photo. Swapping in a real designed cover
- * later is a drop-in <Image> replacement, no component changes needed.
+ * Ebook cover visual. Renders the real designed cover (lib/leadMagnets.ts's
+ * `coverImage`) when one exists — it already carries its own shadow/depth,
+ * so it's rendered plain, no extra wrapper effects. Falls back to a
+ * code-generated placeholder (brand-token gradient + title text) for any
+ * future lead magnet that doesn't have a real cover yet, so this
+ * component never needs to change when one is added later — just set
+ * `coverImage` in that magnet's config.
  */
-export default function EbookMockup({ title, className = "" }: { title: string; className?: string }) {
+export default function EbookMockup({
+  title,
+  coverImage,
+  className = "",
+}: {
+  title: string;
+  coverImage?: { src: string; alt: string };
+  className?: string;
+}) {
+  if (coverImage) {
+    return (
+      <div className={`ebook-cover-tilt relative aspect-[3/4] overflow-hidden ${className}`}>
+        <Image
+          src={coverImage.src}
+          alt={coverImage.alt}
+          fill
+          sizes="(min-width: 1024px) 320px, 280px"
+          className="object-contain"
+          priority
+        />
+        {/* Looping glossy sweep — mix-blend-mode: overlay so it reads as a
+            light reflection across the cover, not a flat white bar. */}
+        <span aria-hidden="true" className="ebook-cover-shine pointer-events-none" />
+      </div>
+    );
+  }
+
   return (
     <div className={`relative ${className}`} aria-hidden="true">
       {/* Stacked "pages" edge, offset behind the cover for a subtle depth effect */}

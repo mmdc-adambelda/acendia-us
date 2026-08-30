@@ -54,7 +54,7 @@ export default function EbookHomepageSection() {
           </Link>
         </div>
         <div className="order-1 mx-auto w-full max-w-[280px] lg:order-2 lg:max-w-[320px]">
-          <EbookMockup title={magnet.hero.title} />
+          <EbookMockup title={magnet.hero.title} coverImage={magnet.coverImage} />
         </div>
       </div>
     </Section>
