@@ -32,7 +32,7 @@ export default function ReviewsWidgetSection() {
           Real reviews from real clients
         </h2>
       </div>
-      <div className="space-y-8">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {googleIframeSrc && (
           <iframe
             src={googleIframeSrc}
@@ -41,7 +41,7 @@ export default function ReviewsWidgetSection() {
             height={382}
             loading="lazy"
             title="Google reviews"
-            className="w-full border-0"
+            className="w-full rounded-[var(--r-md)] border-0"
           />
         )}
         {facebookIframeSrc && (
@@ -52,7 +52,7 @@ export default function ReviewsWidgetSection() {
             height={382}
             loading="lazy"
             title="Facebook reviews"
-            className="w-full border-0"
+            className="w-full rounded-[var(--r-md)] border-0"
           />
         )}
       </div>
