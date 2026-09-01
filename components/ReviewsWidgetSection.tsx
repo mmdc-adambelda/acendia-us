@@ -1,18 +1,24 @@
+import Script from "next/script";
 import Section, { Eyebrow } from "@/components/Section";
 
 /**
  * Real Google + Facebook reviews via Trustindex — chosen over the
  * official Google Places API since that requires a Google Cloud project
- * with billing enabled. Each Trustindex loader script uses
- * document.currentScript to find its own position in the DOM and
- * injects its widget markup right there — so this deliberately renders
- * a plain native <script> tag (matching Trustindex's actual embed
- * snippet exactly) rather than next/script's <Script> component.
- * <Script>'s "lazyOnload"/"afterInteractive" strategies don't preserve
- * JSX position — they inject the real script tag at the end of <body>
- * (after Footer), which is why the widgets rendered below the footer
- * instead of here when this used <Script> — confirmed live, this was a
- * real bug, not just a theoretical concern.
+ * with billing enabled.
+ *
+ * Uses next/script's <Script strategy="lazyOnload">, not a plain
+ * <script> tag — confirmed live that a plain tag causes this specific
+ * widget to never actually expand/show content (its own visibility-
+ * detection logic behaves differently depending on load timing), while
+ * <Script> reliably renders it. This widget is currently configured on
+ * Trustindex's dashboard as a "floating sticky button" layout
+ * (confirmed via its own rendered class names,
+ * ti-sticky-button/ti-position-right) — that's what causes it to
+ * attach itself to document.body and appear at the end of the page
+ * instead of inline here, regardless of where this script tag sits.
+ * Fixing the position requires switching that widget's layout/display
+ * type in the Trustindex dashboard to an inline type (Grid/Carousel/
+ * List) — not something controllable from the embed code.
  *
  * Renders nothing at all if neither is configured; renders whichever
  * platform(s) actually have a script src set, independent of the other —
@@ -32,8 +38,8 @@ export default function ReviewsWidgetSection() {
           Real reviews from real clients
         </h2>
       </div>
-      {googleScriptSrc && <script defer async src={googleScriptSrc} />}
-      {facebookScriptSrc && <script defer async src={facebookScriptSrc} />}
+      {googleScriptSrc && <Script src={googleScriptSrc} strategy="lazyOnload" />}
+      {facebookScriptSrc && <Script src={facebookScriptSrc} strategy="lazyOnload" />}
     </Section>
   );
 }
