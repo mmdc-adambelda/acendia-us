@@ -2,19 +2,23 @@ import Script from "next/script";
 import Section, { Eyebrow } from "@/components/Section";
 
 /**
- * Real Google reviews via Trustindex — chosen over the official Google
- * Places API since that requires a Google Cloud project with billing
- * enabled. Trustindex's loader script is fully self-contained (the
- * widget key lives in its own query string, and it injects its own
- * markup — no separate container div needed), unlike some other
- * providers, so this is deliberately just the one <Script> tag.
+ * Real Google + Facebook reviews via Trustindex — chosen over the
+ * official Google Places API since that requires a Google Cloud project
+ * with billing enabled. Each Trustindex loader script is fully self-
+ * contained (the widget key lives in its own query string, and it
+ * injects its own markup via document.currentScript — no separate
+ * container div needed), so this is deliberately just one <Script> tag
+ * per platform, matching each platform's real embed snippet exactly.
  *
- * Renders nothing at all if unconfigured — same graceful-degradation
- * pattern as every other optional third-party integration in this app.
+ * Renders nothing at all if neither is configured; renders whichever
+ * platform(s) actually have a script src set, independent of the other —
+ * same graceful-degradation pattern as every other optional third-party
+ * integration in this app.
  */
 export default function ReviewsWidgetSection() {
-  const scriptSrc = process.env.NEXT_PUBLIC_REVIEWS_WIDGET_SCRIPT_SRC;
-  if (!scriptSrc) return null;
+  const googleScriptSrc = process.env.NEXT_PUBLIC_REVIEWS_WIDGET_SCRIPT_SRC;
+  const facebookScriptSrc = process.env.NEXT_PUBLIC_FB_REVIEWS_WIDGET_SCRIPT_SRC;
+  if (!googleScriptSrc && !facebookScriptSrc) return null;
 
   return (
     <Section className="border-t border-[var(--border-dim)]">
@@ -24,7 +28,8 @@ export default function ReviewsWidgetSection() {
           Real reviews from real clients
         </h2>
       </div>
-      <Script src={scriptSrc} strategy="lazyOnload" />
+      {googleScriptSrc && <Script src={googleScriptSrc} strategy="lazyOnload" />}
+      {facebookScriptSrc && <Script src={facebookScriptSrc} strategy="lazyOnload" />}
     </Section>
   );
 }

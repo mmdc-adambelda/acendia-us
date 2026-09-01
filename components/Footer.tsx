@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Container from "./Container";
+import TrustBadge from "./TrustBadge";
 import { FacebookIcon, InstagramIcon, LinkedinIcon } from "./icons";
 import { FOOTER_LINK_COLUMNS, SOCIAL_LINKS, TAGLINE } from "@/lib/site";
 
@@ -80,6 +81,7 @@ export default function Footer() {
           <p className="text-xs text-white/40">
             Serving businesses across the United States — remote-first, nationwide.
           </p>
+          <TrustBadge />
         </div>
       </Container>
     </footer>
