@@ -317,29 +317,6 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* Case studies placeholder */}
-      <Section className="border-t border-[var(--border-dim)]">
-        <div className="mb-12 max-w-2xl">
-          <Eyebrow>Proof, once it exists</Eyebrow>
-          <h2 className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Results are coming soon — we won&apos;t fabricate them in the meantime
-          </h2>
-          <p className="mt-4 text-lg text-white/60">
-            We&apos;d rather show you a placeholder than an invented case study. Verified client
-            results will be published here as engagements complete.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {["Home Services", "Legal", "Healthcare"].map((label) => (
-            <Card key={label} className="flex h-40 items-center justify-center">
-              <span className="text-sm font-medium uppercase tracking-wide text-white/30">
-                {label} case study — coming soon
-              </span>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
       <ReviewsWidgetSection />
 
       {/* FAQ */}
