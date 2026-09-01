@@ -1,34 +1,28 @@
-import Script from "next/script";
 import Section, { Eyebrow } from "@/components/Section";
 
 /**
- * Real Google + Facebook reviews via Trustindex — chosen over the
- * official Google Places API since that requires a Google Cloud project
- * with billing enabled.
+ * Real Google + Facebook reviews via Trustindex, embedded as plain
+ * iframes pointed at Trustindex's own widget pages.
  *
- * Uses next/script's <Script strategy="lazyOnload">, not a plain
- * <script> tag — confirmed live that a plain tag causes this specific
- * widget to never actually expand/show content (its own visibility-
- * detection logic behaves differently depending on load timing), while
- * <Script> reliably renders it. This widget is currently configured on
- * Trustindex's dashboard as a "floating sticky button" layout
- * (confirmed via its own rendered class names,
- * ti-sticky-button/ti-position-right) — that's what causes it to
- * attach itself to document.body and appear at the end of the page
- * instead of inline here, regardless of where this script tag sits.
- * Fixing the position requires switching that widget's layout/display
- * type in the Trustindex dashboard to an inline type (Grid/Carousel/
- * List) — not something controllable from the embed code.
+ * Trustindex's dashboard offers this as an <amp-iframe> snippet, but
+ * amp-iframe is an AMP component — it only renders on actual AMP pages
+ * that load Google's AMP runtime, which this site doesn't (and
+ * shouldn't). The src it points to (cdn.trustindex.io/amp-widget.html)
+ * is just a normal HTML page though, so a plain <iframe> with the same
+ * src works identically outside of AMP, with none of the DOM-position
+ * quirks the script-tag "floating/sticky button" widget had (see git
+ * history on this file) — an iframe always renders exactly where it's
+ * placed, full stop.
  *
  * Renders nothing at all if neither is configured; renders whichever
- * platform(s) actually have a script src set, independent of the other —
- * same graceful-degradation pattern as every other optional third-party
- * integration in this app.
+ * platform(s) actually have an iframe src set, independent of the
+ * other — same graceful-degradation pattern as every other optional
+ * third-party integration in this app.
  */
 export default function ReviewsWidgetSection() {
-  const googleScriptSrc = process.env.NEXT_PUBLIC_REVIEWS_WIDGET_SCRIPT_SRC;
-  const facebookScriptSrc = process.env.NEXT_PUBLIC_FB_REVIEWS_WIDGET_SCRIPT_SRC;
-  if (!googleScriptSrc && !facebookScriptSrc) return null;
+  const googleIframeSrc = process.env.NEXT_PUBLIC_REVIEWS_WIDGET_IFRAME_SRC;
+  const facebookIframeSrc = process.env.NEXT_PUBLIC_FB_REVIEWS_WIDGET_IFRAME_SRC;
+  if (!googleIframeSrc && !facebookIframeSrc) return null;
 
   return (
     <Section className="border-t border-[var(--border-dim)]">
@@ -38,8 +32,30 @@ export default function ReviewsWidgetSection() {
           Real reviews from real clients
         </h2>
       </div>
-      {googleScriptSrc && <Script src={googleScriptSrc} strategy="lazyOnload" />}
-      {facebookScriptSrc && <Script src={facebookScriptSrc} strategy="lazyOnload" />}
+      <div className="space-y-8">
+        {googleIframeSrc && (
+          <iframe
+            src={googleIframeSrc}
+            sandbox="allow-scripts allow-same-origin"
+            width="100%"
+            height={382}
+            loading="lazy"
+            title="Google reviews"
+            className="w-full border-0"
+          />
+        )}
+        {facebookIframeSrc && (
+          <iframe
+            src={facebookIframeSrc}
+            sandbox="allow-scripts allow-same-origin"
+            width="100%"
+            height={382}
+            loading="lazy"
+            title="Facebook reviews"
+            className="w-full border-0"
+          />
+        )}
+      </div>
     </Section>
   );
 }
