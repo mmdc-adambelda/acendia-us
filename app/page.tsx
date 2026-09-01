@@ -12,7 +12,7 @@ import Card from "@/components/Card";
 import PricingPreviewWidget from "@/components/PricingPreviewWidget";
 import HeroOrbitalBackground from "@/components/HeroOrbitalBackground";
 import EbookHomepageSection from "@/components/leadMagnets/EbookHomepageSection";
-import GoogleReviewsSection from "@/components/GoogleReviewsSection";
+import ReviewsWidgetSection from "@/components/ReviewsWidgetSection";
 import JsonLd from "@/components/JsonLd";
 import { webPageSchema, faqSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
@@ -340,7 +340,7 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <GoogleReviewsSection />
+      <ReviewsWidgetSection />
 
       {/* FAQ */}
       <Section className="border-t border-[var(--border-dim)]">
