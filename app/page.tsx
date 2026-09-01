@@ -10,7 +10,6 @@ import CTASection from "@/components/CTASection";
 import FAQAccordion from "@/components/FAQAccordion";
 import Card from "@/components/Card";
 import PricingPreviewWidget from "@/components/PricingPreviewWidget";
-import HeroOrbitalBackground from "@/components/HeroOrbitalBackground";
 import EbookHomepageSection from "@/components/leadMagnets/EbookHomepageSection";
 import ReviewsWidgetSection from "@/components/ReviewsWidgetSection";
 import JsonLd from "@/components/JsonLd";
@@ -82,7 +81,6 @@ export default function HomePage() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_-10%,rgba(255,255,255,0.10),transparent_55%)]"
         />
-        <HeroOrbitalBackground />
         <Section className="relative py-16 sm:py-24">
           <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
             <div>

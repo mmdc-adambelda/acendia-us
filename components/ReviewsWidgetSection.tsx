@@ -1,14 +1,18 @@
-import Script from "next/script";
 import Section, { Eyebrow } from "@/components/Section";
 
 /**
  * Real Google + Facebook reviews via Trustindex — chosen over the
  * official Google Places API since that requires a Google Cloud project
- * with billing enabled. Each Trustindex loader script is fully self-
- * contained (the widget key lives in its own query string, and it
- * injects its own markup via document.currentScript — no separate
- * container div needed), so this is deliberately just one <Script> tag
- * per platform, matching each platform's real embed snippet exactly.
+ * with billing enabled. Each Trustindex loader script uses
+ * document.currentScript to find its own position in the DOM and
+ * injects its widget markup right there — so this deliberately renders
+ * a plain native <script> tag (matching Trustindex's actual embed
+ * snippet exactly) rather than next/script's <Script> component.
+ * <Script>'s "lazyOnload"/"afterInteractive" strategies don't preserve
+ * JSX position — they inject the real script tag at the end of <body>
+ * (after Footer), which is why the widgets rendered below the footer
+ * instead of here when this used <Script> — confirmed live, this was a
+ * real bug, not just a theoretical concern.
  *
  * Renders nothing at all if neither is configured; renders whichever
  * platform(s) actually have a script src set, independent of the other —
@@ -28,8 +32,8 @@ export default function ReviewsWidgetSection() {
           Real reviews from real clients
         </h2>
       </div>
-      {googleScriptSrc && <Script src={googleScriptSrc} strategy="lazyOnload" />}
-      {facebookScriptSrc && <Script src={facebookScriptSrc} strategy="lazyOnload" />}
+      {googleScriptSrc && <script defer async src={googleScriptSrc} />}
+      {facebookScriptSrc && <script defer async src={facebookScriptSrc} />}
     </Section>
   );
 }
